@@ -1,6 +1,6 @@
 ﻿namespace UI
 {
-    partial class frmLogin
+    partial class frmRegistro
     {
         /// <summary>
         /// Required designer variable.
@@ -28,35 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            btnCerrar = new Button();
-            SuspendLayout();
-            // 
-            // btnCerrar
-            // 
-            btnCerrar.FlatStyle = FlatStyle.Flat;
-            btnCerrar.ForeColor = Color.Red;
-            btnCerrar.Location = new Point(765, 12);
-            btnCerrar.Name = "btnCerrar";
-            btnCerrar.Size = new Size(23, 23);
-            btnCerrar.TabIndex = 5;
-            btnCerrar.Text = "X";
-            btnCerrar.UseVisualStyleBackColor = true;
-            // 
-            // frmLogin
-            // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            components = new System.ComponentModel.Container();
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(128, 255, 255);
             ClientSize = new Size(800, 450);
-            Controls.Add(btnCerrar);
-            FormBorderStyle = FormBorderStyle.None;
-            Name = "frmLogin";
             Text = "Form1";
-            ResumeLayout(false);
         }
 
         #endregion
-
-        private Button btnCerrar;
     }
 }

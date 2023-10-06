@@ -1,6 +1,6 @@
 ﻿namespace NestApp
 {
-    partial class RegistroForm
+    partial class frmMain
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegistroForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             btnInicioSesion = new Button();
             pictureBox1 = new PictureBox();
             btnRegistrar = new Button();

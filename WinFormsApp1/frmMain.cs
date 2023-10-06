@@ -1,8 +1,8 @@
 namespace NestApp
 {
-    public partial class RegistroForm : Form
+    public partial class frmMain : Form
     {
-        public RegistroForm()
+        public frmMain()
         {
             InitializeComponent();
         }

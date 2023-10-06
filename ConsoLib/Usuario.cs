@@ -18,9 +18,5 @@
             return $"{Nombre} {Apellido}";
         }
         
-        public void registrarUsuario()
-        { 
-            
-        }
     }
 }
