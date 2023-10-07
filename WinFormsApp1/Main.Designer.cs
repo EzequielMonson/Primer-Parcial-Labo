@@ -1,6 +1,6 @@
 ﻿namespace NestApp
 {
-    partial class frmMain
+    partial class Main
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             btnInicioSesion = new Button();
             pictureBox1 = new PictureBox();
             btnRegistrar = new Button();
@@ -45,6 +45,7 @@
             btnInicioSesion.TabIndex = 0;
             btnInicioSesion.Text = "Inicia Sesión";
             btnInicioSesion.UseVisualStyleBackColor = true;
+            btnInicioSesion.Click += BtnIniciarSesion_Click;
             // 
             // pictureBox1
             // 
@@ -75,9 +76,9 @@
             btnCerrar.TabIndex = 4;
             btnCerrar.Text = "X";
             btnCerrar.UseVisualStyleBackColor = true;
-            btnCerrar.Click += btnCerrar_Click;
+            btnCerrar.Click += BtnCerrar_Click;
             // 
-            // RegistroForm
+            // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -88,8 +89,9 @@
             Controls.Add(btnInicioSesion);
             Controls.Add(pictureBox1);
             FormBorderStyle = FormBorderStyle.None;
-            Name = "RegistroForm";
+            Name = "Main";
             Text = "NestApp";
+            Load += FrmMain_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }

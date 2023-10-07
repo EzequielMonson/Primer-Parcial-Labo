@@ -8,5 +8,6 @@ namespace Clases
 {
     internal class Inquilino
     {
+
     }
 }

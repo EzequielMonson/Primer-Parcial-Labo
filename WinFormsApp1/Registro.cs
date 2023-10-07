@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace UI
 {
-    public partial class frmRegistro : Form
+    public partial class Registro : Form
     {
-        public frmRegistro()
+        public Registro()
         {
             InitializeComponent();
         }
@@ -55,6 +55,23 @@ namespace UI
         private void textBox8_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
         }
     }
 }

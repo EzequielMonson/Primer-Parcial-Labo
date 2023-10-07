@@ -1,6 +1,6 @@
 ﻿namespace UI
 {
-    partial class frmRegistro
+    partial class Registro
     {
         /// <summary>
         /// Required designer variable.
