@@ -1,6 +1,6 @@
 ﻿namespace NestApp
 {
-    partial class Main
+    partial class FrmInicio
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmInicio));
             btnInicioSesion = new Button();
             pictureBox1 = new PictureBox();
             btnRegistrar = new Button();
@@ -78,20 +78,23 @@
             btnCerrar.UseVisualStyleBackColor = true;
             btnCerrar.Click += BtnCerrar_Click;
             // 
-            // Main
+            // FrmInicio
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(128, 255, 255);
+            BackColor = Color.FromArgb(255, 128, 128);
             ClientSize = new Size(800, 450);
             Controls.Add(btnCerrar);
             Controls.Add(btnRegistrar);
             Controls.Add(btnInicioSesion);
             Controls.Add(pictureBox1);
-            FormBorderStyle = FormBorderStyle.None;
-            Name = "Main";
+            Name = "FrmInicio";
             Text = "NestApp";
             Load += FrmMain_Load;
+            Controls.SetChildIndex(pictureBox1, 0);
+            Controls.SetChildIndex(btnInicioSesion, 0);
+            Controls.SetChildIndex(btnRegistrar, 0);
+            Controls.SetChildIndex(btnCerrar, 0);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }

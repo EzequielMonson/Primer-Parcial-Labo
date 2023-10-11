@@ -31,110 +31,135 @@ namespace UI
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            btnCerrar = new Button();
-            textBox3 = new TextBox();
-            label4 = new Label();
-            textBox6 = new TextBox();
-            label6 = new Label();
-            groupBox2 = new GroupBox();
+            txtCorreo = new TextBox();
+            lblCorreo = new Label();
+            txtContrasenia = new TextBox();
+            lblContrasenia = new Label();
+            grpDatos = new GroupBox();
             button1 = new Button();
+            btnInicioSesion = new Button();
+            btnAtras = new Button();
+            grpDatos.SuspendLayout();
             SuspendLayout();
             // 
-            // btnCerrar
+            // txtCorreo
             // 
-            btnCerrar.FlatStyle = FlatStyle.Flat;
-            btnCerrar.ForeColor = Color.Red;
-            btnCerrar.Location = new Point(765, 12);
-            btnCerrar.Name = "btnCerrar";
-            btnCerrar.Size = new Size(23, 23);
-            btnCerrar.TabIndex = 5;
-            btnCerrar.Text = "X";
-            btnCerrar.UseVisualStyleBackColor = true;
+            txtCorreo.ForeColor = SystemColors.ActiveCaptionText;
+            txtCorreo.Location = new Point(192, 49);
+            txtCorreo.Name = "txtCorreo";
+            txtCorreo.Size = new Size(197, 23);
+            txtCorreo.TabIndex = 18;
             // 
-            // textBox3
+            // lblCorreo
             // 
-            textBox3.Location = new Point(192, 49);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(197, 23);
-            textBox3.TabIndex = 18;
+            lblCorreo.AutoSize = true;
+            lblCorreo.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lblCorreo.Location = new Point(13, 44);
+            lblCorreo.Name = "lblCorreo";
+            lblCorreo.Size = new Size(173, 25);
+            lblCorreo.TabIndex = 21;
+            lblCorreo.Text = "Correo Electronico:";
+            lblCorreo.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // label4
+            // txtContrasenia
             // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label4.Location = new Point(13, 44);
-            label4.Name = "label4";
-            label4.Size = new Size(173, 25);
-            label4.TabIndex = 21;
-            label4.Text = "Correo Electronico:";
-            label4.TextAlign = ContentAlignment.MiddleCenter;
+            txtContrasenia.Location = new Point(192, 103);
+            txtContrasenia.Name = "txtContrasenia";
+            txtContrasenia.PasswordChar = '*';
+            txtContrasenia.Size = new Size(197, 23);
+            txtContrasenia.TabIndex = 19;
             // 
-            // textBox6
+            // lblContrasenia
             // 
-            textBox6.Location = new Point(192, 103);
-            textBox6.Name = "textBox6";
-            textBox6.Size = new Size(197, 23);
-            textBox6.TabIndex = 19;
+            lblContrasenia.AutoSize = true;
+            lblContrasenia.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            lblContrasenia.Location = new Point(13, 103);
+            lblContrasenia.Name = "lblContrasenia";
+            lblContrasenia.Size = new Size(112, 25);
+            lblContrasenia.TabIndex = 22;
+            lblContrasenia.Text = "Contraseña:";
             // 
-            // label6
+            // grpDatos
             // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            label6.Location = new Point(13, 103);
-            label6.Name = "label6";
-            label6.Size = new Size(112, 25);
-            label6.TabIndex = 22;
-            label6.Text = "Contraseña:";
-            // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(label4);
-            groupBox2.Controls.Add(label6);
-            groupBox2.Controls.Add(textBox6);
-            groupBox2.Controls.Add(textBox3);
-            groupBox2.Location = new Point(172, 102);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(445, 158);
-            groupBox2.TabIndex = 27;
-            groupBox2.TabStop = false;
+            grpDatos.BackColor = Color.FromArgb(255, 128, 128);
+            grpDatos.Controls.Add(button1);
+            grpDatos.Controls.Add(lblCorreo);
+            grpDatos.Controls.Add(lblContrasenia);
+            grpDatos.Controls.Add(txtContrasenia);
+            grpDatos.Controls.Add(txtCorreo);
+            grpDatos.Location = new Point(172, 102);
+            grpDatos.Name = "grpDatos";
+            grpDatos.Size = new Size(445, 158);
+            grpDatos.TabIndex = 27;
+            grpDatos.TabStop = false;
             // 
             // button1
             // 
             button1.FlatStyle = FlatStyle.Popup;
-            button1.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            button1.Location = new Point(280, 333);
+            button1.ForeColor = Color.Blue;
+            button1.Location = new Point(395, 103);
             button1.Name = "button1";
-            button1.Size = new Size(216, 55);
-            button1.TabIndex = 28;
-            button1.Text = "Iniciar Sesion";
+            button1.Size = new Size(29, 25);
+            button1.TabIndex = 23;
+            button1.Text = "👁";
             button1.UseVisualStyleBackColor = true;
+            button1.MouseDown += MostrarContrasenia;
+            button1.MouseLeave += OcultarContrasenia;
+            button1.MouseHover += OcultarContrasenia;
             // 
-            // frmLogin
+            // btnInicioSesion
+            // 
+            btnInicioSesion.FlatStyle = FlatStyle.Popup;
+            btnInicioSesion.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnInicioSesion.Location = new Point(280, 333);
+            btnInicioSesion.Name = "btnInicioSesion";
+            btnInicioSesion.Size = new Size(216, 55);
+            btnInicioSesion.TabIndex = 28;
+            btnInicioSesion.Text = "Iniciar Sesion";
+            btnInicioSesion.UseVisualStyleBackColor = true;
+            btnInicioSesion.Click += BtnIniciarSesion_Click;
+            // 
+            // btnAtras
+            // 
+            btnAtras.FlatStyle = FlatStyle.Flat;
+            btnAtras.Font = new Font("Segoe UI Black", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            btnAtras.ImageAlign = ContentAlignment.TopRight;
+            btnAtras.Location = new Point(12, 12);
+            btnAtras.Name = "btnAtras";
+            btnAtras.Size = new Size(30, 30);
+            btnAtras.TabIndex = 29;
+            btnAtras.Text = "🢀";
+            btnAtras.UseVisualStyleBackColor = true;
+            btnAtras.Click += VolverAtras;
+            // 
+            // Login
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(128, 255, 255);
+            BackColor = Color.FromArgb(255, 128, 128);
             ClientSize = new Size(800, 450);
-            Controls.Add(button1);
-            Controls.Add(groupBox2);
-            Controls.Add(btnCerrar);
-            FormBorderStyle = FormBorderStyle.None;
-            Name = "frmLogin";
+            Controls.Add(btnAtras);
+            Controls.Add(btnInicioSesion);
+            Controls.Add(grpDatos);
+            Name = "Login";
             Text = "Form1";
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
+            Load += BtnIniciarSesion_Click;
+            Controls.SetChildIndex(grpDatos, 0);
+            Controls.SetChildIndex(btnInicioSesion, 0);
+            Controls.SetChildIndex(btnAtras, 0);
+            grpDatos.ResumeLayout(false);
+            grpDatos.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
-
-        private Button btnCerrar;
-        private TextBox textBox3;
-        private Label label4;
-        private TextBox textBox6;
-        private Label label6;
-        private GroupBox groupBox2;
+        private TextBox txtCorreo;
+        private Label lblCorreo;
+        private TextBox txtContrasenia;
+        private Label lblContrasenia;
+        private GroupBox grpDatos;
+        private Button btnInicioSesion;
         private Button button1;
+        private Button btnAtras;
     }
 }

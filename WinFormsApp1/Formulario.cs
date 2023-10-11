@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace UI
 {
-    public partial class Registro : Formulario
+    public partial class Formulario : Form
     {
-        public Registro()
+        public Formulario()
         {
             InitializeComponent();
+        }
+
+        protected void BtnCerrar_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

@@ -2,20 +2,17 @@ using UI;
 
 namespace NestApp
 {
-    public partial class Main : Form
+    public partial class FrmInicio : Formulario
     {
-        public Main()
+        public FrmInicio()
         {
             InitializeComponent();
-        }
-        private void BtnCerrar_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
         }
         private void BtnIniciarSesion_Click(object sender, EventArgs e)
         {
             this.Hide();
-
+            Login frmLogin = new Login();
+            frmLogin.Show();
         }
 
         private void FrmMain_Load(object sender, EventArgs e)

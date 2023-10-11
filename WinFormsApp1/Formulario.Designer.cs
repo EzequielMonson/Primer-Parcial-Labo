@@ -1,6 +1,6 @@
 ﻿namespace UI
 {
-    partial class Registro
+    partial class Formulario
     {
         /// <summary>
         /// Required designer variable.
@@ -28,18 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
+            btnCerrar = new Button();
             SuspendLayout();
             // 
-            // Registro
+            // btnCerrar
+            // 
+            btnCerrar.FlatStyle = FlatStyle.Flat;
+            btnCerrar.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btnCerrar.ForeColor = Color.Red;
+            btnCerrar.Location = new Point(759, 12);
+            btnCerrar.Name = "btnCerrar";
+            btnCerrar.Size = new Size(29, 30);
+            btnCerrar.TabIndex = 0;
+            btnCerrar.Text = "X";
+            btnCerrar.UseVisualStyleBackColor = true;
+            btnCerrar.Click += BtnCerrar_Click;
+            // 
+            // Formulario
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(255, 128, 128);
             ClientSize = new Size(800, 450);
-            Name = "Registro";
-            Text = "Form1";
+            Controls.Add(btnCerrar);
+            FormBorderStyle = FormBorderStyle.None;
+            Name = "Formulario";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Formulario";
             ResumeLayout(false);
         }
 
         #endregion
+
+        private Button btnCerrar;
     }
 }
