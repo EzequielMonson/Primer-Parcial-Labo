@@ -7,22 +7,27 @@
         public string correo;
         public string contraseña;
         public string ciudad;
-        public string agencia;
-        internal int saldo;
+        public string fechaNacimiento;
+        public int telefono;
+        public int saldo;
 
-        protected Usuario(string nombre, string apellido, string correo, string contraseña, string ciudad,string agencia, int saldo)
+
+        protected Usuario(string nombre, string apellido, string correo, string contraseña, string ciudad, string fechaNacimiento, int telefono)
         {
             this.correo = correo;
             this.contraseña = contraseña;
             this.nombre = nombre;
             this.apellido = apellido;
             this.ciudad = ciudad;
-            this.agencia = agencia;
-            this.saldo = saldo;
+            this.fechaNacimiento = fechaNacimiento;
+            this.telefono = telefono;
+            saldo = 0;
         }
+        public abstract void MostrarHistorialActividades();
+        public abstract void MostrarHistorialPagos();
         public override string ToString()
         {
-            return $"{nombre} {apellido} {correo} {contraseña} {ciudad} {agencia} {saldo}" ;
+            return $"{nombre} {apellido} {correo} {contraseña} {ciudad}  {saldo}" ;
         }
         
     }

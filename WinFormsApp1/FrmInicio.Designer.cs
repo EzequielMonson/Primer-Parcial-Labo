@@ -32,7 +32,6 @@
             btnInicioSesion = new Button();
             pictureBox1 = new PictureBox();
             btnRegistrar = new Button();
-            btnCerrar = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -65,18 +64,7 @@
             btnRegistrar.TabIndex = 3;
             btnRegistrar.Text = "Registrarte";
             btnRegistrar.UseVisualStyleBackColor = true;
-            // 
-            // btnCerrar
-            // 
-            btnCerrar.FlatStyle = FlatStyle.Flat;
-            btnCerrar.ForeColor = Color.Red;
-            btnCerrar.Location = new Point(765, 12);
-            btnCerrar.Name = "btnCerrar";
-            btnCerrar.Size = new Size(23, 23);
-            btnCerrar.TabIndex = 4;
-            btnCerrar.Text = "X";
-            btnCerrar.UseVisualStyleBackColor = true;
-            btnCerrar.Click += BtnCerrar_Click;
+            btnRegistrar.Click += BtnRegistrar_Click;
             // 
             // FrmInicio
             // 
@@ -84,7 +72,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 128, 128);
             ClientSize = new Size(800, 450);
-            Controls.Add(btnCerrar);
             Controls.Add(btnRegistrar);
             Controls.Add(btnInicioSesion);
             Controls.Add(pictureBox1);
@@ -94,7 +81,6 @@
             Controls.SetChildIndex(pictureBox1, 0);
             Controls.SetChildIndex(btnInicioSesion, 0);
             Controls.SetChildIndex(btnRegistrar, 0);
-            Controls.SetChildIndex(btnCerrar, 0);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
@@ -103,6 +89,5 @@
         private Button btnInicioSesion;
         private PictureBox pictureBox1;
         private Button btnRegistrar;
-        private Button btnCerrar;
     }
 }

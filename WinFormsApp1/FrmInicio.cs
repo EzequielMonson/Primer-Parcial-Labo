@@ -19,5 +19,12 @@ namespace NestApp
         {
 
         }
+
+        private void BtnRegistrar_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Registro frmRegistro = new Registro();
+            frmRegistro.Show();
+        }
     }
 }

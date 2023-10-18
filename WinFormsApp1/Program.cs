@@ -12,6 +12,9 @@ namespace NestApp
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new FrmInicio());
+
+            string directorioActual = Directory.GetCurrentDirectory();
+            
         }
     }
 }
