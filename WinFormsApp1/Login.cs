@@ -25,7 +25,7 @@ namespace UI
             {
                 MessageBox.Show("Usuario logueado");
                 this.Hide();
-                FrmMenuInquilino menuInqui = new FrmMenuInquilino();
+                FrmMenu menuInqui = new FrmMenu();
                 menuInqui.Show();
             }
         }

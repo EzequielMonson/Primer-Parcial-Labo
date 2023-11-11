@@ -11,7 +11,6 @@
         public int telefono;
         public int saldo;
 
-
         protected Usuario(string nombre, string apellido, string correo, string contraseña, string ciudad, string fechaNacimiento, int telefono)
         {
             this.correo = correo;
@@ -27,7 +26,7 @@
         public abstract void MostrarHistorialPagos();
         public override string ToString()
         {
-            return $"{nombre} {apellido} {correo} {contraseña} {ciudad}  {saldo}" ;
+            return $"{nombre} {apellido}" ;
         }
         
     }

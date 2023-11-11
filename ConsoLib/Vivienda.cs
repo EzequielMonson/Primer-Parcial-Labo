@@ -1,56 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Clases
 {
-    public enum Estado
-    {
-        Activo,
-        Inactivo,
-        Pendiente,
-        Eliminado
-    }
-    public enum Servicios
-    {
-        Agua,
-        Internet,
-        Cable,
-        Luz,
-        Gas,
-    }
+ 
+
     public class Vivienda
     {
-        private String direccion;
+        private string direccion;
         private int numeroHabitaciones;
-        private double costoAgua;
-        private double costoLuz;
-        private double costoGas;
         private int piso;
-        private string arriendador;
+        private Administrador arriendador;
         private string departamento;
         private int cantInquilinos;
-        private List<Servicios> servicios;
+        private List<Servicio> servicios;
+        private Inquilino inquilino;
+        
 
-        public Vivienda(string direccion, int numeroHabitaciones, double costoAgua, double costoLuz, double costoGas, int piso, string arriendador, string departamento, int cantInquilinos, Servicios servicios)
+        public Vivienda(string direccion, int numeroHabitaciones, int piso, Administrador arriendador, string departamento, int cantInquilinos)
         {
             this.direccion = direccion;
             this.numeroHabitaciones = numeroHabitaciones;
-            this.costoAgua = costoAgua;
-            this.costoLuz = costoLuz;
-            this.costoGas = costoGas;
             this.piso = piso;
             this.arriendador = arriendador;
             this.departamento = departamento;
             this.cantInquilinos = cantInquilinos;
-            this.servicios = new List<Servicios>();
+            
+        }
+        public Inquilino Inquilino { get => inquilino; set => inquilino = value; }
+        public double MostrarPrecio(double precioBase)
+        {
+            double precioTotal = precioBase;
+            foreach (Servicio unServicio in servicios)
+            {
+                precioTotal += unServicio.Precio;
+            }
+            return precioTotal;
+        }
+        public void AgregarServicio(Servicio nuevoServicio)
+        {
+            this.servicios.Add(nuevoServicio);
+        }
+        public void CancelarServicio(NombreServicios servicioAEliminar)
+        {
+            for (int i = this.servicios.Count - 1; i >= 0; i--)
+            {
+                if (this.servicios[i].Nombre == servicioAEliminar)
+                {
+                    this.servicios.RemoveAt(i);
+                }
+            }
+        }
+        public override string ToString()
+        {
+            return $" el piso {piso} en el departamento {departamento}";
         }
 
-        public int MostrarPrecio(int precioBase,List<Servicios> servicio)
-        {
-            return precioBase; 
-        }
     }
 }
+
+

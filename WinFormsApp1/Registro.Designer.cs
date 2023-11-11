@@ -102,13 +102,13 @@
             grpDatosViviendas.Controls.Add(cboCiudad);
             grpDatosViviendas.Controls.Add(nudIinquilinos);
             grpDatosViviendas.Controls.Add(txtDireccion);
-            grpDatosViviendas.Controls.Add(label6);
             grpDatosViviendas.Controls.Add(cboArriendador);
             grpDatosViviendas.Controls.Add(label10);
             grpDatosViviendas.Controls.Add(label9);
             grpDatosViviendas.Controls.Add(lblOcupantes);
             grpDatosViviendas.Controls.Add(label8);
             grpDatosViviendas.Controls.Add(lblPiso);
+            grpDatosViviendas.Controls.Add(label6);
             grpDatosViviendas.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             grpDatosViviendas.ForeColor = Color.White;
             grpDatosViviendas.Location = new Point(83, 221);
@@ -138,7 +138,6 @@
             chklServicios.Name = "chklServicios";
             chklServicios.Size = new Size(141, 48);
             chklServicios.TabIndex = 24;
-            chklServicios.ItemCheck += chklServicios_ItemCheck;
             // 
             // label7
             // 
@@ -348,7 +347,7 @@
             grpDatosEmpleo.ForeColor = Color.White;
             grpDatosEmpleo.Location = new Point(83, 432);
             grpDatosEmpleo.Name = "grpDatosEmpleo";
-            grpDatosEmpleo.Size = new Size(631, 205);
+            grpDatosEmpleo.Size = new Size(631, 171);
             grpDatosEmpleo.TabIndex = 24;
             grpDatosEmpleo.TabStop = false;
             grpDatosEmpleo.Text = "Datos de empleo";
@@ -682,23 +681,23 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 627);
+            ClientSize = new Size(800, 745);
             Controls.Add(btnSiguiente);
-            Controls.Add(grpDatosIngreso);
-            Controls.Add(grpDatosEmpleo);
             Controls.Add(btnAtras);
             Controls.Add(grpRol);
-            Controls.Add(grpDatosViviendas);
             Controls.Add(groupBox4);
+            Controls.Add(grpDatosIngreso);
+            Controls.Add(grpDatosViviendas);
+            Controls.Add(grpDatosEmpleo);
             Name = "Registro";
             Text = "Form1";
             Load += Registro_Load;
-            Controls.SetChildIndex(groupBox4, 0);
+            Controls.SetChildIndex(grpDatosEmpleo, 0);
             Controls.SetChildIndex(grpDatosViviendas, 0);
+            Controls.SetChildIndex(grpDatosIngreso, 0);
+            Controls.SetChildIndex(groupBox4, 0);
             Controls.SetChildIndex(grpRol, 0);
             Controls.SetChildIndex(btnAtras, 0);
-            Controls.SetChildIndex(grpDatosEmpleo, 0);
-            Controls.SetChildIndex(grpDatosIngreso, 0);
             Controls.SetChildIndex(btnSiguiente, 0);
             grpDatosViviendas.ResumeLayout(false);
             grpDatosViviendas.PerformLayout();

@@ -11,9 +11,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace UI
 {
-    public partial class FrmMenuInquilino : Formulario
+    public partial class FrmMenu : Formulario
     {
-        public FrmMenuInquilino()
+        public FrmMenu()
         {
             InitializeComponent();
         }
@@ -23,11 +23,5 @@ namespace UI
 
         }
 
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
-
-
- 
     }
 }

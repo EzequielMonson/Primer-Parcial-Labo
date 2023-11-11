@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -9,14 +10,11 @@ namespace Clases
 {
     public class Administrador : Usuario
     {
-        public Administrador(string nombre, string apellido, string correo, string contraseña, string ciudad, int saldo) : base(nombre, apellido, correo, contraseña, ciudad, saldo)
+        public List<Vivienda> viviendasACargo;
+        public List<Vivienda> viviendasDisponibles;
+        public List<Inquilino> InquilinosPendientes;
+        public Administrador(string nombre, string apellido, string correo, string contraseña, string ciudad,string fechaNacimiento, int telefono) : base(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono)
         {
-            this.nombre = nombre;
-            this.apellido = apellido;
-            this.correo = correo;
-            this.contraseña = contraseña;
-            this.ciudad = ciudad;
-            this.saldo = saldo;
         }
         public void AgregarPago(Queue<Dictionary<string, object>> colaDeudas, string vencimiento, string fecha, int monto )
         {
@@ -28,7 +26,21 @@ namespace Clases
             };
             colaDeudas.Enqueue(dictDeuda);
         }
-
+        public void MostrarInquilinosPendientes() 
+        {
+            foreach (var inquilino in InquilinosPendientes)
+            {
+                Console.WriteLine($"Nombre: {inquilino.ToString}");
+                Console.WriteLine($"Correo: {inquilino.Dni}");
+                Console.WriteLine($"Ciudad: {inquilino.Direccion}");
+                Console.WriteLine($"Quiere alquilar en {inquilino.Vivienda.ToString}");
+            }
+        }
+        public void AlquilarVivienda(Inquilino nuevoInquilino, Vivienda viviendaAAlquilar)
+        {
+            viviendaAAlquilar.Inquilino = nuevoInquilino;
+            nuevoInquilino.Estado = Estado.Activo;
+        }
         public override void MostrarHistorialActividades()
         {
             throw new NotImplementedException();
@@ -44,6 +56,7 @@ namespace Clases
         }
         public void PermitirNuevoInquilino(Inquilino inquilino)
         { 
+
         }
     }
 }
