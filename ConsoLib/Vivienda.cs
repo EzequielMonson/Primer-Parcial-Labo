@@ -19,8 +19,11 @@ namespace Clases
         private int cantInquilinos;
         private List<Servicio> servicios;
         private Inquilino inquilino;
-        
 
+        public Vivienda()
+        {
+
+        }
         public Vivienda(string direccion, int numeroHabitaciones, int piso, Administrador arriendador, string departamento, int cantInquilinos)
         {
             this.direccion = direccion;

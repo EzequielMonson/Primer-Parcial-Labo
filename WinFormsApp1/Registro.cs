@@ -76,6 +76,7 @@ namespace UI
             fechaNacimiento = this.dtpFechaNacimiento.Text;
             ciudad = this.cboCiudad.Text;
             direccion = this.txtDireccion.Text;
+
             try
             {
                 edad = int.Parse(txtEdad.Text);
@@ -84,9 +85,9 @@ namespace UI
             }
             catch (FormatException)
             {
-
-                MessageBox.Show("Error: El dato no es númerico", "Error", MessageBoxButtons.OK);
+                MessageBox.Show("Error: El dato no es numérico", "Error", MessageBoxButtons.OK);
             }
+
             if (edad < 18)
             {
                 MessageBox.Show("Usted no puede registrarse porque no es un adulto.", "Error", MessageBoxButtons.OK);
@@ -100,25 +101,34 @@ namespace UI
             else
             {
                 MessageBox.Show("Los datos de ingreso no son iguales. ", "Error", MessageBoxButtons.OK);
-
             }
+
             if (rol == "inquilino")
             {
-                MessageBox.Show("inquilino", "Log in", MessageBoxButtons.OK);
                 this.inquilino = new Inquilino(nombre, apellido, correo, clave, ciudad, fechaNacimiento, telefono, direccion, dni, edad);
+
+                List<Inquilino> inquilinoList = new List<Inquilino> { inquilino };
+                string rutaArchivoJSON = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosInquilino.json");
+                Serializadora<Inquilino>.GuardarComoJSON(inquilinoList, rutaArchivoJSON);
+
                 MessageBox.Show($"{this.inquilino.ToString()}");
             }
-            else
+            else if (rol == "administrador")
             {
-                MessageBox.Show("Administador");
                 this.administrador = new Administrador(nombre, apellido, correo, clave, ciudad, fechaNacimiento, telefono);
+
+                List<Administrador> adminList = new List<Administrador> { administrador };
+                string rutaArchivoXML = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.xml");
+                Serializadora<Administrador>.GuardarComoXML(adminList, rutaArchivoXML);
+
                 MessageBox.Show($"{this.administrador.ToString()}");
             }
+
             this.Hide();
             FrmMenu menu = new FrmMenu();
             menu.Show();
-
         }
+
 
 
     }

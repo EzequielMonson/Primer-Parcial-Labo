@@ -12,11 +12,18 @@ namespace Clases
     {
         public List<Vivienda> viviendasACargo;
         public List<Vivienda> viviendasDisponibles;
-        public List<Inquilino> InquilinosPendientes;
-        public Administrador(string nombre, string apellido, string correo, string contraseña, string ciudad,string fechaNacimiento, int telefono) : base(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono)
+        public List<Inquilino> inquilinosPendientes;
+
+        public Administrador() : base()
         {
         }
-        public void AgregarPago(Queue<Dictionary<string, object>> colaDeudas, string vencimiento, string fecha, int monto )
+        public Administrador(string nombre, string apellido, string correo, string contraseña, string ciudad,string fechaNacimiento, int telefono) : base(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono)
+        {
+            viviendasACargo = new List<Vivienda>();
+            viviendasDisponibles = new List<Vivienda>();
+            inquilinosPendientes = new List<Inquilino>();
+        }
+        /*public void AgregarPago(Queue<Dictionary<string, object>> colaDeudas, string vencimiento, string fecha, int monto )
         {
             Dictionary<string, object> dictDeuda = new Dictionary<string, object>
             {
@@ -25,10 +32,10 @@ namespace Clases
                 { "monto", monto }
             };
             colaDeudas.Enqueue(dictDeuda);
-        }
+        }*/
         public void MostrarInquilinosPendientes() 
         {
-            foreach (var inquilino in InquilinosPendientes)
+            foreach (var inquilino in inquilinosPendientes)
             {
                 Console.WriteLine($"Nombre: {inquilino.ToString}");
                 Console.WriteLine($"Correo: {inquilino.Dni}");
@@ -41,22 +48,31 @@ namespace Clases
             viviendaAAlquilar.Inquilino = nuevoInquilino;
             nuevoInquilino.Estado = Estado.Activo;
         }
-        public override void MostrarHistorialActividades()
-        {
-            throw new NotImplementedException();
-        }
 
         public override void MostrarHistorialPagos()
         {
             throw new NotImplementedException();
         }
+        public override void AgregarActividad(string tipo)
+        {
+            // Agregar actividades a la lista específica de Inquilino
+            string rutaArchivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ActividadAdministrador.json");
+            var nuevaActividad = new Actividad(DateTime.Now, tipo);
+            actividades.Add(nuevaActividad);
 
-        public void MostrarDeudores()
+            Serializadora<Actividad>.GuardarComoJSON(actividades, rutaArchivo);
+        }
+        public void MostrarDeudores(List<Inquilino> listaDeudores)
         { 
         }
         public void PermitirNuevoInquilino(Inquilino inquilino)
-        { 
+        {
+            inquilino.Estado = Estado.Activo;
 
+        }
+        public void RechazarNuevoInquilino(Inquilino inquilino)
+        {
+            inquilino.Estado = Estado.Rechazado;
         }
     }
 }

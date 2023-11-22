@@ -143,7 +143,6 @@ namespace UI
             Controls.Add(grpDatos);
             Name = "Login";
             Text = "Form1";
-            Load += BtnIniciarSesion_Click;
             Controls.SetChildIndex(grpDatos, 0);
             Controls.SetChildIndex(btnInicioSesion, 0);
             Controls.SetChildIndex(btnAtras, 0);

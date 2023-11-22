@@ -11,7 +11,7 @@ namespace Clases
         Activo,
         Inactivo,
         Pendiente,
-        Eliminado
+        Rechazado
     }
     public class Inquilino : Usuario
     {
@@ -21,6 +21,9 @@ namespace Clases
         private Estado estado;
         private readonly int dni;
         private int edad;
+        public Inquilino() 
+        {
+        }
         public Inquilino(string nombre, string apellido, string correo, string contraseña, string ciudad, string fechaNacimiento, int telefono, string direccion, int dni, int edad) : base(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono)
         {
             this.direccion = direccion;
@@ -34,11 +37,21 @@ namespace Clases
         public Estado Estado { get => estado; set => estado = value; }
         public string Direccion { get => direccion; set => direccion = value; }
         public Vivienda Vivienda { get => vivienda; set => vivienda = value; }
-        public Queue<Dictionary<string, object>> ColaDeudas { get => colaDeudas; set => colaDeudas = value; }
+       // public Queue<Dictionary<string, object>> ColaDeudas { get => colaDeudas; set => colaDeudas = value; }
 
         public void ElegirVivienda(Vivienda viviendaElegida)
         {
             this.vivienda = viviendaElegida;
+        }
+        public override void AgregarActividad(string tipo)
+        {
+            // Agregar actividades a la lista específica de Inquilino
+            string rutaArchivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ActividadInquilino.json");
+            var nuevaActividad = new Actividad(DateTime.Now, tipo);
+            actividades.Add(nuevaActividad);
+
+            // Guardar el historial actualizado en un archivo JSON específico para Inquilino
+            Serializadora<Actividad>.GuardarComoJSON(actividades, rutaArchivo);
         }
         public void PagarDeuda()
         {

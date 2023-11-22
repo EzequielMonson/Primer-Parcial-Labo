@@ -7,15 +7,27 @@ namespace ConsoPruebas
     {
         static void Main(string[] args)
         {
-            /*
-            Administrador UnAdmin = new Administrador("José", "Martin", "Jose2023@Gmail.com", "123abc", "Banfield", "Remax", 12000);
-            Inquilino UnInquilino = new Inquilino("Raul", "Suarez", "RSuarez@hotmail.com", "Heladera123", "Banfield", "Remax", 30000, "Av brasil 3400");
+           
+            
+            string rutaArchivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistroAdministrador.xml");
+            Administrador aaaa = new Administrador("José", "Martin", "Jose2023@Gmail.com", "123abc", "Banfield", "Remax", 12000);
+            List<Administrador> listaAdmins = new List<Administrador>();
+            listaAdmins.Add(aaaa);
+            Administrador eeee = new Administrador("Leo", "Monier", "leomonier@Gmail.com", "chichi22", "Cordoba", "LarsonCompany", 251536231);
+            listaAdmins.Add(eeee);
+            /*Serializadora<Administrador>.GuardarComoJSON(listaAdmins, rutaArchivo);*/
+            Serializadora<Administrador>.GuardarComoXML(listaAdmins, rutaArchivo);
+            List<Administrador> NuevaLista;
+            NuevaLista = Serializadora<Administrador>.CargarDesdeXML(rutaArchivo);
+            Console.WriteLine("guardado como XML.");
+            foreach (var admin in NuevaLista) 
+            {
+                Console.WriteLine(admin.ToString());
+            }
+            Console.WriteLine($"En: {rutaArchivo}");
+            
 
-            Console.WriteLine(UnAdmin.ToString());
-            Console.WriteLine(UnInquilino.ToString());
-            UnAdmin.AgregarPago(UnInquilino.ColaDeudas, "10-10-2023", "10-09-2023", 10000);
-            */
-            File.WriteAllText(@".\archivo.txt", "hola mundo");
+            
 
         }
     }

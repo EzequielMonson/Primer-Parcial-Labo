@@ -20,6 +20,9 @@ namespace Clases
         public NombreServicios Nombre { get; set; }
         public double Precio { get; set; }
 
+        public Servicio() 
+        {
+        }
         public Servicio(NombreServicios nombre, double precio)
         {
             Nombre = nombre;
