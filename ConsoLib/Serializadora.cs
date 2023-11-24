@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace Clases
 {
-    public static class Serializadora<T>
+    public static class Serializadora<T> 
     {
         public static void GuardarComoJSON(List<T> listaObjetos, string rutaArchivo)
         {

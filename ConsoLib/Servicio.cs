@@ -18,12 +18,12 @@ namespace Clases
     public class Servicio
     {
         public NombreServicios Nombre { get; set; }
-        public double Precio { get; set; }
+        public int Precio { get; set; }
 
         public Servicio() 
         {
         }
-        public Servicio(NombreServicios nombre, double precio)
+        public Servicio(NombreServicios nombre, int precio)
         {
             Nombre = nombre;
             Precio = precio;

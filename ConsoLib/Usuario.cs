@@ -1,5 +1,6 @@
 ﻿namespace Clases
 {
+
     public abstract class Usuario
     {
         public string nombre;
@@ -9,13 +10,15 @@
         public string ciudad;
         public string fechaNacimiento;
         public int telefono;
+        public int dni;
+        public int edad;
         public int saldo;
         public List<Actividad> actividades;
-
+        
         public Usuario()
         {
         }
-        protected Usuario(string nombre, string apellido, string correo, string contraseña, string ciudad, string fechaNacimiento, int telefono)
+        protected Usuario(string nombre, string apellido, string correo, string contraseña, string ciudad, string fechaNacimiento, int telefono, int dni, int edad)
         {
             this.correo = correo;
             this.contraseña = contraseña;
@@ -25,6 +28,9 @@
             this.fechaNacimiento = fechaNacimiento;
             this.telefono = telefono;
             saldo = 0;
+            this.dni = dni;
+            this.edad = edad;
+            
         }
         public virtual void MostrarHistorialActividades()
         {

@@ -29,22 +29,22 @@
         private void InitializeComponent()
         {
             grpDatosViviendas = new GroupBox();
+            nudHabitaciones = new NumericUpDown();
             label3 = new Label();
             chklServicios = new CheckedListBox();
-            label7 = new Label();
+            txtHabitaciones = new Label();
             nudPiso = new NumericUpDown();
-            cboUso = new ComboBox();
             cboDepartamento = new ComboBox();
             cboCiudad = new ComboBox();
-            nudIinquilinos = new NumericUpDown();
-            txtDireccion = new TextBox();
-            label6 = new Label();
+            nudInquilinos = new NumericUpDown();
+            txtDireccionVivienda = new TextBox();
             cboArriendador = new ComboBox();
             label10 = new Label();
             label9 = new Label();
             lblOcupantes = new Label();
             label8 = new Label();
             lblPiso = new Label();
+            label6 = new Label();
             grpRol = new GroupBox();
             radInquilino = new RadioButton();
             radAdministrador = new RadioButton();
@@ -83,8 +83,9 @@
             dtpFechaNacimiento = new DateTimePicker();
             groupBox4 = new GroupBox();
             grpDatosViviendas.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudHabitaciones).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudPiso).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)nudIinquilinos).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudInquilinos).BeginInit();
             grpRol.SuspendLayout();
             grpDatosEmpleo.SuspendLayout();
             grpDatosIngreso.SuspendLayout();
@@ -93,15 +94,15 @@
             // 
             // grpDatosViviendas
             // 
+            grpDatosViviendas.Controls.Add(nudHabitaciones);
             grpDatosViviendas.Controls.Add(label3);
             grpDatosViviendas.Controls.Add(chklServicios);
-            grpDatosViviendas.Controls.Add(label7);
+            grpDatosViviendas.Controls.Add(txtHabitaciones);
             grpDatosViviendas.Controls.Add(nudPiso);
-            grpDatosViviendas.Controls.Add(cboUso);
             grpDatosViviendas.Controls.Add(cboDepartamento);
             grpDatosViviendas.Controls.Add(cboCiudad);
-            grpDatosViviendas.Controls.Add(nudIinquilinos);
-            grpDatosViviendas.Controls.Add(txtDireccion);
+            grpDatosViviendas.Controls.Add(nudInquilinos);
+            grpDatosViviendas.Controls.Add(txtDireccionVivienda);
             grpDatosViviendas.Controls.Add(cboArriendador);
             grpDatosViviendas.Controls.Add(label10);
             grpDatosViviendas.Controls.Add(label9);
@@ -119,10 +120,23 @@
             grpDatosViviendas.Text = "Datos de la vivienda";
             grpDatosViviendas.Visible = false;
             // 
+            // nudHabitaciones
+            // 
+            nudHabitaciones.BackColor = Color.FromArgb(255, 128, 128);
+            nudHabitaciones.BorderStyle = BorderStyle.FixedSingle;
+            nudHabitaciones.ForeColor = Color.White;
+            nudHabitaciones.Location = new Point(412, 114);
+            nudHabitaciones.Maximum = new decimal(new int[] { 6, 0, 0, 0 });
+            nudHabitaciones.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudHabitaciones.Name = "nudHabitaciones";
+            nudHabitaciones.Size = new Size(141, 27);
+            nudHabitaciones.TabIndex = 26;
+            nudHabitaciones.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(312, 147);
+            label3.Location = new Point(301, 147);
             label3.Name = "label3";
             label3.Size = new Size(75, 20);
             label3.TabIndex = 25;
@@ -139,14 +153,14 @@
             chklServicios.Size = new Size(141, 48);
             chklServicios.TabIndex = 24;
             // 
-            // label7
+            // txtHabitaciones
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(312, 114);
-            label7.Name = "label7";
-            label7.Size = new Size(40, 20);
-            label7.TabIndex = 23;
-            label7.Text = "Uso:";
+            txtHabitaciones.AutoSize = true;
+            txtHabitaciones.Location = new Point(301, 114);
+            txtHabitaciones.Name = "txtHabitaciones";
+            txtHabitaciones.Size = new Size(103, 20);
+            txtHabitaciones.TabIndex = 23;
+            txtHabitaciones.Text = "Habitaciones:";
             // 
             // nudPiso
             // 
@@ -158,17 +172,6 @@
             nudPiso.Name = "nudPiso";
             nudPiso.Size = new Size(129, 27);
             nudPiso.TabIndex = 22;
-            // 
-            // cboUso
-            // 
-            cboUso.BackColor = Color.FromArgb(255, 128, 128);
-            cboUso.FlatStyle = FlatStyle.Popup;
-            cboUso.ForeColor = Color.White;
-            cboUso.FormattingEnabled = true;
-            cboUso.Location = new Point(412, 110);
-            cboUso.Name = "cboUso";
-            cboUso.Size = new Size(141, 28);
-            cboUso.TabIndex = 21;
             // 
             // cboDepartamento
             // 
@@ -192,36 +195,27 @@
             cboCiudad.Size = new Size(141, 28);
             cboCiudad.TabIndex = 19;
             // 
-            // nudIinquilinos
+            // nudInquilinos
             // 
-            nudIinquilinos.BackColor = Color.FromArgb(255, 128, 128);
-            nudIinquilinos.BorderStyle = BorderStyle.FixedSingle;
-            nudIinquilinos.ForeColor = Color.White;
-            nudIinquilinos.Location = new Point(166, 140);
-            nudIinquilinos.Maximum = new decimal(new int[] { 6, 0, 0, 0 });
-            nudIinquilinos.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            nudIinquilinos.Name = "nudIinquilinos";
-            nudIinquilinos.Size = new Size(129, 27);
-            nudIinquilinos.TabIndex = 18;
-            nudIinquilinos.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            nudInquilinos.BackColor = Color.FromArgb(255, 128, 128);
+            nudInquilinos.BorderStyle = BorderStyle.FixedSingle;
+            nudInquilinos.ForeColor = Color.White;
+            nudInquilinos.Location = new Point(166, 140);
+            nudInquilinos.Maximum = new decimal(new int[] { 6, 0, 0, 0 });
+            nudInquilinos.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudInquilinos.Name = "nudInquilinos";
+            nudInquilinos.Size = new Size(129, 27);
+            nudInquilinos.TabIndex = 18;
+            nudInquilinos.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // txtDireccion
+            // txtDireccionVivienda
             // 
-            txtDireccion.BackColor = Color.FromArgb(255, 128, 128);
-            txtDireccion.ForeColor = Color.White;
-            txtDireccion.Location = new Point(166, 37);
-            txtDireccion.Name = "txtDireccion";
-            txtDireccion.Size = new Size(129, 27);
-            txtDireccion.TabIndex = 17;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(33, 40);
-            label6.Name = "label6";
-            label6.Size = new Size(78, 20);
-            label6.TabIndex = 16;
-            label6.Text = "Dirección:";
+            txtDireccionVivienda.BackColor = Color.FromArgb(255, 128, 128);
+            txtDireccionVivienda.ForeColor = Color.White;
+            txtDireccionVivienda.Location = new Point(166, 37);
+            txtDireccionVivienda.Name = "txtDireccionVivienda";
+            txtDireccionVivienda.Size = new Size(129, 27);
+            txtDireccionVivienda.TabIndex = 17;
             // 
             // cboArriendador
             // 
@@ -246,7 +240,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(312, 40);
+            label9.Location = new Point(301, 40);
             label9.Name = "label9";
             label9.Size = new Size(99, 20);
             label9.TabIndex = 6;
@@ -265,7 +259,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(312, 77);
+            label8.Location = new Point(301, 77);
             label8.Name = "label8";
             label8.Size = new Size(61, 20);
             label8.TabIndex = 5;
@@ -279,6 +273,15 @@
             lblPiso.Size = new Size(42, 20);
             lblPiso.TabIndex = 4;
             lblPiso.Text = "Piso:";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(33, 40);
+            label6.Name = "label6";
+            label6.Size = new Size(78, 20);
+            label6.TabIndex = 16;
+            label6.Text = "Dirección:";
             // 
             // grpRol
             // 
@@ -701,8 +704,9 @@
             Controls.SetChildIndex(btnSiguiente, 0);
             grpDatosViviendas.ResumeLayout(false);
             grpDatosViviendas.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudHabitaciones).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudPiso).EndInit();
-            ((System.ComponentModel.ISupportInitialize)nudIinquilinos).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudInquilinos).EndInit();
             grpRol.ResumeLayout(false);
             grpRol.PerformLayout();
             grpDatosEmpleo.ResumeLayout(false);
@@ -726,14 +730,12 @@
         private RadioButton radAdministrador;
         private ComboBox cboArriendador;
         private Label label6;
-        private NumericUpDown nudIinquilinos;
-        private TextBox txtDireccion;
+        private NumericUpDown nudInquilinos;
+        private TextBox txtDireccionVivienda;
         private Button btnAtras;
         private NumericUpDown nudPiso;
-        private ComboBox cboUso;
         private ComboBox cboDepartamento;
         private ComboBox cboCiudad;
-        private Label label7;
         private GroupBox grpDatosEmpleo;
         private Label label1;
         private ComboBox cboCiudadAdministrador;
@@ -769,5 +771,7 @@
         private Label label14;
         private TextBox txtClaveIngreso;
         private Label label13;
+        private NumericUpDown nudHabitaciones;
+        private Label txtHabitaciones;
     }
 }

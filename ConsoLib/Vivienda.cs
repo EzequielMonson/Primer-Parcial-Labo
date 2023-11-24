@@ -34,20 +34,61 @@ namespace Clases
             this.cantInquilinos = cantInquilinos;
             
         }
-        public Inquilino Inquilino { get => inquilino; set => inquilino = value; }
-        public double MostrarPrecio(double precioBase)
+        public Inquilino Inquilino
         {
-            double precioTotal = precioBase;
+            get => inquilino;
+            set
+            {
+                inquilino = value;
+                CalcularDeuda();
+            }
+        }
+
+        public int CalcularPrecioBase()
+        {
+           
+            return 1000; // precio base fijo de 1000
+        }
+        public int CalcularPrecioTotal()
+        {
+            int precioTotal = CalcularPrecioBase();
+
             foreach (Servicio unServicio in servicios)
             {
                 precioTotal += unServicio.Precio;
             }
+
+            return precioTotal;
+        }
+
+        private void CalcularDeuda()
+        {
+            if (inquilino != null)
+            {
+                int precioTotal = CalcularPrecioTotal();
+                Deuda nuevaDeuda = new Deuda(precioTotal, "Alquiler", DateTime.Now, DateTime.Now.AddMonths(1));
+                inquilino.AgregarDeuda(nuevaDeuda);
+            }
+        }
+
+
+        public int MostrarPrecio(int precioBase)
+        {
+            int precioTotal = precioBase;
+
+            foreach (Servicio unServicio in servicios)
+            {
+                precioTotal += unServicio.Precio;
+            }
+
             return precioTotal;
         }
         public void AgregarServicio(Servicio nuevoServicio)
         {
             this.servicios.Add(nuevoServicio);
+            CalcularDeuda(); // Actualiza la deuda cuando se agrega un nuevo servicio
         }
+
         public void CancelarServicio(NombreServicios servicioAEliminar)
         {
             for (int i = this.servicios.Count - 1; i >= 0; i--)
@@ -57,13 +98,17 @@ namespace Clases
                     this.servicios.RemoveAt(i);
                 }
             }
-        }
-        public override string ToString()
-        {
-            return $" el piso {piso} en el departamento {departamento}";
+
+            CalcularDeuda(); // Actualiza la deuda cuando se cancela un servicio
         }
 
+        public override string ToString()
+        {
+            return $"El piso {piso} en el departamento {departamento}";
+        }
     }
+
 }
+
 
 

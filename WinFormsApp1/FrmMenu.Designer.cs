@@ -29,28 +29,29 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMenu));
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             grpDeudas = new GroupBox();
             lblDeudas = new Label();
             dtgDeudas = new DataGridView();
-            ColumnaUno = new DataGridViewTextBoxColumn();
-            ColumnaDos = new DataGridViewTextBoxColumn();
-            ColumnaTres = new DataGridViewTextBoxColumn();
             grpMensajes = new GroupBox();
             lblMensajes = new Label();
             dtgMensajes = new DataGridView();
-            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
-            ColumnUno = new DataGridViewCheckBoxColumn();
-            Columna2 = new DataGridViewCheckBoxColumn();
+            Propuesta = new DataGridViewTextBoxColumn();
+            ColumnaFavor = new DataGridViewCheckBoxColumn();
+            ColumnaContra = new DataGridViewCheckBoxColumn();
             notifyIcon1 = new NotifyIcon(components);
             grpPagos = new GroupBox();
             lblPagos = new Label();
             dtgPagos = new DataGridView();
-            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+            fechaAbonoPagos = new DataGridViewTextBoxColumn();
+            cantidadAbonadaPagos = new DataGridViewTextBoxColumn();
+            fechaVencimientoPagos = new DataGridViewTextBoxColumn();
+            inquilino = new DataGridViewComboBoxColumn();
+            fechaEmisionDeudas = new DataGridViewTextBoxColumn();
+            cantidadAbonarDeudas = new DataGridViewTextBoxColumn();
+            FechaVencimiento = new DataGridViewTextBoxColumn();
             grpDeudas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtgDeudas).BeginInit();
             grpMensajes.SuspendLayout();
@@ -89,7 +90,7 @@
             dtgDeudas.AllowUserToResizeRows = false;
             dtgDeudas.BackgroundColor = Color.FromArgb(255, 192, 192);
             dtgDeudas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgDeudas.Columns.AddRange(new DataGridViewColumn[] { ColumnaUno, ColumnaDos, ColumnaTres });
+            dtgDeudas.Columns.AddRange(new DataGridViewColumn[] { inquilino, fechaEmisionDeudas, cantidadAbonarDeudas, FechaVencimiento });
             dtgDeudas.GridColor = Color.Black;
             dtgDeudas.Location = new Point(26, 54);
             dtgDeudas.Name = "dtgDeudas";
@@ -97,30 +98,6 @@
             dtgDeudas.RowTemplate.Height = 25;
             dtgDeudas.Size = new Size(560, 103);
             dtgDeudas.TabIndex = 0;
-            // 
-            // ColumnaUno
-            // 
-            ColumnaUno.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle5.BackColor = Color.Salmon;
-            ColumnaUno.DefaultCellStyle = dataGridViewCellStyle5;
-            ColumnaUno.HeaderText = "Fecha de emisión";
-            ColumnaUno.Name = "ColumnaUno";
-            ColumnaUno.ReadOnly = true;
-            ColumnaUno.Resizable = DataGridViewTriState.True;
-            // 
-            // ColumnaDos
-            // 
-            ColumnaDos.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            ColumnaDos.HeaderText = "Cantidad a abonar";
-            ColumnaDos.Name = "ColumnaDos";
-            ColumnaDos.ReadOnly = true;
-            // 
-            // ColumnaTres
-            // 
-            ColumnaTres.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            ColumnaTres.HeaderText = "Fecha de vencimiento";
-            ColumnaTres.Name = "ColumnaTres";
-            ColumnaTres.ReadOnly = true;
             // 
             // grpMensajes
             // 
@@ -152,7 +129,7 @@
             dtgMensajes.AllowUserToResizeRows = false;
             dtgMensajes.BackgroundColor = Color.FromArgb(255, 192, 192);
             dtgMensajes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgMensajes.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn3, ColumnUno, Columna2 });
+            dtgMensajes.Columns.AddRange(new DataGridViewColumn[] { Propuesta, ColumnaFavor, ColumnaContra });
             dtgMensajes.GridColor = Color.Black;
             dtgMensajes.Location = new Point(25, 47);
             dtgMensajes.Name = "dtgMensajes";
@@ -161,29 +138,29 @@
             dtgMensajes.Size = new Size(560, 103);
             dtgMensajes.TabIndex = 2;
             // 
-            // dataGridViewTextBoxColumn3
+            // Propuesta
             // 
-            dataGridViewTextBoxColumn3.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewTextBoxColumn3.HeaderText = "Propuesta";
-            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            dataGridViewTextBoxColumn3.ReadOnly = true;
-            dataGridViewTextBoxColumn3.Resizable = DataGridViewTriState.True;
+            Propuesta.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Propuesta.HeaderText = "Propuesta";
+            Propuesta.Name = "Propuesta";
+            Propuesta.ReadOnly = true;
+            Propuesta.Resizable = DataGridViewTriState.True;
             // 
-            // ColumnUno
+            // ColumnaFavor
             // 
-            ColumnUno.HeaderText = "Favor";
-            ColumnUno.Name = "ColumnUno";
-            ColumnUno.ReadOnly = true;
-            ColumnUno.Resizable = DataGridViewTriState.True;
-            ColumnUno.SortMode = DataGridViewColumnSortMode.Automatic;
+            ColumnaFavor.HeaderText = "Favor";
+            ColumnaFavor.Name = "ColumnaFavor";
+            ColumnaFavor.ReadOnly = true;
+            ColumnaFavor.Resizable = DataGridViewTriState.True;
+            ColumnaFavor.SortMode = DataGridViewColumnSortMode.Automatic;
             // 
-            // Columna2
+            // ColumnaContra
             // 
-            Columna2.HeaderText = "Contra";
-            Columna2.Name = "Columna2";
-            Columna2.ReadOnly = true;
-            Columna2.Resizable = DataGridViewTriState.True;
-            Columna2.SortMode = DataGridViewColumnSortMode.Automatic;
+            ColumnaContra.HeaderText = "Contra";
+            ColumnaContra.Name = "ColumnaContra";
+            ColumnaContra.ReadOnly = true;
+            ColumnaContra.Resizable = DataGridViewTriState.True;
+            ColumnaContra.SortMode = DataGridViewColumnSortMode.Automatic;
             // 
             // notifyIcon1
             // 
@@ -221,7 +198,7 @@
             dtgPagos.AllowUserToResizeRows = false;
             dtgPagos.BackgroundColor = Color.FromArgb(255, 192, 192);
             dtgPagos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgPagos.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn4 });
+            dtgPagos.Columns.AddRange(new DataGridViewColumn[] { fechaAbonoPagos, cantidadAbonadaPagos, fechaVencimientoPagos });
             dtgPagos.GridColor = Color.Black;
             dtgPagos.Location = new Point(22, 59);
             dtgPagos.Name = "dtgPagos";
@@ -230,31 +207,62 @@
             dtgPagos.Size = new Size(560, 103);
             dtgPagos.TabIndex = 0;
             // 
-            // dataGridViewTextBoxColumn1
+            // fechaAbonoPagos
             // 
-            dataGridViewTextBoxColumn1.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle6.BackColor = Color.Salmon;
-            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle6;
-            dataGridViewTextBoxColumn1.HeaderText = "Fecha de abono";
-            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            dataGridViewTextBoxColumn1.ReadOnly = true;
-            dataGridViewTextBoxColumn1.Resizable = DataGridViewTriState.True;
+            fechaAbonoPagos.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle2.BackColor = Color.Salmon;
+            fechaAbonoPagos.DefaultCellStyle = dataGridViewCellStyle2;
+            fechaAbonoPagos.HeaderText = "Fecha de abono";
+            fechaAbonoPagos.Name = "fechaAbonoPagos";
+            fechaAbonoPagos.ReadOnly = true;
+            fechaAbonoPagos.Resizable = DataGridViewTriState.True;
             // 
-            // dataGridViewTextBoxColumn2
+            // cantidadAbonadaPagos
             // 
-            dataGridViewTextBoxColumn2.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewTextBoxColumn2.HeaderText = "Cantidad a abonada";
-            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            dataGridViewTextBoxColumn2.ReadOnly = true;
+            cantidadAbonadaPagos.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            cantidadAbonadaPagos.HeaderText = "Cantidad a abonada";
+            cantidadAbonadaPagos.Name = "cantidadAbonadaPagos";
+            cantidadAbonadaPagos.ReadOnly = true;
             // 
-            // dataGridViewTextBoxColumn4
+            // fechaVencimientoPagos
             // 
-            dataGridViewTextBoxColumn4.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewTextBoxColumn4.HeaderText = "Fecha de vencimiento";
-            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            dataGridViewTextBoxColumn4.ReadOnly = true;
+            fechaVencimientoPagos.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            fechaVencimientoPagos.HeaderText = "Fecha de vencimiento";
+            fechaVencimientoPagos.Name = "fechaVencimientoPagos";
+            fechaVencimientoPagos.ReadOnly = true;
             // 
-            // FrmMenuInquilino
+            // inquilino
+            // 
+            inquilino.HeaderText = "Inquilino";
+            inquilino.Name = "inquilino";
+            inquilino.ReadOnly = true;
+            inquilino.Visible = false;
+            // 
+            // fechaEmisionDeudas
+            // 
+            fechaEmisionDeudas.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle1.BackColor = Color.Salmon;
+            fechaEmisionDeudas.DefaultCellStyle = dataGridViewCellStyle1;
+            fechaEmisionDeudas.HeaderText = "Fecha de emisión";
+            fechaEmisionDeudas.Name = "fechaEmisionDeudas";
+            fechaEmisionDeudas.ReadOnly = true;
+            fechaEmisionDeudas.Resizable = DataGridViewTriState.True;
+            // 
+            // cantidadAbonarDeudas
+            // 
+            cantidadAbonarDeudas.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            cantidadAbonarDeudas.HeaderText = "Cantidad a abonar";
+            cantidadAbonarDeudas.Name = "cantidadAbonarDeudas";
+            cantidadAbonarDeudas.ReadOnly = true;
+            // 
+            // FechaVencimiento
+            // 
+            FechaVencimiento.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            FechaVencimiento.HeaderText = "Fecha de vencimiento";
+            FechaVencimiento.Name = "FechaVencimiento";
+            FechaVencimiento.ReadOnly = true;
+            // 
+            // FrmMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -263,9 +271,9 @@
             Controls.Add(grpPagos);
             Controls.Add(grpMensajes);
             Controls.Add(grpDeudas);
-            Name = "FrmMenuInquilino";
-            Text = "FrmMenuInquilino";
-            Load += FrmMenuInquilino_Load;
+            Name = "FrmMenu";
+            Text = "FrmMenu";
+            Load += FrmMenu_Load;
             Controls.SetChildIndex(grpDeudas, 0);
             Controls.SetChildIndex(grpMensajes, 0);
             Controls.SetChildIndex(grpPagos, 0);
@@ -287,20 +295,21 @@
         private GroupBox grpMensajes;
         private DataGridView dtgDeudas;
         private Label lblDeudas;
-        private DataGridViewTextBoxColumn ColumnaUno;
-        private DataGridViewTextBoxColumn ColumnaDos;
-        private DataGridViewTextBoxColumn ColumnaTres;
         private NotifyIcon notifyIcon1;
         private Label lblMensajes;
         private DataGridView dtgMensajes;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private DataGridViewCheckBoxColumn ColumnUno;
-        private DataGridViewCheckBoxColumn Columna2;
         private GroupBox grpPagos;
         private Label lblPagos;
         private DataGridView dtgPagos;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private DataGridViewTextBoxColumn Propuesta;
+        private DataGridViewCheckBoxColumn ColumnaFavor;
+        private DataGridViewCheckBoxColumn ColumnaContra;
+        private DataGridViewTextBoxColumn fechaAbonoPagos;
+        private DataGridViewTextBoxColumn cantidadAbonadaPagos;
+        private DataGridViewTextBoxColumn fechaVencimientoPagos;
+        private DataGridViewComboBoxColumn inquilino;
+        private DataGridViewTextBoxColumn fechaEmisionDeudas;
+        private DataGridViewTextBoxColumn cantidadAbonarDeudas;
+        private DataGridViewTextBoxColumn FechaVencimiento;
     }
 }
