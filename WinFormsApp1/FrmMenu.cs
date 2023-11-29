@@ -9,19 +9,95 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Text.Json;
 
 namespace UI
 {
-    public partial class FrmMenu : Form
+    public partial class FrmMenu : Formulario
     {
         private Administrador administradorActual;
         private Inquilino inquilinoActual;
+        public List<Inquilino> listaInquilinos;
 
-        public void FrmMenu_Load(object sender, EventArgs e)
-        { 
-        
+        public FrmMenu()
+        {
+            InitializeComponent();
         }
-        // Agrega esta propiedad para determinar el tipo de usuario
+        public void FrmMenu_Load(object sender, EventArgs e)
+        {
+            string jsonFilePath = "registrosInquilino.json";
+
+            if (File.Exists(jsonFilePath))
+            {
+                //string jsonContent = File.ReadAllText(jsonFilePath);
+                //listaInquilinos = JsonSerializer.Deserialize<List<Inquilino>>(jsonContent);
+                listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON(jsonFilePath);
+            }
+            else
+            {
+                MessageBox.Show("El archivo JSON no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                listaInquilinos = new List<Inquilino> ();
+            }
+            if (UsuarioActual == TipoUsuario.Administrador)
+            {
+                List<Vivienda> listaVivienda = administradorActual.viviendasACargo;
+                List<Inquilino> listaInquilinosDeViviendasACargo = new List<Inquilino>();
+                foreach (var vivienda in listaVivienda)
+                {
+                    foreach (var inquilino in listaInquilinos)
+                    {
+                        if (vivienda.dniInquilino == inquilino.dni)
+                        {
+                            listaInquilinosDeViviendasACargo.Add(inquilino);
+                            inquilino.CalcularDeuda(vivienda);
+
+                        }
+                    }
+                }
+                Serializadora<Inquilino>.GuardarComoJSON(listaInquilinos, jsonFilePath);
+                this.cmbInquilinoSeleccionado.DataSource = listaInquilinosDeViviendasACargo;
+                this.grpInquilinoSeleccionado.Visible = true;
+                cmbInquilinoSeleccionado.DisplayMember = "ToString";
+                cmbInquilinoSeleccionado.ValueMember =  null;
+                //this.grpPagos.Location = grpInquilinoSeleccionado.Location;
+
+                Inquilino inquilinoSeleccionado = (Inquilino)cmbInquilinoSeleccionado.SelectedItem;
+                this.inquilinoActual = inquilinoSeleccionado;
+                
+                if (inquilinoSeleccionado != null)
+                {
+                    // Mostrar el nombre del inquilino en algún control, por ejemplo, un label
+                    lblInquilinoSeleccionado.Text = $"INQUILINO: {inquilinoSeleccionado.ToString()}";
+                    lblInquilinoSeleccionado.Location =  new Point(70, 19);
+
+                    
+                    CargarPagos();
+                    CargarDeudas();
+                }
+                cmbInquilinoSeleccionado.SelectedIndexChanged += cmbInquilinoSeleccionado_SelectedIndexChanged;
+
+
+            }
+            if (UsuarioActual == TipoUsuario.Inquilino)
+            {
+                CargarPagos();
+                CargarDeudas();
+            }
+        }
+        private void cmbInquilinoSeleccionado_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Inquilino inquilinoSeleccionado = (Inquilino)cmbInquilinoSeleccionado.SelectedItem;
+            this.inquilinoActual = inquilinoSeleccionado;
+            if (inquilinoSeleccionado != null)
+            {
+                lblInquilinoSeleccionado.Text = $"INQUILINO: {inquilinoSeleccionado.ToString()}";
+                lblInquilinoSeleccionado.Location = new Point(70, 19);
+
+                // Update the data in DataGridViews based on the selected Inquilino
+                CargarPagos();
+                CargarDeudas();
+            }
+        }
         public enum TipoUsuario
         {
             Administrador,
@@ -35,9 +111,13 @@ namespace UI
         // Añade este método para establecer el administrador actual
         public void SetAdministrador(Administrador administrador)
         {
+            
             administradorActual = administrador;
             UsuarioActual = TipoUsuario.Administrador;
-            //MostrarInquilinosACargo();
+            //
+
+            // Verificar si hay un inquilino seleccionado
+            
         }
 
         // Añade este método para establecer el inquilino actual
@@ -45,6 +125,9 @@ namespace UI
         {
             inquilinoActual = inquilino;
             UsuarioActual = TipoUsuario.Inquilino;
+            this.grpInquilinoSeleccionado.Visible = false;
+
+
         }
         private void CargarPagos()
         {
@@ -52,19 +135,22 @@ namespace UI
             List<Pago> listaPagos = inquilinoActual.HistorialPagos;
 
             dtgPagos.Rows.Clear();
-
-            foreach (var pago in listaPagos)
+            if (listaPagos != null)
             {
-                // Añadir una nueva fila y llenar las columnas específicas
-                int rowIndex = dtgPagos.Rows.Add();
-                dtgPagos.Rows[rowIndex].Cells["fechaAbonoPagos"].Value = pago.FechaAbono;
-                dtgPagos.Rows[rowIndex].Cells["cantidadAbonadaPagos"].Value = pago.CantidadAbonada;
-                dtgPagos.Rows[rowIndex].Cells["fechaVencimientoPagos"].Value = pago.FechaVencimiento;
+                foreach (var pago in listaPagos)
+                {
+                    // Añadir una nueva fila y llenar las columnas específicas
+                    int rowIndex = dtgPagos.Rows.Add();
+                    dtgPagos.Rows[rowIndex].Cells["fechaAbonoPagos"].Value = pago.FechaAbono;
+                    dtgPagos.Rows[rowIndex].Cells["cantidadAbonadaPagos"].Value = pago.CantidadAbonada;
+                    dtgPagos.Rows[rowIndex].Cells["fechaVencimientoPagos"].Value = pago.FechaVencimiento;
+                }
             }
         }
         private void CargarDeudas()
         {
             // Asumiendo que Inquilino tiene una propiedad Queue<Deuda> llamada ColaDeudas
+            
             Queue<Deuda> colaDeudas = inquilinoActual.ColaDeudas;
 
             dtgDeudas.Rows.Clear();

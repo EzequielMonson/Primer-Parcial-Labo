@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,6 +65,35 @@ namespace Clases
                 return false;
             }
             return true;
+        }
+        public bool ConfirmarCorreo(string correoIngresado)
+        {
+
+            if (unInquilino.correo == correoIngresado)
+            {
+                
+                return true;
+            }
+            else
+            {
+                EnviarMensajeError("Los correos ingresados no coinciden.");
+                return false;
+            }
+        
+        }
+
+        public bool ConfirmarContraseña(string contraseñaIngresada)
+        {
+            if (unInquilino.contraseña == contraseñaIngresada)
+            {
+                return true;
+            }
+            else
+            {
+                EnviarMensajeError("Las contraseñas ingresadas no coinciden.");
+                return false;
+            }
+
         }
     }
 }

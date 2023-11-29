@@ -71,7 +71,7 @@ namespace Clases
                 throw new InvalidOperationException($"No se pudo cargar el archivo XML: {ex.Message}", ex);
             }
         }
-        public static void GuardarComoXML(List<T> listaObjetos, string rutaArchivo)
+        public static void GuardarComoXML(List<T> listaObjetos, string rutaArchivo, string tipo)
         {
             if (listaObjetos == null)
                 throw new ArgumentNullException(nameof(listaObjetos));
@@ -86,9 +86,17 @@ namespace Clases
 
                 using (TextWriter writer = new StreamWriter(rutaArchivo))
                 {
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<T>));
-                    // Serializar y guardar la lista combinada
-                    xmlSerializer.Serialize(writer, datosExistente);
+                    if (tipo == "administrador")
+                    {
+                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Administrador>));
+                        xmlSerializer.Serialize(writer, datosExistente);
+                    }
+                    if (tipo == "Inquilino")
+                    {
+                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Inquilino>));
+                        xmlSerializer.Serialize(writer, datosExistente);
+                    }
+                    
                 }
             }
             catch (IOException ex)

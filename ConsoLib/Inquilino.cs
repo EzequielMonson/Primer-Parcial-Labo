@@ -40,10 +40,29 @@ namespace Clases
         public Queue<Deuda> ColaDeudas { get => colaDeudas; set => colaDeudas = value; }
         public List<Pago> HistorialPagos { get => historialPagos; }
 
-        public void ElegirVivienda(Vivienda viviendaElegida)
+        public  void ElegirVivienda(Vivienda viviendaElegida)
         {
             this.vivienda = viviendaElegida;
+            vivienda.DniInquilino = Dni;
+            Administrador administrador = vivienda.ObtenerAdministradorPorIdentificacion();//arriendador.inquilinosPendientes.Add(this);
+            administrador.inquilinosPendientes.Add(this);
         }
+        public void CalcularDeuda(Vivienda vivienda)
+        {
+            if (vivienda != null)
+            {
+                int precioTotal = vivienda.CalcularPrecioTotal();
+
+                
+                if (colaDeudas.Count == 0 || colaDeudas.Peek().FechaVencimiento < DateTime.Now)
+                {
+                    Deuda nuevaDeuda = new Deuda(precioTotal, "Alquiler", DateTime.Now, DateTime.Now.AddMonths(1));
+                    AgregarDeuda(nuevaDeuda);
+                }
+            }
+        }
+
+
         public override void AgregarActividad(string tipo)
         {
             // Agregar actividades a la lista específica de Inquilino
@@ -91,9 +110,14 @@ namespace Clases
                 Console.WriteLine($"Error al intentar pagar la deuda: {ex.Message}");
             }
         }
+
         public void AgregarDeuda(Deuda nuevaDeuda)
         {
-            colaDeudas.Enqueue(nuevaDeuda);
+            // Verificar si ya hay una deuda en la cola
+            if (colaDeudas.Count == 0 || colaDeudas.Peek().FechaVencimiento < DateTime.Now)
+            {
+                colaDeudas.Enqueue(nuevaDeuda);
+            }
         }
         public void IngresarSaldo(int saldoIngresado) 
         {

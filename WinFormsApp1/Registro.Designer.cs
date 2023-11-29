@@ -30,43 +30,42 @@
         {
             grpDatosViviendas = new GroupBox();
             nudHabitaciones = new NumericUpDown();
-            label3 = new Label();
+            lblServicios = new Label();
             chklServicios = new CheckedListBox();
-            txtHabitaciones = new Label();
+            lblHabitaciones = new Label();
             nudPiso = new NumericUpDown();
             cboDepartamento = new ComboBox();
             cboCiudad = new ComboBox();
             nudInquilinos = new NumericUpDown();
             txtDireccionVivienda = new TextBox();
             cboArriendador = new ComboBox();
-            label10 = new Label();
-            label9 = new Label();
+            lblDepartamento = new Label();
+            lblArriendador = new Label();
             lblOcupantes = new Label();
-            label8 = new Label();
+            lblCiudadInqui = new Label();
             lblPiso = new Label();
-            label6 = new Label();
+            lblDireccion = new Label();
             grpRol = new GroupBox();
             radInquilino = new RadioButton();
             radAdministrador = new RadioButton();
             btnAtras = new Button();
             grpDatosEmpleo = new GroupBox();
             txtIdentificacion = new TextBox();
-            label5 = new Label();
+            lblIdentificacion = new Label();
             txtContacto = new TextBox();
-            label1 = new Label();
+            lblContactoAgencia = new Label();
             cboCiudadAdministrador = new ComboBox();
             txtAgencia = new TextBox();
-            label2 = new Label();
-            label4 = new Label();
-            label11 = new Label();
+            lblAgencia = new Label();
+            lblCiudad = new Label();
             btnSiguiente = new Button();
             grpDatosIngreso = new GroupBox();
             txtConfirmacionClave = new TextBox();
-            label15 = new Label();
+            lblConfirmarContraseña = new Label();
             txtCorfirmacionCorreo = new TextBox();
-            label14 = new Label();
+            lblConfirmarCorreo = new Label();
             txtClaveIngreso = new TextBox();
-            label13 = new Label();
+            lblContraseña = new Label();
             lblNombre = new Label();
             lblApellido = new Label();
             lblDni = new Label();
@@ -81,7 +80,7 @@
             lblEdad = new Label();
             lblFechaNacimiento = new Label();
             dtpFechaNacimiento = new DateTimePicker();
-            groupBox4 = new GroupBox();
+            grpDatosPersonales = new GroupBox();
             grpDatosViviendas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudHabitaciones).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudPiso).BeginInit();
@@ -89,27 +88,27 @@
             grpRol.SuspendLayout();
             grpDatosEmpleo.SuspendLayout();
             grpDatosIngreso.SuspendLayout();
-            groupBox4.SuspendLayout();
+            grpDatosPersonales.SuspendLayout();
             SuspendLayout();
             // 
             // grpDatosViviendas
             // 
             grpDatosViviendas.Controls.Add(nudHabitaciones);
-            grpDatosViviendas.Controls.Add(label3);
+            grpDatosViviendas.Controls.Add(lblServicios);
             grpDatosViviendas.Controls.Add(chklServicios);
-            grpDatosViviendas.Controls.Add(txtHabitaciones);
+            grpDatosViviendas.Controls.Add(lblHabitaciones);
             grpDatosViviendas.Controls.Add(nudPiso);
             grpDatosViviendas.Controls.Add(cboDepartamento);
             grpDatosViviendas.Controls.Add(cboCiudad);
             grpDatosViviendas.Controls.Add(nudInquilinos);
             grpDatosViviendas.Controls.Add(txtDireccionVivienda);
             grpDatosViviendas.Controls.Add(cboArriendador);
-            grpDatosViviendas.Controls.Add(label10);
-            grpDatosViviendas.Controls.Add(label9);
+            grpDatosViviendas.Controls.Add(lblDepartamento);
+            grpDatosViviendas.Controls.Add(lblArriendador);
             grpDatosViviendas.Controls.Add(lblOcupantes);
-            grpDatosViviendas.Controls.Add(label8);
+            grpDatosViviendas.Controls.Add(lblCiudadInqui);
             grpDatosViviendas.Controls.Add(lblPiso);
-            grpDatosViviendas.Controls.Add(label6);
+            grpDatosViviendas.Controls.Add(lblDireccion);
             grpDatosViviendas.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             grpDatosViviendas.ForeColor = Color.White;
             grpDatosViviendas.Location = new Point(83, 221);
@@ -133,34 +132,33 @@
             nudHabitaciones.TabIndex = 26;
             nudHabitaciones.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // label3
+            // lblServicios
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(301, 147);
-            label3.Name = "label3";
-            label3.Size = new Size(75, 20);
-            label3.TabIndex = 25;
-            label3.Text = "Servicios:";
+            lblServicios.AutoSize = true;
+            lblServicios.Location = new Point(301, 147);
+            lblServicios.Name = "lblServicios";
+            lblServicios.Size = new Size(75, 20);
+            lblServicios.TabIndex = 25;
+            lblServicios.Text = "Servicios:";
             // 
             // chklServicios
             // 
             chklServicios.BackColor = Color.FromArgb(255, 128, 128);
             chklServicios.ForeColor = Color.White;
             chklServicios.FormattingEnabled = true;
-            chklServicios.Items.AddRange(new object[] { "Luz", "Agua", "Gas" });
             chklServicios.Location = new Point(412, 146);
             chklServicios.Name = "chklServicios";
             chklServicios.Size = new Size(141, 48);
             chklServicios.TabIndex = 24;
             // 
-            // txtHabitaciones
+            // lblHabitaciones
             // 
-            txtHabitaciones.AutoSize = true;
-            txtHabitaciones.Location = new Point(301, 114);
-            txtHabitaciones.Name = "txtHabitaciones";
-            txtHabitaciones.Size = new Size(103, 20);
-            txtHabitaciones.TabIndex = 23;
-            txtHabitaciones.Text = "Habitaciones:";
+            lblHabitaciones.AutoSize = true;
+            lblHabitaciones.Location = new Point(301, 114);
+            lblHabitaciones.Name = "lblHabitaciones";
+            lblHabitaciones.Size = new Size(103, 20);
+            lblHabitaciones.TabIndex = 23;
+            lblHabitaciones.Text = "Habitaciones:";
             // 
             // nudPiso
             // 
@@ -190,6 +188,7 @@
             cboCiudad.FlatStyle = FlatStyle.Popup;
             cboCiudad.ForeColor = Color.White;
             cboCiudad.FormattingEnabled = true;
+            cboCiudad.Items.AddRange(new object[] { "Buenos Aires", "Córdoba", "Rosario", "Mendoza", "La Plata", "San Miguel de Tucumán", "Mar del Plata", "Salta", "Santa Fe", "San Juan", "Neuquén", "Resistencia", "Corrientes", "Posadas", "Santiago del Estero", "San Salvador de Jujuy", "Formosa", "San Luis", "Catamarca", "La Rioja", "Rawson", "Viedma", "Santa Rosa", "Ushuaia", "Comodoro Rivadavia", "Bahía Blanca", "San Rafael", "San Fernando del Valle de Catamarca", "Junín", "Tandil", "Pergamino", "San Nicolás de los Arroyos", "Olavarría", "Trelew", "Río Cuarto", "San Carlos de Bariloche", "Villa María", "Concordia", "Gualeguaychú", "Santa Cruz", "San Justo", "Zárate" });
             cboCiudad.Location = new Point(412, 74);
             cboCiudad.Name = "cboCiudad";
             cboCiudad.Size = new Size(141, 28);
@@ -228,23 +227,23 @@
             cboArriendador.Size = new Size(141, 28);
             cboArriendador.TabIndex = 15;
             // 
-            // label10
+            // lblDepartamento
             // 
-            label10.AutoSize = true;
-            label10.Location = new Point(32, 110);
-            label10.Name = "label10";
-            label10.Size = new Size(115, 20);
-            label10.TabIndex = 7;
-            label10.Text = "Departamento:";
+            lblDepartamento.AutoSize = true;
+            lblDepartamento.Location = new Point(32, 110);
+            lblDepartamento.Name = "lblDepartamento";
+            lblDepartamento.Size = new Size(115, 20);
+            lblDepartamento.TabIndex = 7;
+            lblDepartamento.Text = "Departamento:";
             // 
-            // label9
+            // lblArriendador
             // 
-            label9.AutoSize = true;
-            label9.Location = new Point(301, 40);
-            label9.Name = "label9";
-            label9.Size = new Size(99, 20);
-            label9.TabIndex = 6;
-            label9.Text = "Arriendador:";
+            lblArriendador.AutoSize = true;
+            lblArriendador.Location = new Point(301, 40);
+            lblArriendador.Name = "lblArriendador";
+            lblArriendador.Size = new Size(99, 20);
+            lblArriendador.TabIndex = 6;
+            lblArriendador.Text = "Arriendador:";
             // 
             // lblOcupantes
             // 
@@ -256,14 +255,14 @@
             lblOcupantes.Text = "Inquilinos:";
             lblOcupantes.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // label8
+            // lblCiudadInqui
             // 
-            label8.AutoSize = true;
-            label8.Location = new Point(301, 77);
-            label8.Name = "label8";
-            label8.Size = new Size(61, 20);
-            label8.TabIndex = 5;
-            label8.Text = "Ciudad:";
+            lblCiudadInqui.AutoSize = true;
+            lblCiudadInqui.Location = new Point(301, 77);
+            lblCiudadInqui.Name = "lblCiudadInqui";
+            lblCiudadInqui.Size = new Size(61, 20);
+            lblCiudadInqui.TabIndex = 5;
+            lblCiudadInqui.Text = "Ciudad:";
             // 
             // lblPiso
             // 
@@ -274,14 +273,14 @@
             lblPiso.TabIndex = 4;
             lblPiso.Text = "Piso:";
             // 
-            // label6
+            // lblDireccion
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(33, 40);
-            label6.Name = "label6";
-            label6.Size = new Size(78, 20);
-            label6.TabIndex = 16;
-            label6.Text = "Dirección:";
+            lblDireccion.AutoSize = true;
+            lblDireccion.Location = new Point(33, 40);
+            lblDireccion.Name = "lblDireccion";
+            lblDireccion.Size = new Size(78, 20);
+            lblDireccion.TabIndex = 16;
+            lblDireccion.Text = "Dirección:";
             // 
             // grpRol
             // 
@@ -338,14 +337,13 @@
             // grpDatosEmpleo
             // 
             grpDatosEmpleo.Controls.Add(txtIdentificacion);
-            grpDatosEmpleo.Controls.Add(label5);
+            grpDatosEmpleo.Controls.Add(lblIdentificacion);
             grpDatosEmpleo.Controls.Add(txtContacto);
-            grpDatosEmpleo.Controls.Add(label1);
+            grpDatosEmpleo.Controls.Add(lblContactoAgencia);
             grpDatosEmpleo.Controls.Add(cboCiudadAdministrador);
             grpDatosEmpleo.Controls.Add(txtAgencia);
-            grpDatosEmpleo.Controls.Add(label2);
-            grpDatosEmpleo.Controls.Add(label4);
-            grpDatosEmpleo.Controls.Add(label11);
+            grpDatosEmpleo.Controls.Add(lblAgencia);
+            grpDatosEmpleo.Controls.Add(lblCiudad);
             grpDatosEmpleo.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             grpDatosEmpleo.ForeColor = Color.White;
             grpDatosEmpleo.Location = new Point(83, 432);
@@ -365,14 +363,14 @@
             txtIdentificacion.Size = new Size(150, 27);
             txtIdentificacion.TabIndex = 26;
             // 
-            // label5
+            // lblIdentificacion
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(297, 119);
-            label5.Name = "label5";
-            label5.Size = new Size(108, 20);
-            label5.TabIndex = 25;
-            label5.Text = "Identificacion:";
+            lblIdentificacion.AutoSize = true;
+            lblIdentificacion.Location = new Point(297, 119);
+            lblIdentificacion.Name = "lblIdentificacion";
+            lblIdentificacion.Size = new Size(108, 20);
+            lblIdentificacion.TabIndex = 25;
+            lblIdentificacion.Text = "Identificacion:";
             // 
             // txtContacto
             // 
@@ -383,14 +381,14 @@
             txtContacto.Size = new Size(150, 27);
             txtContacto.TabIndex = 24;
             // 
-            // label1
+            // lblContactoAgencia
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(281, 44);
-            label1.Name = "label1";
-            label1.Size = new Size(174, 20);
-            label1.TabIndex = 23;
-            label1.Text = " Contacto de la agencia:";
+            lblContactoAgencia.AutoSize = true;
+            lblContactoAgencia.Location = new Point(281, 44);
+            lblContactoAgencia.Name = "lblContactoAgencia";
+            lblContactoAgencia.Size = new Size(174, 20);
+            lblContactoAgencia.TabIndex = 23;
+            lblContactoAgencia.Text = " Contacto de la agencia:";
             // 
             // cboCiudadAdministrador
             // 
@@ -398,6 +396,7 @@
             cboCiudadAdministrador.FlatStyle = FlatStyle.Popup;
             cboCiudadAdministrador.ForeColor = Color.White;
             cboCiudadAdministrador.FormattingEnabled = true;
+            cboCiudadAdministrador.Items.AddRange(new object[] { "Buenos Aires", "Córdoba", "Rosario", "Mendoza", "La Plata", "San Miguel de Tucumán", "Mar del Plata", "Salta", "Santa Fe", "San Juan", "Neuquén", "Resistencia", "Corrientes", "Posadas", "Santiago del Estero", "San Salvador de Jujuy", "Formosa", "San Luis", "Catamarca", "La Rioja", "Rawson", "Viedma", "Santa Rosa", "Ushuaia", "Comodoro Rivadavia", "Bahía Blanca", "San Rafael", "San Fernando del Valle de Catamarca", "Junín", "Tandil", "Pergamino", "San Nicolás de los Arroyos", "Olavarría", "Trelew", "Río Cuarto", "San Carlos de Bariloche", "Villa María", "Concordia", "Gualeguaychú", "Santa Cruz", "San Justo", "Zárate", "" });
             cboCiudadAdministrador.Location = new Point(100, 116);
             cboCiudadAdministrador.Name = "cboCiudadAdministrador";
             cboCiudadAdministrador.Size = new Size(162, 28);
@@ -412,31 +411,23 @@
             txtAgencia.Size = new Size(162, 27);
             txtAgencia.TabIndex = 17;
             // 
-            // label2
+            // lblAgencia
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(33, 40);
-            label2.Name = "label2";
-            label2.Size = new Size(69, 20);
-            label2.TabIndex = 16;
-            label2.Text = "Agencia:";
+            lblAgencia.AutoSize = true;
+            lblAgencia.Location = new Point(33, 40);
+            lblAgencia.Name = "lblAgencia";
+            lblAgencia.Size = new Size(69, 20);
+            lblAgencia.TabIndex = 16;
+            lblAgencia.Text = "Agencia:";
             // 
-            // label4
+            // lblCiudad
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(312, 40);
-            label4.Name = "label4";
-            label4.Size = new Size(0, 20);
-            label4.TabIndex = 6;
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(40, 119);
-            label11.Name = "label11";
-            label11.Size = new Size(61, 20);
-            label11.TabIndex = 5;
-            label11.Text = "Ciudad:";
+            lblCiudad.AutoSize = true;
+            lblCiudad.Location = new Point(40, 119);
+            lblCiudad.Name = "lblCiudad";
+            lblCiudad.Size = new Size(61, 20);
+            lblCiudad.TabIndex = 5;
+            lblCiudad.Text = "Ciudad:";
             // 
             // btnSiguiente
             // 
@@ -455,11 +446,11 @@
             // grpDatosIngreso
             // 
             grpDatosIngreso.Controls.Add(txtConfirmacionClave);
-            grpDatosIngreso.Controls.Add(label15);
+            grpDatosIngreso.Controls.Add(lblConfirmarContraseña);
             grpDatosIngreso.Controls.Add(txtCorfirmacionCorreo);
-            grpDatosIngreso.Controls.Add(label14);
+            grpDatosIngreso.Controls.Add(lblConfirmarCorreo);
             grpDatosIngreso.Controls.Add(txtClaveIngreso);
-            grpDatosIngreso.Controls.Add(label13);
+            grpDatosIngreso.Controls.Add(lblContraseña);
             grpDatosIngreso.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             grpDatosIngreso.ForeColor = Color.White;
             grpDatosIngreso.Location = new Point(83, 432);
@@ -479,14 +470,14 @@
             txtConfirmacionClave.Size = new Size(172, 27);
             txtConfirmacionClave.TabIndex = 24;
             // 
-            // label15
+            // lblConfirmarContraseña
             // 
-            label15.AutoSize = true;
-            label15.Location = new Point(290, 70);
-            label15.Name = "label15";
-            label15.Size = new Size(165, 20);
-            label15.TabIndex = 23;
-            label15.Text = "Confirmar contraseña:";
+            lblConfirmarContraseña.AutoSize = true;
+            lblConfirmarContraseña.Location = new Point(290, 70);
+            lblConfirmarContraseña.Name = "lblConfirmarContraseña";
+            lblConfirmarContraseña.Size = new Size(165, 20);
+            lblConfirmarContraseña.TabIndex = 23;
+            lblConfirmarContraseña.Text = "Confirmar contraseña:";
             // 
             // txtCorfirmacionCorreo
             // 
@@ -497,14 +488,14 @@
             txtCorfirmacionCorreo.Size = new Size(360, 27);
             txtCorfirmacionCorreo.TabIndex = 22;
             // 
-            // label14
+            // lblConfirmarCorreo
             // 
-            label14.AutoSize = true;
-            label14.Location = new Point(32, 37);
-            label14.Name = "label14";
-            label14.Size = new Size(133, 20);
-            label14.TabIndex = 21;
-            label14.Text = "Confirmar correo:";
+            lblConfirmarCorreo.AutoSize = true;
+            lblConfirmarCorreo.Location = new Point(32, 37);
+            lblConfirmarCorreo.Name = "lblConfirmarCorreo";
+            lblConfirmarCorreo.Size = new Size(133, 20);
+            lblConfirmarCorreo.TabIndex = 21;
+            lblConfirmarCorreo.Text = "Confirmar correo:";
             // 
             // txtClaveIngreso
             // 
@@ -515,14 +506,14 @@
             txtClaveIngreso.Size = new Size(158, 27);
             txtClaveIngreso.TabIndex = 20;
             // 
-            // label13
+            // lblContraseña
             // 
-            label13.AutoSize = true;
-            label13.Location = new Point(25, 66);
-            label13.Name = "label13";
-            label13.Size = new Size(92, 20);
-            label13.TabIndex = 19;
-            label13.Text = "Contraseña:";
+            lblContraseña.AutoSize = true;
+            lblContraseña.Location = new Point(25, 66);
+            lblContraseña.Name = "lblContraseña";
+            lblContraseña.Size = new Size(92, 20);
+            lblContraseña.TabIndex = 19;
+            lblContraseña.Text = "Contraseña:";
             // 
             // lblNombre
             // 
@@ -655,53 +646,53 @@
             dtpFechaNacimiento.TabIndex = 9;
             dtpFechaNacimiento.Value = new DateTime(2023, 10, 13, 0, 0, 0, 0);
             // 
-            // groupBox4
+            // grpDatosPersonales
             // 
-            groupBox4.Controls.Add(dtpFechaNacimiento);
-            groupBox4.Controls.Add(lblFechaNacimiento);
-            groupBox4.Controls.Add(lblEdad);
-            groupBox4.Controls.Add(txtEdad);
-            groupBox4.Controls.Add(txtCorreo);
-            groupBox4.Controls.Add(lblCorreo);
-            groupBox4.Controls.Add(txtDni);
-            groupBox4.Controls.Add(txtTelefono);
-            groupBox4.Controls.Add(txtNombre);
-            groupBox4.Controls.Add(txtApellido);
-            groupBox4.Controls.Add(lblTelefono);
-            groupBox4.Controls.Add(lblDni);
-            groupBox4.Controls.Add(lblApellido);
-            groupBox4.Controls.Add(lblNombre);
-            groupBox4.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            groupBox4.ForeColor = SystemColors.ButtonHighlight;
-            groupBox4.Location = new Point(83, 34);
-            groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(473, 181);
-            groupBox4.TabIndex = 2;
-            groupBox4.TabStop = false;
-            groupBox4.Text = "Datos personales";
+            grpDatosPersonales.Controls.Add(dtpFechaNacimiento);
+            grpDatosPersonales.Controls.Add(lblFechaNacimiento);
+            grpDatosPersonales.Controls.Add(lblEdad);
+            grpDatosPersonales.Controls.Add(txtEdad);
+            grpDatosPersonales.Controls.Add(txtCorreo);
+            grpDatosPersonales.Controls.Add(lblCorreo);
+            grpDatosPersonales.Controls.Add(txtDni);
+            grpDatosPersonales.Controls.Add(txtTelefono);
+            grpDatosPersonales.Controls.Add(txtNombre);
+            grpDatosPersonales.Controls.Add(txtApellido);
+            grpDatosPersonales.Controls.Add(lblTelefono);
+            grpDatosPersonales.Controls.Add(lblDni);
+            grpDatosPersonales.Controls.Add(lblApellido);
+            grpDatosPersonales.Controls.Add(lblNombre);
+            grpDatosPersonales.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            grpDatosPersonales.ForeColor = SystemColors.ButtonHighlight;
+            grpDatosPersonales.Location = new Point(83, 34);
+            grpDatosPersonales.Name = "grpDatosPersonales";
+            grpDatosPersonales.Size = new Size(473, 181);
+            grpDatosPersonales.TabIndex = 2;
+            grpDatosPersonales.TabStop = false;
+            grpDatosPersonales.Text = "Datos personales";
             // 
             // Registro
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 745);
+            Controls.Add(grpDatosEmpleo);
             Controls.Add(btnSiguiente);
             Controls.Add(btnAtras);
             Controls.Add(grpRol);
-            Controls.Add(groupBox4);
+            Controls.Add(grpDatosPersonales);
             Controls.Add(grpDatosIngreso);
             Controls.Add(grpDatosViviendas);
-            Controls.Add(grpDatosEmpleo);
             Name = "Registro";
             Text = "Form1";
             Load += Registro_Load;
-            Controls.SetChildIndex(grpDatosEmpleo, 0);
             Controls.SetChildIndex(grpDatosViviendas, 0);
             Controls.SetChildIndex(grpDatosIngreso, 0);
-            Controls.SetChildIndex(groupBox4, 0);
+            Controls.SetChildIndex(grpDatosPersonales, 0);
             Controls.SetChildIndex(grpRol, 0);
             Controls.SetChildIndex(btnAtras, 0);
             Controls.SetChildIndex(btnSiguiente, 0);
+            Controls.SetChildIndex(grpDatosEmpleo, 0);
             grpDatosViviendas.ResumeLayout(false);
             grpDatosViviendas.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)nudHabitaciones).EndInit();
@@ -713,8 +704,8 @@
             grpDatosEmpleo.PerformLayout();
             grpDatosIngreso.ResumeLayout(false);
             grpDatosIngreso.PerformLayout();
-            groupBox4.ResumeLayout(false);
-            groupBox4.PerformLayout();
+            grpDatosPersonales.ResumeLayout(false);
+            grpDatosPersonales.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -722,14 +713,14 @@
         private GroupBox grpDatosViviendas;
         private Label lblPiso;
         private GroupBox grpRol;
-        private Label label10;
-        private Label label9;
-        private Label label8;
+        private Label lblDepartamento;
+        private Label lblArriendador;
+        private Label lblCiudadInqui;
         private Label lblOcupantes;
         private RadioButton radInquilino;
         private RadioButton radAdministrador;
         private ComboBox cboArriendador;
-        private Label label6;
+        private Label lblDireccion;
         private NumericUpDown nudInquilinos;
         private TextBox txtDireccionVivienda;
         private Button btnAtras;
@@ -737,17 +728,16 @@
         private ComboBox cboDepartamento;
         private ComboBox cboCiudad;
         private GroupBox grpDatosEmpleo;
-        private Label label1;
+        private Label lblContactoAgencia;
         private ComboBox cboCiudadAdministrador;
         private TextBox txtAgencia;
-        private Label label2;
-        private Label label4;
-        private Label label11;
+        private Label lblAgencia;
+        private Label lblCiudad;
         private TextBox txtContacto;
-        private Label label3;
+        private Label lblServicios;
         private CheckedListBox chklServicios;
         private TextBox txtIdentificacion;
-        private Label label5;
+        private Label lblIdentificacion;
         private Button btnSiguiente;
         private GroupBox grpDatosIngreso;
         private Label lblNombre;
@@ -766,12 +756,13 @@
         private DateTimePicker dtpFechaNacimiento;
         private GroupBox groupBox4;
         private TextBox txtConfirmacionClave;
-        private Label label15;
+        private Label lblConfirmarContraseña;
         private TextBox txtCorfirmacionCorreo;
-        private Label label14;
+        private Label lblConfirmarCorreo;
         private TextBox txtClaveIngreso;
-        private Label label13;
+        private Label lblContraseña;
         private NumericUpDown nudHabitaciones;
-        private Label txtHabitaciones;
+        private Label lblHabitaciones;
+        private GroupBox grpDatosPersonales;
     }
 }

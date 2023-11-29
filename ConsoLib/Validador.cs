@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-
+using System.Text.RegularExpressions;
 namespace Clases
 {
     public abstract class Validador<T>
@@ -16,19 +16,30 @@ namespace Clases
             this.usuario = usuario;
         }
         public abstract bool ValidarRegistro();
-       
+
         internal bool IsValidEmail(string email)
         {
             try
             {
-                var correo = new System.Net.Mail.MailAddress(email);
-                return correo.Address == email;
+                // Verificar si el correo no es nulo antes de validar
+                if (email != null)
+                {
+                    // Expresión regular para validar correos electrónicos
+                    string patronCorreo = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+                    Regex regexCorreo = new Regex(patronCorreo);
+
+                    // Verificar si el correo coincide con la expresión regular
+                    return regexCorreo.IsMatch(email);
+                }
+                return false;
             }
-            catch
+            catch (RegexMatchTimeoutException)
             {
+                // Manejar la excepción si hay un tiempo de espera al validar la expresión regular
                 return false;
             }
         }
+
 
         internal bool IsValidDate(string date)
         {

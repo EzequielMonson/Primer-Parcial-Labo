@@ -17,7 +17,7 @@ namespace Clases
         public List<Vivienda> viviendasDisponibles;
         public List<Inquilino> inquilinosPendientes;
         public List<Inquilino> inquilinosDeudores;
-        public string identificacion;
+        public int Identificacion { get; set; }
         public string agencia;
         public string contactoAgencia;
 
@@ -27,22 +27,15 @@ namespace Clases
         public Administrador(string nombre, string apellido, string correo, string contraseña, string ciudad,string fechaNacimiento, int telefono, int dni, int edad, string agencia, string contactoAgencia, int identificacion) :
             base(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, dni, edad)
         {
+            this.agencia = agencia;
+            this.contactoAgencia = contactoAgencia;
+            this.Identificacion = identificacion;
             viviendasACargo = new List<Vivienda>();
             viviendasDisponibles = new List<Vivienda>();
             inquilinosPendientes = new List<Inquilino>();
             inquilinosDeudores = new List<Inquilino>();
 
         }
-        /*public void AgregarPago(Queue<Dictionary<string, object>> colaDeudas, string vencimiento, string fecha, int monto )
-        {
-            Dictionary<string, object> dictDeuda = new Dictionary<string, object>
-            {
-                { "vencimiento" , vencimiento},
-                { "fecha" , fecha },
-                { "monto", monto }
-            };
-            colaDeudas.Enqueue(dictDeuda);
-        }*/
         public void MostrarInquilinosPendientes() 
         {
             foreach (var inquilino in inquilinosPendientes)
@@ -55,7 +48,7 @@ namespace Clases
         }
         public void AlquilarVivienda(Inquilino nuevoInquilino, Vivienda viviendaAAlquilar)
         {
-            viviendaAAlquilar.Inquilino = nuevoInquilino;
+            viviendaAAlquilar.DniInquilino = nuevoInquilino.Dni;
             nuevoInquilino.Estado = Estado.Activo;
         }
 
@@ -81,7 +74,7 @@ namespace Clases
             foreach (var vivienda in viviendasACargo)
             {
                 // Obtener el inquilino de la vivienda
-                Inquilino inquilino = vivienda.Inquilino;
+                Inquilino inquilino = vivienda.ObtenerInquilinoPorDni(vivienda.DniInquilino);
 
                 // Verificar si hay un inquilino y si la vivienda tiene deudas
                 if (inquilino != null && vivienda.MostrarPrecio(vivienda.CalcularPrecioBase()) > 0)

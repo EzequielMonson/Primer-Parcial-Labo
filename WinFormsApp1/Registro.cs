@@ -34,23 +34,67 @@ namespace UI
         public ValidadorInquilino validadorInquilino;
         public ValidadorAdministrador validadorAdministrador;
         public List<Administrador> listaAdministradores;
-
+        public string confirmacionCorreo;
+        public string confirmacionContraseña;
+        public List<Servicio> ListaServiciosSeleccionados { get; set; }
 
         public Registro()
         {
             InitializeComponent();
+            ListaServiciosSeleccionados = new List<Servicio>();
 
         }
         private void Registro_Load(object sender, EventArgs e)
         {
-            string rutaArchivoXML = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.xml");
-            listaAdministradores = Serializadora<Administrador>.CargarDesdeXML(rutaArchivoXML);
-
-            // Llenar el ComboBox con los nombres de los administradores
-            cboArriendador.DataSource = listaAdministradores;
-            cboArriendador.DisplayMember = "nombre" + " apellido"; // nombre completo del administrador
-            cboArriendador.ValueMember = "identificacion";
+            string rutaArchivoJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");
+            if (File.Exists(rutaArchivoJson))
+            {
+                listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON(rutaArchivoJson);
+                // Llenar el ComboBox con los nombres de los administradores
+                cboArriendador.DataSource = listaAdministradores;
+                cboArriendador.DisplayMember = "ToString"; // nombre completo del administrador
+                cboArriendador.ValueMember = null;
+            }
+            chklServicios.DataSource = Enum.GetValues(typeof(NombreServicios));
         }
+        private void ObtenerServiciosSeleccionados()
+        {
+            ListaServiciosSeleccionados.Clear();
+
+            foreach (NombreServicios nombreServicio in chklServicios.CheckedItems)
+            {
+                int precio = ObtenerPrecioServicio(nombreServicio);
+                string nombre = Enum.GetName(typeof(NombreServicios), nombreServicio);
+                NombreServicios id = nombreServicio;
+                Servicio servicio = new Servicio(nombre, precio, id);
+                ListaServiciosSeleccionados.Add(servicio);
+            }
+        }
+        private int ObtenerPrecioServicio(NombreServicios nombreServicio)
+        {
+            switch (nombreServicio)
+            {
+                case NombreServicios.Agua:
+                    return 20; // Precio del servicio de agua
+
+                case NombreServicios.Internet:
+                    return 50; // Precio del servicio de internet
+
+                case NombreServicios.Cable:
+                    return 30; // Precio del servicio de cable
+
+                case NombreServicios.Luz:
+                    return 25; // Precio del servicio de luz
+
+                case NombreServicios.Gas:
+                    return 40; // Precio del servicio de gas
+
+                default:
+                    return 0; 
+            }
+        }
+
+    
         private void RadInquilino_CheckedChanged(object sender, EventArgs e)
         {
             this.grpDatosViviendas.Visible = true;
@@ -85,13 +129,13 @@ namespace UI
             apellido = this.txtApellido.Text;
             correo = this.txtCorreo.Text;
             fechaNacimiento = this.dtpFechaNacimiento.Text;
-            ciudad = this.cboCiudad.Text;
+
             direccion = this.txtDireccionVivienda.Text;
             contraseña = this.txtClaveIngreso.Text;
             apellido = this.txtApellido.Text;
             correo = this.txtCorreo.Text;
             fechaNacimiento = this.dtpFechaNacimiento.Text;
-            ciudad = this.cboCiudad.Text;
+
             direccion = this.txtDireccionVivienda.Text;
             contactoAgencia = this.txtContacto.Text;
             agencia = this.txtAgencia.Text;
@@ -99,66 +143,88 @@ namespace UI
             dni = ObtenerValorNumerico(this.txtDni.Text);
             edad = ObtenerValorNumerico(this.txtEdad.Text);
             identificacion = ObtenerValorNumerico(this.txtIdentificacion.Text);
+            confirmacionCorreo = txtCorfirmacionCorreo.Text;
+            confirmacionContraseña = txtConfirmacionClave.Text;
 
 
             if (rol == "inquilino")
             {
-                
+                ciudad = this.cboCiudad.Text;
                 this.inquilino = new Inquilino(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, direccion, dni, edad);
                 ValidadorInquilino miValidadorInquilino = new ValidadorInquilino(this.inquilino);
                 miValidadorInquilino.OnMostrarMensajeError += MostrarMensajeError;
-                if (miValidadorInquilino.ValidarRegistro())
+                if (miValidadorInquilino.ConfirmarContraseña(confirmacionContraseña) && miValidadorInquilino.ConfirmarCorreo(confirmacionCorreo))
                 {
-                    Administrador administradorSeleccionado = (Administrador)cboArriendador.SelectedItem;
+                    if (miValidadorInquilino.ValidarRegistro())
+                    {
+                        Administrador administradorSeleccionado = (Administrador)cboArriendador.SelectedItem;
 
-                    this.inquilino = new Inquilino(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, direccion, dni, edad);
+                        this.inquilino = new Inquilino(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, direccion, dni, edad);
 
-                    // Crear la vivienda
-                    string direccionVivienda = txtDireccionVivienda.Text;
-                    int numeroHabitaciones = ObtenerValorNumerico(txtHabitaciones.Text);
-                    int pisoVivienda = ObtenerValorNumerico(nudPiso.Text);
-                    string departamento = cboDepartamento.Text;
-                    int cantInquilinos = ObtenerValorNumerico(nudInquilinos.Text);
+                        // Crear la vivienda
+                        string direccionVivienda = txtDireccionVivienda.Text;
+                        int numeroHabitaciones = ObtenerValorNumerico(lblHabitaciones.Text);
+                        int pisoVivienda = ObtenerValorNumerico(nudPiso.Text);
+                        string departamento = cboDepartamento.Text;
+                        int cantInquilinos = ObtenerValorNumerico(nudInquilinos.Text);
+                        Vivienda nuevaVivienda = new Vivienda(direccionVivienda, numeroHabitaciones, pisoVivienda, administradorSeleccionado.Identificacion, departamento, cantInquilinos);
+                        ObtenerServiciosSeleccionados();
+                        foreach (var servicio in ListaServiciosSeleccionados)
+                        {
+                            nuevaVivienda.AgregarServicio(servicio);
+                        }
+                        this.inquilino.ElegirVivienda(nuevaVivienda);
 
-                    Vivienda nuevaVivienda = new Vivienda(direccionVivienda, numeroHabitaciones, pisoVivienda, administradorSeleccionado, departamento, cantInquilinos);
+                        int adminIndex = listaAdministradores.FindIndex(admin => admin.Identificacion == administradorSeleccionado.Identificacion);
+                        administradorSeleccionado.viviendasACargo.Add(nuevaVivienda);
+                        listaAdministradores[adminIndex] = administradorSeleccionado;
 
-                    // Asignar la vivienda al inquilino
-                    this.inquilino.ElegirVivienda(nuevaVivienda);
+                        string rutaArchivoJsonAdministrador = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");
+                        string rutaArchivoJsonInquilino = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosInquilino.json");
+                        Serializadora<Administrador>.GuardarComoJSON(listaAdministradores, rutaArchivoJsonAdministrador);
+                        List<Inquilino> listaInquilinos = new List<Inquilino>();
+                        if (File.Exists(rutaArchivoJsonInquilino))
+                        {
+                            listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON(rutaArchivoJsonInquilino);
+                            listaInquilinos.Add(inquilino);
+                        }
 
-                    // Añadir el inquilino a la lista de inquilinos pendientes del administrador
-                    // Actualizar el administrador en la lista y guardar en el archivo XML
-                    int adminIndex = listaAdministradores.FindIndex(a => a.identificacion == administradorSeleccionado.identificacion);
-                    listaAdministradores[adminIndex] = administradorSeleccionado;
+                        Serializadora<Inquilino>.GuardarComoJSON(listaInquilinos, rutaArchivoJsonInquilino);
 
-                    string rutaArchivoXML = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.xml");
-                    Serializadora<Administrador>.GuardarComoXML(listaAdministradores, rutaArchivoXML);
-
-                    List<Inquilino> inquilinoList = new List<Inquilino> { inquilino };
-                    string rutaArchivoJSON = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosInquilino.json");
-                    Serializadora<Inquilino>.GuardarComoJSON(inquilinoList, rutaArchivoJSON);
-                    //dministrador administradorSeleccionado = (Administrador)cboArriendador.SelectedItem;
-                    MessageBox.Show($"{this.inquilino.ToString()}");
-                    this.Hide();
-                    FrmMenu menu = new FrmMenu();
-                    menu.SetInquilino(inquilino);
-                    menu.Show();
+                        MessageBox.Show($"{this.inquilino.ToString()}");
+                        this.Hide();
+                        FrmMenu menu = new FrmMenu();
+                        menu.SetInquilino(inquilino);
+                        menu.Show();
+                    }
                 }
             }
             else if (rol == "administrador")
             {
+                ciudad = this.cboCiudadAdministrador.Text;
                 this.administrador = new Administrador(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, dni, edad, agencia, contactoAgencia, identificacion);
                 ValidadorAdministrador miValidadorAdministrador = new ValidadorAdministrador(this.administrador);
                 miValidadorAdministrador.OnMostrarMensajeError += MostrarMensajeError;
-                if (miValidadorAdministrador.ValidarRegistro())
+                if (miValidadorAdministrador.ConfirmarContraseña(confirmacionContraseña) && miValidadorAdministrador.ConfirmarCorreo(confirmacionCorreo))
                 {
-                    List<Administrador> adminList = new List<Administrador> { administrador };
-                    string rutaArchivoXML = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.xml");
-                    Serializadora<Administrador>.GuardarComoXML(adminList, rutaArchivoXML);
-                    MessageBox.Show($"{this.administrador.ToString()}");
-                    this.Hide();
-                    FrmMenu menu = new FrmMenu();
-                    menu.SetAdministrador(administrador);
-                    menu.Show();
+                    if (miValidadorAdministrador.ValidarRegistro())
+                    {
+                        List<Administrador> adminList = new List<Administrador> { administrador };
+                        string rutaArchivoJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");
+                        List<Administrador> listaAdministradores = new List<Administrador>();
+                        if (File.Exists(rutaArchivoJson))
+                        {
+                            listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON(rutaArchivoJson);
+                            listaAdministradores.Add(administrador);
+                        }
+                        Serializadora<Administrador>.GuardarComoJSON(listaAdministradores, rutaArchivoJson);
+
+                        MessageBox.Show($"{this.administrador.ToString()}");
+                        this.Hide();
+                        FrmMenu menu = new FrmMenu();
+                        menu.SetAdministrador(administrador);
+                        menu.Show();
+                    }
                 }
             }
 

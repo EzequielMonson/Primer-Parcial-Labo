@@ -56,13 +56,11 @@ namespace Clases
                 EnviarMensajeError("Por favor, ingrese una dirección de correo electrónico válida.");
                 return false;
             }
-            if (!ValidarNumero(unAdministrador.identificacion.ToString()))
+            if (!ValidarNumero(unAdministrador.Identificacion.ToString()))
             {
                 EnviarMensajeError("La identificacion no es válida.");
                 return false;
             }
-
-            
 
             if (string.IsNullOrEmpty(unAdministrador.contraseña))
             {
@@ -71,9 +69,36 @@ namespace Clases
             }
 
             
-
-            // Todas las validaciones pasaron
             return true;
+        }
+        public bool ConfirmarCorreo(string correoIngresado)
+        {
+
+            if (unAdministrador.correo == correoIngresado)
+            {
+
+                return true;
+            }
+            else
+            {
+                EnviarMensajeError("Los correos ingresados no coinciden.");
+                return false;
+            }
+
+        }
+
+        public bool ConfirmarContraseña(string contraseñaIngresada)
+        {
+            if (unAdministrador.contraseña == contraseñaIngresada)
+            {
+                return true;
+            }
+            else
+            {
+                EnviarMensajeError("Las contraseñas ingresadas no coinciden.");
+                return false;
+            }
+
         }
     }
 }

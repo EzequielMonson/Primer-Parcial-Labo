@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace UI
 {
@@ -28,47 +29,67 @@ namespace UI
             {
                 try
                 {
-                    // Intenta cargar los datos desde el archivo XML y validar el inicio de sesión
-                    List<Administrador> listaAdministradores = Serializadora<Administrador>.CargarDesdeXML("RegistrosAdministrador.xml");
-                    List<Inquilino> listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON("RegistrosInquilino.json");
+                    
+                    string rutaAdmin = "RegistrosAdministrador.json";
+                    string rutaInqui = "RegistrosInquilino.json";
                     bool usuarioEncontrado = false;
-                    foreach (var administrador in listaAdministradores)
+                    if (File.Exists(rutaAdmin))
                     {
-                        if (administrador.correo == correo && administrador.contraseña == contraseña)
+
+                        List<Administrador> listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON("RegistrosAdministrador.json");
+                        
+                        foreach (var administrador in listaAdministradores)
                         {
-                            // Si la validación es exitosa, muestra el mensaje y abre el formulario del menú
-                            MessageBox.Show("Usuario logueado");
-                            usuarioEncontrado = true;
-                            this.Hide();
-                            FrmMenu menuInqui = new FrmMenu();
-                            menuInqui.Show();
-                            break;
-                        } 
-                    }
-                    foreach (var inquilino in listaInquilinos)
-                    {
-                        if (inquilino.correo == correo && inquilino.contraseña == contraseña)
-                        {
-                            // Si la validación es exitosa, muestra el mensaje y abre el formulario del menú
-                            MessageBox.Show("Usuario logueado");
-                            usuarioEncontrado = true;
-                            this.Hide();
-                            FrmMenu menuInqui = new FrmMenu();
-                            menuInqui.Show();
-                            break;
+                            if (administrador.correo == correo && administrador.contraseña == contraseña)
+                            {
+                                
+                                MessageBox.Show("Usuario logueado");
+                                usuarioEncontrado = true;
+                                this.Hide();
+                                FrmMenu menuAdmin = new FrmMenu();
+                                menuAdmin.SetAdministrador(administrador);
+                                menuAdmin.Show();
+
+                                break;
+                            }
                         }
+
                     }
-                
-                    if (!usuarioEncontrado)
+                    if (File.Exists(rutaInqui) && !usuarioEncontrado)
                     {
-                        // Mostrar mensaje de error si el usuario no se encuentra
+                        List<Inquilino> listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON("RegistrosInquilino.json");
+
+                        foreach (var inquilino in listaInquilinos)
+                        {
+                            if (inquilino.correo == correo && inquilino.contraseña == contraseña)
+                            {
+                                
+                                MessageBox.Show("Usuario logueado");
+                                usuarioEncontrado = true;
+                                this.Hide();
+                                FrmMenu menuInqui = new FrmMenu();
+                                menuInqui.SetInquilino(inquilino);
+                                menuInqui.Show();
+                                break;
+                            }
+                        }
+
+                    }
+                    else if (File.Exists(rutaInqui) && File.Exists(rutaAdmin))
+                    {
+                        MessageBox.Show("No hay registros de usuarios.");
+                    }
+                    else if (!usuarioEncontrado)
+                    {
+                        
                         MessageBox.Show("Usuario o contraseña incorrectos");
+
                     }
 
                 }
                 catch (Exception ex)
                 {
-                    // Manejo de errores en la carga de datos o validación
+                    
                     MessageBox.Show($"Error al iniciar sesión: {ex.Message}");
                 }
             }
@@ -92,8 +113,8 @@ namespace UI
         private void VolverAtras(object sender, EventArgs e)
         {
             this.Hide();
-            FrmInicio menu = new FrmInicio();
-            menu.Show();
+            FrmInicio inicio = new FrmInicio();
+            inicio.Show();
         }
     }
 }
