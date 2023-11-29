@@ -75,11 +75,12 @@ namespace UI
                         }
 
                     }
-                    else if (File.Exists(rutaInqui) && File.Exists(rutaAdmin))
+                    else if (!File.Exists(rutaInqui) && !File.Exists(rutaAdmin))
                     {
                         MessageBox.Show("No hay registros de usuarios.");
+                        usuarioEncontrado = true;
                     }
-                    else if (!usuarioEncontrado)
+                    if (!usuarioEncontrado)
                     {
                         
                         MessageBox.Show("Usuario o contraseña incorrectos");

@@ -29,9 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMenu));
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             grpDeudas = new GroupBox();
             lblDeudas = new Label();
             dtgDeudas = new DataGridView();
@@ -49,11 +48,24 @@
             grpInquilinoSeleccionado = new GroupBox();
             cmbInquilinoSeleccionado = new ComboBox();
             lblInquilinoSeleccionado = new Label();
+            btnOpciones = new Button();
+            pnlOpciones = new Panel();
+            btnIngresarSaldo = new Button();
+            button4 = new Button();
+            btnOpcionesEnPanel = new Button();
+            button3 = new Button();
+            button2 = new Button();
+            button1 = new Button();
+            btnMostrarPagos = new Button();
+            btnMostrarDeudas = new Button();
+            btnPagarDeudaSeleccionada = new Button();
+            btnPagarTotalDeudas = new Button();
             grpDeudas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtgDeudas).BeginInit();
             grpPagos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtgPagos).BeginInit();
             grpInquilinoSeleccionado.SuspendLayout();
+            pnlOpciones.SuspendLayout();
             SuspendLayout();
             // 
             // grpDeudas
@@ -65,6 +77,7 @@
             grpDeudas.Size = new Size(611, 184);
             grpDeudas.TabIndex = 1;
             grpDeudas.TabStop = false;
+            grpDeudas.Visible = false;
             // 
             // lblDeudas
             // 
@@ -94,6 +107,7 @@
             dtgDeudas.RowTemplate.Height = 25;
             dtgDeudas.Size = new Size(560, 103);
             dtgDeudas.TabIndex = 0;
+            dtgDeudas.CellClick += dtgDeudas_CellClick;
             // 
             // inquilino
             // 
@@ -105,8 +119,6 @@
             // fechaEmisionDeudas
             // 
             fechaEmisionDeudas.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle3.BackColor = Color.Salmon;
-            fechaEmisionDeudas.DefaultCellStyle = dataGridViewCellStyle3;
             fechaEmisionDeudas.HeaderText = "Fecha de emisión";
             fechaEmisionDeudas.Name = "fechaEmisionDeudas";
             fechaEmisionDeudas.ReadOnly = true;
@@ -141,6 +153,7 @@
             grpPagos.Size = new Size(611, 184);
             grpPagos.TabIndex = 3;
             grpPagos.TabStop = false;
+            grpPagos.Visible = false;
             // 
             // lblPagos
             // 
@@ -174,8 +187,8 @@
             // fechaAbonoPagos
             // 
             fechaAbonoPagos.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle4.BackColor = Color.Salmon;
-            fechaAbonoPagos.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.BackColor = Color.Salmon;
+            fechaAbonoPagos.DefaultCellStyle = dataGridViewCellStyle1;
             fechaAbonoPagos.HeaderText = "Fecha de abono";
             fechaAbonoPagos.Name = "fechaAbonoPagos";
             fechaAbonoPagos.ReadOnly = true;
@@ -216,7 +229,6 @@
             cmbInquilinoSeleccionado.Name = "cmbInquilinoSeleccionado";
             cmbInquilinoSeleccionado.Size = new Size(492, 23);
             cmbInquilinoSeleccionado.TabIndex = 4;
-            
             // 
             // lblInquilinoSeleccionado
             // 
@@ -230,21 +242,189 @@
             lblInquilinoSeleccionado.Text = "INQUILINO";
             lblInquilinoSeleccionado.TextAlign = ContentAlignment.TopCenter;
             // 
+            // btnOpciones
+            // 
+            btnOpciones.FlatStyle = FlatStyle.Flat;
+            btnOpciones.Font = new Font("Segoe UI Black", 7.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            btnOpciones.ForeColor = SystemColors.ButtonFace;
+            btnOpciones.Location = new Point(12, 13);
+            btnOpciones.Name = "btnOpciones";
+            btnOpciones.Size = new Size(35, 30);
+            btnOpciones.TabIndex = 5;
+            btnOpciones.Text = ". . .";
+            btnOpciones.UseVisualStyleBackColor = true;
+            btnOpciones.Click += btnOpciones_Click;
+            // 
+            // pnlOpciones
+            // 
+            pnlOpciones.BorderStyle = BorderStyle.FixedSingle;
+            pnlOpciones.Controls.Add(btnIngresarSaldo);
+            pnlOpciones.Controls.Add(button4);
+            pnlOpciones.Controls.Add(btnOpcionesEnPanel);
+            pnlOpciones.Controls.Add(button3);
+            pnlOpciones.Controls.Add(button2);
+            pnlOpciones.Controls.Add(button1);
+            pnlOpciones.Controls.Add(btnMostrarPagos);
+            pnlOpciones.Controls.Add(btnMostrarDeudas);
+            pnlOpciones.ForeColor = SystemColors.ButtonFace;
+            pnlOpciones.Location = new Point(1, 1);
+            pnlOpciones.Name = "pnlOpciones";
+            pnlOpciones.Size = new Size(211, 604);
+            pnlOpciones.TabIndex = 6;
+            pnlOpciones.Visible = false;
+            // 
+            // btnIngresarSaldo
+            // 
+            btnIngresarSaldo.FlatStyle = FlatStyle.Flat;
+            btnIngresarSaldo.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnIngresarSaldo.ForeColor = SystemColors.ButtonFace;
+            btnIngresarSaldo.Location = new Point(-1, 83);
+            btnIngresarSaldo.Name = "btnIngresarSaldo";
+            btnIngresarSaldo.Size = new Size(211, 64);
+            btnIngresarSaldo.TabIndex = 9;
+            btnIngresarSaldo.Text = "INGRESAR SALDO";
+            btnIngresarSaldo.UseVisualStyleBackColor = true;
+            btnIngresarSaldo.Visible = false;
+            btnIngresarSaldo.Click += btnIngresarSaldo_Click;
+            // 
+            // button4
+            // 
+            button4.FlatStyle = FlatStyle.Flat;
+            button4.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            button4.ForeColor = SystemColors.ButtonFace;
+            button4.Location = new Point(-1, 506);
+            button4.Name = "button4";
+            button4.Size = new Size(211, 64);
+            button4.TabIndex = 8;
+            button4.Text = "CERRAR SESIÓN";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += btnCerrarSesion_Click;
+            // 
+            // btnOpcionesEnPanel
+            // 
+            btnOpcionesEnPanel.FlatStyle = FlatStyle.Flat;
+            btnOpcionesEnPanel.Font = new Font("Segoe UI Black", 7.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            btnOpcionesEnPanel.ForeColor = SystemColors.ButtonFace;
+            btnOpcionesEnPanel.Location = new Point(10, 10);
+            btnOpcionesEnPanel.Name = "btnOpcionesEnPanel";
+            btnOpcionesEnPanel.Size = new Size(35, 30);
+            btnOpcionesEnPanel.TabIndex = 7;
+            btnOpcionesEnPanel.Text = ". . .";
+            btnOpcionesEnPanel.UseVisualStyleBackColor = true;
+            btnOpcionesEnPanel.Click += btnOpciones_Click;
+            // 
+            // button3
+            // 
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            button3.ForeColor = SystemColors.ButtonFace;
+            button3.Location = new Point(0, 433);
+            button3.Name = "button3";
+            button3.Size = new Size(211, 64);
+            button3.TabIndex = 4;
+            button3.Text = "HISTORIAL";
+            button3.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            button2.ForeColor = SystemColors.ButtonFace;
+            button2.Location = new Point(0, 363);
+            button2.Name = "button2";
+            button2.Size = new Size(211, 64);
+            button2.TabIndex = 3;
+            button2.Text = "SERVICIOS";
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            button1.ForeColor = SystemColors.ButtonFace;
+            button1.Location = new Point(0, 293);
+            button1.Name = "button1";
+            button1.Size = new Size(211, 64);
+            button1.TabIndex = 2;
+            button1.Text = "MENSAJES";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // btnMostrarPagos
+            // 
+            btnMostrarPagos.FlatStyle = FlatStyle.Flat;
+            btnMostrarPagos.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnMostrarPagos.ForeColor = SystemColors.ButtonFace;
+            btnMostrarPagos.Location = new Point(0, 223);
+            btnMostrarPagos.Name = "btnMostrarPagos";
+            btnMostrarPagos.Size = new Size(211, 64);
+            btnMostrarPagos.TabIndex = 1;
+            btnMostrarPagos.Text = "PAGOS";
+            btnMostrarPagos.UseVisualStyleBackColor = true;
+            btnMostrarPagos.Click += btnMostrarPagos_Click;
+            // 
+            // btnMostrarDeudas
+            // 
+            btnMostrarDeudas.FlatStyle = FlatStyle.Flat;
+            btnMostrarDeudas.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnMostrarDeudas.ForeColor = SystemColors.ButtonFace;
+            btnMostrarDeudas.Location = new Point(0, 153);
+            btnMostrarDeudas.Name = "btnMostrarDeudas";
+            btnMostrarDeudas.Size = new Size(211, 64);
+            btnMostrarDeudas.TabIndex = 0;
+            btnMostrarDeudas.Text = "DEUDAS";
+            btnMostrarDeudas.UseVisualStyleBackColor = true;
+            btnMostrarDeudas.Click += btnMostrarDeudas_Click;
+            // 
+            // btnPagarDeudaSeleccionada
+            // 
+            btnPagarDeudaSeleccionada.FlatStyle = FlatStyle.Flat;
+            btnPagarDeudaSeleccionada.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnPagarDeudaSeleccionada.ForeColor = SystemColors.ButtonFace;
+            btnPagarDeudaSeleccionada.Location = new Point(191, 360);
+            btnPagarDeudaSeleccionada.Name = "btnPagarDeudaSeleccionada";
+            btnPagarDeudaSeleccionada.Size = new Size(211, 64);
+            btnPagarDeudaSeleccionada.TabIndex = 7;
+            btnPagarDeudaSeleccionada.Text = "PAGAR DEUDA";
+            btnPagarDeudaSeleccionada.UseVisualStyleBackColor = true;
+            btnPagarDeudaSeleccionada.Visible = false;
+            btnPagarDeudaSeleccionada.Click += btnPagarDeudaSeleccionada_Click;
+            // 
+            // btnPagarTotalDeudas
+            // 
+            btnPagarTotalDeudas.FlatStyle = FlatStyle.Flat;
+            btnPagarTotalDeudas.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnPagarTotalDeudas.ForeColor = SystemColors.ButtonFace;
+            btnPagarTotalDeudas.Location = new Point(437, 360);
+            btnPagarTotalDeudas.Name = "btnPagarTotalDeudas";
+            btnPagarTotalDeudas.Size = new Size(211, 64);
+            btnPagarTotalDeudas.TabIndex = 8;
+            btnPagarTotalDeudas.Text = "PAGAR TOTAL ";
+            btnPagarTotalDeudas.UseVisualStyleBackColor = true;
+            btnPagarTotalDeudas.Visible = false;
+            // 
             // FrmMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(800, 788);
-            Controls.Add(grpInquilinoSeleccionado);
+            ClientSize = new Size(800, 595);
+            Controls.Add(pnlOpciones);
             Controls.Add(grpPagos);
+            Controls.Add(btnPagarTotalDeudas);
+            Controls.Add(btnPagarDeudaSeleccionada);
             Controls.Add(grpDeudas);
+            Controls.Add(btnOpciones);
+            Controls.Add(grpInquilinoSeleccionado);
             Name = "FrmMenu";
             Text = "FrmMenu";
             Load += FrmMenu_Load;
-            Controls.SetChildIndex(grpDeudas, 0);
-            Controls.SetChildIndex(grpPagos, 0);
             Controls.SetChildIndex(grpInquilinoSeleccionado, 0);
+            Controls.SetChildIndex(btnOpciones, 0);
+            Controls.SetChildIndex(grpDeudas, 0);
+            Controls.SetChildIndex(btnPagarDeudaSeleccionada, 0);
+            Controls.SetChildIndex(btnPagarTotalDeudas, 0);
+            Controls.SetChildIndex(grpPagos, 0);
+            Controls.SetChildIndex(pnlOpciones, 0);
             grpDeudas.ResumeLayout(false);
             grpDeudas.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dtgDeudas).EndInit();
@@ -253,6 +433,7 @@
             ((System.ComponentModel.ISupportInitialize)dtgPagos).EndInit();
             grpInquilinoSeleccionado.ResumeLayout(false);
             grpInquilinoSeleccionado.PerformLayout();
+            pnlOpciones.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -268,12 +449,24 @@
         private DataGridViewTextBoxColumn fechaAbonoPagos;
         private DataGridViewTextBoxColumn cantidadAbonadaPagos;
         private DataGridViewTextBoxColumn fechaVencimientoPagos;
+        private GroupBox grpInquilinoSeleccionado;
+        internal ComboBox cmbInquilinoSeleccionado;
+        private Label lblInquilinoSeleccionado;
         private DataGridViewComboBoxColumn inquilino;
         private DataGridViewTextBoxColumn fechaEmisionDeudas;
         private DataGridViewTextBoxColumn cantidadAbonarDeudas;
         private DataGridViewTextBoxColumn FechaVencimiento;
-        private GroupBox grpInquilinoSeleccionado;
-        internal ComboBox cmbInquilinoSeleccionado;
-        private Label lblInquilinoSeleccionado;
+        private Button btnOpciones;
+        private Panel pnlOpciones;
+        private Button button1;
+        private Button btnMostrarPagos;
+        private Button btnMostrarDeudas;
+        private Button button3;
+        private Button button2;
+        private Button btnOpcionesEnPanel;
+        private Button button4;
+        private Button btnPagarDeudaSeleccionada;
+        private Button btnPagarTotalDeudas;
+        private Button btnIngresarSaldo;
     }
 }

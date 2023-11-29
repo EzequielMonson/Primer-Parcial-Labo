@@ -16,7 +16,7 @@ namespace Clases
     public class Inquilino : Usuario
     {
         private Queue<Deuda>colaDeudas;
-        private List<Pago> historialPagos;
+        public List<Pago> historialPagos;
         private Vivienda vivienda;
         private Estado estado;
         private string direccion;
@@ -54,9 +54,10 @@ namespace Clases
                 int precioTotal = vivienda.CalcularPrecioTotal();
 
                 
-                if (colaDeudas.Count == 0 || colaDeudas.Peek().FechaVencimiento < DateTime.Now)
+                if (ColaDeudas.Count == 0 || (DateTime.Now - ColaDeudas.Peek().FechaVencimiento).TotalDays >= 30)
                 {
-                    Deuda nuevaDeuda = new Deuda(precioTotal, "Alquiler", DateTime.Now, DateTime.Now.AddMonths(1));
+                    DateTime fechaVencimiento = DateTime.Now.AddMonths(1);
+                    Deuda nuevaDeuda = new Deuda(precioTotal, "Alquiler", DateTime.Now, fechaVencimiento);
                     AgregarDeuda(nuevaDeuda);
                 }
             }

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Text.Json;
+using NestApp;
+using System.Runtime.InteropServices;
 
 namespace UI
 {
@@ -18,6 +20,8 @@ namespace UI
         private Administrador administradorActual;
         private Inquilino inquilinoActual;
         public List<Inquilino> listaInquilinos;
+        public Deuda deudaActual;
+
 
         public FrmMenu()
         {
@@ -36,7 +40,7 @@ namespace UI
             else
             {
                 MessageBox.Show("El archivo JSON no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                listaInquilinos = new List<Inquilino> ();
+                listaInquilinos = new List<Inquilino>();
             }
             if (UsuarioActual == TipoUsuario.Administrador)
             {
@@ -58,19 +62,19 @@ namespace UI
                 this.cmbInquilinoSeleccionado.DataSource = listaInquilinosDeViviendasACargo;
                 this.grpInquilinoSeleccionado.Visible = true;
                 cmbInquilinoSeleccionado.DisplayMember = "ToString";
-                cmbInquilinoSeleccionado.ValueMember =  null;
+                cmbInquilinoSeleccionado.ValueMember = null;
                 //this.grpPagos.Location = grpInquilinoSeleccionado.Location;
 
                 Inquilino inquilinoSeleccionado = (Inquilino)cmbInquilinoSeleccionado.SelectedItem;
                 this.inquilinoActual = inquilinoSeleccionado;
-                
+
                 if (inquilinoSeleccionado != null)
                 {
                     // Mostrar el nombre del inquilino en algún control, por ejemplo, un label
                     lblInquilinoSeleccionado.Text = $"INQUILINO: {inquilinoSeleccionado.ToString()}";
-                    lblInquilinoSeleccionado.Location =  new Point(70, 19);
+                    lblInquilinoSeleccionado.Location = new Point(70, 19);
 
-                    
+
                     CargarPagos();
                     CargarDeudas();
                 }
@@ -86,6 +90,8 @@ namespace UI
         }
         private void cmbInquilinoSeleccionado_SelectedIndexChanged(object sender, EventArgs e)
         {
+            grpDeudas.Visible = false;
+            grpPagos.Visible = false;
             Inquilino inquilinoSeleccionado = (Inquilino)cmbInquilinoSeleccionado.SelectedItem;
             this.inquilinoActual = inquilinoSeleccionado;
             if (inquilinoSeleccionado != null)
@@ -93,8 +99,8 @@ namespace UI
                 lblInquilinoSeleccionado.Text = $"INQUILINO: {inquilinoSeleccionado.ToString()}";
                 lblInquilinoSeleccionado.Location = new Point(70, 19);
 
-                // Update the data in DataGridViews based on the selected Inquilino
-                CargarPagos();
+
+                //CargarPagos();
                 CargarDeudas();
             }
         }
@@ -106,21 +112,15 @@ namespace UI
 
         public TipoUsuario UsuarioActual { get; private set; }
 
-        // ... otros métodos y eventos ...
-
-        // Añade este método para establecer el administrador actual
+        // método para establecer el administrador actual
         public void SetAdministrador(Administrador administrador)
         {
-            
+
             administradorActual = administrador;
             UsuarioActual = TipoUsuario.Administrador;
-            //
 
-            // Verificar si hay un inquilino seleccionado
-            
         }
 
-        // Añade este método para establecer el inquilino actual
         public void SetInquilino(Inquilino inquilino)
         {
             inquilinoActual = inquilino;
@@ -150,7 +150,7 @@ namespace UI
         private void CargarDeudas()
         {
             // Asumiendo que Inquilino tiene una propiedad Queue<Deuda> llamada ColaDeudas
-            
+
             Queue<Deuda> colaDeudas = inquilinoActual.ColaDeudas;
 
             dtgDeudas.Rows.Clear();
@@ -178,7 +178,134 @@ namespace UI
             }
         }
 
+        private void btnOpciones_Click(object sender, EventArgs e)
+        {
+            if (!pnlOpciones.Visible)
+            {
+                pnlOpciones.Visible = true;
+            }
+            else
+            {
+                pnlOpciones.Visible = false;
+            }
+            if (UsuarioActual != TipoUsuario.Administrador)
+            {
+                btnIngresarSaldo.Visible = true;
+            }
+        }
 
+        private void btnMostrarDeudas_Click(object sender, EventArgs e)
+        {
+            if (grpPagos.Visible || !grpDeudas.Visible)
+            {
+                grpDeudas.Visible = true;
+                grpPagos.Visible = false;
+                CargarDeudas();
+
+            }
+        }
+
+        private void btnMostrarPagos_Click(object sender, EventArgs e)
+        {
+            if (grpDeudas.Visible || !grpPagos.Visible)
+            {
+                grpPagos.Visible = true;
+                grpPagos.Location = grpDeudas.Location;
+                grpDeudas.Visible = false;
+                CargarPagos();
+
+            }
+        }
+
+
+
+        private void dtgDeudas_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (UsuarioActual != TipoUsuario.Administrador)
+            {
+                if (e.RowIndex >= 0)
+                {
+                    DataGridViewRow selectedRow = dtgDeudas.Rows[e.RowIndex];
+                    if (selectedRow.Cells["fechaEmisionDeudas"].Value != null)
+                    {
+                        DateTime fechaEmisionSeleccionada = (DateTime)selectedRow.Cells["fechaEmisionDeudas"].Value;
+                        Deuda deudaSeleccionada = ObtenerDeudaPorFecha(fechaEmisionSeleccionada);
+
+
+                        if (deudaSeleccionada != null)
+                        {
+                            btnPagarDeudaSeleccionada.Visible = true;
+                            this.deudaActual = deudaSeleccionada;
+
+                        }
+
+                    }
+                }
+            }
+        }
+
+        private Deuda ObtenerDeudaPorFecha(DateTime fechaEmisionSeleccionada)
+        {
+            foreach (Deuda deuda in inquilinoActual.ColaDeudas)
+            {
+                if (deuda.FechaEmision == fechaEmisionSeleccionada)
+                {
+                    return deuda; // Se encontró la deuda con la fecha de emisión dada
+                }
+            }
+
+            return null; // No se encontró ninguna deuda con la fecha de emisión dada
+        }
+
+        private void btnPagarDeudaSeleccionada_Click(object sender, EventArgs e)
+        {
+            if (deudaActual != null)
+            {
+                DialogResult resultado = MessageBox.Show($"¿Deseas pagar la deuda seleccionada con monto: {deudaActual.Monto}?",
+                                                          "Confirmar Pago",
+                                                          MessageBoxButtons.YesNo,
+                                                          MessageBoxIcon.Question);
+                if (resultado == DialogResult.Yes)
+                {
+                    // Actualizar el saldo del inquilino
+
+
+                    foreach (var inquilino in listaInquilinos)
+                    {
+                        if (inquilino.dni == inquilinoActual.dni)
+                        {
+                            Pago nuevoPago = new Pago(deudaActual.Monto, deudaActual.FechaVencimiento);
+                            inquilino.historialPagos.Add(nuevoPago);
+                            inquilino.saldo -= deudaActual.Monto;
+                            inquilino.ColaDeudas.Dequeue();
+                            inquilinoActual = inquilino;
+                            break;
+                        }
+                    }
+                    // Guardar la lista actualizada en el archivo JSON
+                    string jsonFilePath = "registrosInquilino.json";
+                    Serializadora<Inquilino>.GuardarComoJSON(listaInquilinos, jsonFilePath);
+                    
+                    CargarPagos();
+                    CargarDeudas();
+                }
+                else
+                {
+                    // El usuario eligió no pagar la deuda, puedes realizar acciones adicionales si es necesario
+                }
+            }
+        }
+
+        private void btnCerrarSesion_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            FrmInicio inicio = new FrmInicio();
+            inicio.Show();
+        }
+
+        private void btnIngresarSaldo_Click(object sender, EventArgs e)
+        {
+
+        }
     }
-
 }
