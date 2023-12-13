@@ -23,7 +23,7 @@ namespace UI
         public int dni;
         public int telefono;
         public int edad;
-        public string fechaNacimiento;
+        public DateTime fechaNacimiento;
         public string rol;
         public string contraseña;
         public string ciudad;
@@ -46,10 +46,10 @@ namespace UI
         }
         private void Registro_Load(object sender, EventArgs e)
         {
-            string rutaArchivoJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");
-            if (File.Exists(rutaArchivoJson))
+            string rutaArchivoAdminJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");
+            if (File.Exists(rutaArchivoAdminJson))
             {
-                listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON(rutaArchivoJson);
+                listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON(rutaArchivoAdminJson);
                 // Llenar el ComboBox con los nombres de los administradores
                 cboArriendador.DataSource = listaAdministradores;
                 cboArriendador.DisplayMember = "ToString"; // nombre completo del administrador
@@ -128,14 +128,9 @@ namespace UI
             nombre = this.txtNombre.Text;
             apellido = this.txtApellido.Text;
             correo = this.txtCorreo.Text;
-            fechaNacimiento = this.dtpFechaNacimiento.Text;
-
-            direccion = this.txtDireccionVivienda.Text;
+            fechaNacimiento = this.dtpFechaNacimiento.Value;
             contraseña = this.txtClaveIngreso.Text;
             apellido = this.txtApellido.Text;
-            correo = this.txtCorreo.Text;
-            fechaNacimiento = this.dtpFechaNacimiento.Text;
-
             direccion = this.txtDireccionVivienda.Text;
             contactoAgencia = this.txtContacto.Text;
             agencia = this.txtAgencia.Text;
@@ -207,7 +202,7 @@ namespace UI
                 miValidadorAdministrador.OnMostrarMensajeError += MostrarMensajeError;
                 if (miValidadorAdministrador.ConfirmarContraseña(confirmacionContraseña) && miValidadorAdministrador.ConfirmarCorreo(confirmacionCorreo))
                 {
-                    if (miValidadorAdministrador.ValidarRegistro())
+                    if (miValidadorAdministrador.Validar())
                     {
                         List<Administrador> adminList = new List<Administrador> { administrador };
                         string rutaArchivoJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");

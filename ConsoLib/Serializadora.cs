@@ -31,7 +31,7 @@ namespace Clases
 
             if (!File.Exists(rutaArchivo))
             {
-                Console.WriteLine("Usuario invalido o inexistente");
+                Console.WriteLine("Registro invalido o inexistente");
                 return new List<T>();
             }
 

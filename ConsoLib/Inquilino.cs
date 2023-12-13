@@ -15,32 +15,34 @@ namespace Clases
     }
     public class Inquilino : Usuario
     {
-        private Queue<Deuda>colaDeudas;
-        public List<Pago> historialPagos;
+        private Queue<Deuda> colaDeudas;
+        private List<Pago> historialPagos;
         private Vivienda vivienda;
         private Estado estado;
         private string direccion;
-        public Inquilino() 
+        private Tarjeta tarjeta;
+        public Inquilino()
         {
         }
-        public Inquilino(string nombre, string apellido, string correo, string contraseña, string ciudad, string fechaNacimiento, int telefono, string direccion, int dni, int edad) : 
+        public Inquilino(string nombre, string apellido, string correo, string contraseña, string ciudad, DateTime fechaNacimiento, int telefono, string direccion, int dni, int edad) :
             base(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, dni, edad)
         {
             this.direccion = direccion;
             colaDeudas = new Queue<Deuda>();
-            historialPagos = new List<Pago>();
+            HistorialPagos = new List<Pago>();
             estado = Estado.Pendiente;
-            
+
+
         }
-    
-        public int Dni  { get => dni ; }
+        public Tarjeta Tarjeta { get => tarjeta; set => tarjeta = value; }
+        public int Dni { get => dni; }
         public Estado Estado { get => estado; set => estado = value; }
         public string Direccion { get => direccion; set => direccion = value; }
         public Vivienda Vivienda { get => vivienda; set => vivienda = value; }
         public Queue<Deuda> ColaDeudas { get => colaDeudas; set => colaDeudas = value; }
-        public List<Pago> HistorialPagos { get => historialPagos; }
+        public List<Pago> HistorialPagos { get => historialPagos; set => historialPagos = value; }
 
-        public  void ElegirVivienda(Vivienda viviendaElegida)
+        public void ElegirVivienda(Vivienda viviendaElegida)
         {
             this.vivienda = viviendaElegida;
             vivienda.DniInquilino = Dni;
@@ -53,17 +55,41 @@ namespace Clases
             {
                 int precioTotal = vivienda.CalcularPrecioTotal();
 
-                
-                if (ColaDeudas.Count == 0 || (DateTime.Now - ColaDeudas.Peek().FechaVencimiento).TotalDays >= 30)
+
+                if (HistorialPagos.Count == 0)
                 {
+
                     DateTime fechaVencimiento = DateTime.Now.AddMonths(1);
                     Deuda nuevaDeuda = new Deuda(precioTotal, "Alquiler", DateTime.Now, fechaVencimiento);
                     AgregarDeuda(nuevaDeuda);
+
+                }
+                else
+                {
+                    // Obtiene la fecha de vencimiento del último pago
+                    DateTime ultimaFechaVencimiento = HistorialPagos.Last().FechaVencimiento;
+
+                    // Calcula la diferencia en días desde la última fecha de vencimiento
+                    int diasDesdeVencimiento = (int)(DateTime.Now - ultimaFechaVencimiento).TotalDays;
+
+                    // Define el período después del cual se agregaría una nueva deuda (por ejemplo, 30 días)
+                    int periodoDeuda = 30;
+
+                    if (diasDesdeVencimiento >= periodoDeuda)
+                    {
+                        // Ha pasado el período definido, agrega una nueva deuda
+                        DateTime nuevaFechaVencimiento = DateTime.Now.AddMonths(1);
+                        Deuda nuevaDeuda = new Deuda(precioTotal, "Alquiler", DateTime.Now, nuevaFechaVencimiento);
+                        AgregarDeuda(nuevaDeuda);
+                    }
                 }
             }
         }
 
-
+        public void AgregarTarjeta(Tarjeta tarjeta)
+        {
+            this.Tarjeta = tarjeta;
+        }
         public override void AgregarActividad(string tipo)
         {
             // Agregar actividades a la lista específica de Inquilino

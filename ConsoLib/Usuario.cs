@@ -8,7 +8,7 @@
         public string correo;
         public string contraseña;
         public string ciudad;
-        public string fechaNacimiento;
+        public DateTime fechaNacimiento;
         public int telefono;
         public int dni;
         public int edad;
@@ -18,7 +18,7 @@
         public Usuario()
         {
         }
-        protected Usuario(string nombre, string apellido, string correo, string contraseña, string ciudad, string fechaNacimiento, int telefono, int dni, int edad)
+        protected Usuario(string nombre, string apellido, string correo, string contraseña, string ciudad, DateTime fechaNacimiento, int telefono, int dni, int edad)
         {
             this.correo = correo;
             this.contraseña = contraseña;

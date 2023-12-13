@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Clases
 {
-    public class ValidadorAdministrador: Validador<Administrador>
+    public class ValidadorAdministrador: ValidadorUsuario<Administrador>, IValidable<Administrador>
     {
         public Administrador unAdministrador;
         public ValidadorAdministrador(Administrador administrador) : base(administrador)
@@ -14,7 +14,7 @@ namespace Clases
             unAdministrador = administrador;
         }
 
-        public override bool ValidarRegistro()
+        public bool Validar()
         {
             if (string.IsNullOrEmpty(unAdministrador.nombre) || string.IsNullOrEmpty(unAdministrador.apellido))
             {
@@ -41,7 +41,7 @@ namespace Clases
                 EnviarMensajeError("Por favor, ingrese una dirección de correo electrónico válida.");
                 return false;
             }
-            if (!IsValidDate(unAdministrador.fechaNacimiento) || !ValidarEdadConFechaNacimiento(unAdministrador.fechaNacimiento, unAdministrador.edad))
+            if (!ValidarEdadConFechaNacimiento(unAdministrador.fechaNacimiento, unAdministrador.edad))
             {
                 EnviarMensajeError($"Por favor, ingrese una fecha de nacimiento válida que coincida con la edad. {unAdministrador.fechaNacimiento}");
                 return false;

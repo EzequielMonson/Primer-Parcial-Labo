@@ -17,6 +17,7 @@ namespace Clases
         public List<Vivienda> viviendasDisponibles;
         public List<Inquilino> inquilinosPendientes;
         public List<Inquilino> inquilinosDeudores;
+        public List<Inquilino> inquilinosACargo;
         public int Identificacion { get; set; }
         public string agencia;
         public string contactoAgencia;
@@ -24,7 +25,7 @@ namespace Clases
         public Administrador() : base()
         {
         }
-        public Administrador(string nombre, string apellido, string correo, string contraseña, string ciudad,string fechaNacimiento, int telefono, int dni, int edad, string agencia, string contactoAgencia, int identificacion) :
+        public Administrador(string nombre, string apellido, string correo, string contraseña, string ciudad, DateTime fechaNacimiento, int telefono, int dni, int edad, string agencia, string contactoAgencia, int identificacion) :
             base(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, dni, edad)
         {
             this.agencia = agencia;
@@ -34,6 +35,7 @@ namespace Clases
             viviendasDisponibles = new List<Vivienda>();
             inquilinosPendientes = new List<Inquilino>();
             inquilinosDeudores = new List<Inquilino>();
+            inquilinosACargo = new List<Inquilino>();
 
         }
         public void MostrarInquilinosPendientes() 
@@ -54,7 +56,22 @@ namespace Clases
 
         public override void MostrarHistorialPagos()
         {
-            throw new NotImplementedException();
+            string rutaInquilinosJson = "registrosInquilino.json";
+            if (File.Exists(rutaInquilinosJson))
+            {
+                List<Inquilino> listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON(rutaInquilinosJson);
+                foreach (var vivienda in viviendasACargo) 
+                {
+                    foreach (var inquilino in listaInquilinos)
+                    {
+                        if (vivienda.dniInquilino == inquilino.Dni)
+                        {
+                            inquilino.MostrarHistorialPagos();
+                        }
+                    }
+                }
+
+            }
         }
         public override void AgregarActividad(string tipo)
         {

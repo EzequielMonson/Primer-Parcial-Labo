@@ -15,7 +15,7 @@ namespace Clases
         public string direccion;
         public int numeroHabitaciones;
         public int piso;
-        public  int identificacionArriendador;
+        public int identificacionArriendador;
         public string departamento;
         public int cantInquilinos;
         public List<Servicio> servicios;

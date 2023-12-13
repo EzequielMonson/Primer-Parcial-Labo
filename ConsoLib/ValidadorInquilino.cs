@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Clases
 {
-    public class ValidadorInquilino : Validador<Inquilino>
+    public class ValidadorInquilino : ValidadorUsuario<Inquilino>
     {
         public Inquilino unInquilino;
         public ValidadorInquilino(Inquilino inquilino) : base(inquilino)
@@ -15,7 +15,7 @@ namespace Clases
             unInquilino = inquilino;
         }
 
-        public override bool ValidarRegistro()
+        public bool ValidarRegistro()
         {
             if (string.IsNullOrEmpty(unInquilino.nombre) || string.IsNullOrEmpty(unInquilino.apellido))
             {
@@ -47,7 +47,7 @@ namespace Clases
                 return false;
             }
 
-            if (!IsValidDate(unInquilino.fechaNacimiento) || !ValidarEdadConFechaNacimiento(unInquilino.fechaNacimiento, unInquilino.edad))
+            if (!ValidarEdadConFechaNacimiento(unInquilino.fechaNacimiento, unInquilino.edad))
             {
                 EnviarMensajeError("Por favor, ingrese una fecha de nacimiento válida que coincida con la edad.");
                 return false;
