@@ -53,7 +53,7 @@ namespace UI
             
             List<Inquilino> listaVecinos = ObtenerVecinosDesdeOtraFuente(baseDatosInquilinos.ObtenerTodos());
 
-            // Combinar listas de administradores y vecinos en listaContactos
+            
             
             listaContactos.AddRange(listaVecinos);
             if (UsuarioActual == TipoUsuario.Inquilino)
@@ -190,7 +190,7 @@ namespace UI
             }
             catch (Exception ex)
             {
-                MostrarError($"Error al cargar mensajes: {ex}");
+               string mensajeError =  $"Error al cargar mensajes: {ex}";
                 
             }
             

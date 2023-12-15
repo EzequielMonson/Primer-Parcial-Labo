@@ -55,7 +55,6 @@
             btnIngresarSaldo = new Button();
             btnCerrarSesion = new Button();
             btnOpcionesEnPanel = new Button();
-            btnHistorial = new Button();
             btnServicios = new Button();
             btnMensajes = new Button();
             btnMostrarPagos = new Button();
@@ -357,7 +356,6 @@
             pnlOpciones.Controls.Add(btnIngresarSaldo);
             pnlOpciones.Controls.Add(btnCerrarSesion);
             pnlOpciones.Controls.Add(btnOpcionesEnPanel);
-            pnlOpciones.Controls.Add(btnHistorial);
             pnlOpciones.Controls.Add(btnServicios);
             pnlOpciones.Controls.Add(btnMensajes);
             pnlOpciones.Controls.Add(btnMostrarPagos);
@@ -402,7 +400,7 @@
             btnCerrarSesion.FlatStyle = FlatStyle.Flat;
             btnCerrarSesion.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             btnCerrarSesion.ForeColor = SystemColors.ButtonFace;
-            btnCerrarSesion.Location = new Point(-1, 582);
+            btnCerrarSesion.Location = new Point(0, 509);
             btnCerrarSesion.Name = "btnCerrarSesion";
             btnCerrarSesion.Size = new Size(211, 64);
             btnCerrarSesion.TabIndex = 8;
@@ -422,18 +420,6 @@
             btnOpcionesEnPanel.Text = ". . .";
             btnOpcionesEnPanel.UseVisualStyleBackColor = true;
             btnOpcionesEnPanel.Click += btnOpciones_Click;
-            // 
-            // btnHistorial
-            // 
-            btnHistorial.FlatStyle = FlatStyle.Flat;
-            btnHistorial.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btnHistorial.ForeColor = SystemColors.ButtonFace;
-            btnHistorial.Location = new Point(0, 509);
-            btnHistorial.Name = "btnHistorial";
-            btnHistorial.Size = new Size(211, 64);
-            btnHistorial.TabIndex = 4;
-            btnHistorial.Text = "HISTORIAL";
-            btnHistorial.UseVisualStyleBackColor = true;
             // 
             // btnServicios
             // 
@@ -847,7 +833,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(797, 647);
+            ClientSize = new Size(797, 576);
             Controls.Add(grpDatosTarjeta);
             Controls.Add(grpIngreseSaldo);
             Controls.Add(pnlOpciones);
@@ -908,7 +894,6 @@
         private Button btnMensajes;
         private Button btnMostrarPagos;
         private Button btnMostrarDeudas;
-        private Button btnHistorial;
         private Button btnServicios;
         private Button btnOpcionesEnPanel;
         private Button btnCerrarSesion;

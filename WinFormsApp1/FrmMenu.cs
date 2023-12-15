@@ -177,7 +177,14 @@ namespace UI
         {
             dtgPagos.Rows.Clear();
             // Asumiendo que Inquilino tiene una propiedad List<Pago> llamada Pagos
+
+            if (inquilinoActual.HistorialPagos == null)
+            {
+                OperacionesBSPago<Pago> baseDatosPagos = new OperacionesBSPago<Pago>(cadenaConexion, inquilinoActual);
+                inquilinoActual.HistorialPagos = baseDatosPagos.ObtenerTodos();
+            }
             List<Pago> listaPagos = inquilinoActual.HistorialPagos;
+            
 
             if (listaPagos != null)
             {
@@ -680,6 +687,11 @@ namespace UI
 
             }
             mensajes.Show();
+        }
+
+        private void btnHistorial_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
