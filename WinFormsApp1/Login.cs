@@ -16,9 +16,18 @@ namespace UI
     public partial class Login : Formulario
 
     {
+        public OperacionesBDInquilino<Inquilino> baseDatosInquilinos;
+        public OperacionesBDAdministrador<Administrador> baseDatosAdministradores;
+        public string cadenaConexion;
         public Login()
         {
             InitializeComponent();
+            cadenaConexion = "SERVER=127.0.0.1;PORT=3306;DATABASE=nestapp;UID=root;PASSWORDS=;";
+            baseDatosInquilinos = new OperacionesBDInquilino<Inquilino>(cadenaConexion);
+            baseDatosAdministradores = new OperacionesBDAdministrador<Administrador>(cadenaConexion);
+            baseDatosInquilinos.OnMostrarMensajeError += MostrarMensaje;
+            baseDatosAdministradores.OnMostrarMensajeError += MostrarMensaje;
+            
         }
 
         private void BtnIniciarSesion_Click(object sender, EventArgs e)
@@ -29,41 +38,34 @@ namespace UI
             {
                 try
                 {
-                    
-                    string rutaAdmin = "RegistrosAdministrador.json";
-                    string rutaInqui = "RegistrosInquilino.json";
                     bool usuarioEncontrado = false;
-                    if (File.Exists(rutaAdmin))
-                    {
 
-                        List<Administrador> listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON("RegistrosAdministrador.json");
+                    List<Administrador> listaAdministradores = baseDatosAdministradores.ObtenerTodos();
                         
-                        foreach (var administrador in listaAdministradores)
-                        {
-                            if (administrador.correo == correo && administrador.contraseña == contraseña)
-                            {
-                                
-                                MessageBox.Show("Usuario logueado");
-                                usuarioEncontrado = true;
-                                this.Hide();
-                                FrmMenu menuAdmin = new FrmMenu();
-                                menuAdmin.SetAdministrador(administrador);
-                                menuAdmin.Show();
-
-                                break;
-                            }
-                        }
-
-                    }
-                    if (File.Exists(rutaInqui) && !usuarioEncontrado)
+                    foreach (var administrador in listaAdministradores)
                     {
-                        List<Inquilino> listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON("RegistrosInquilino.json");
+                        if (administrador.correo == correo && administrador.contraseña == contraseña)
+                        {
+                                
+                            MessageBox.Show("Usuario logueado");
+                            usuarioEncontrado = true;
+                            this.Hide();
+                            FrmMenu menuAdmin = new FrmMenu();
+                            menuAdmin.SetAdministrador(administrador);
+                            menuAdmin.Show();
+
+                            break;
+                        }
+                    }
+                    if (!usuarioEncontrado)
+                    {
+                        List<Inquilino> listaInquilinos = baseDatosInquilinos.ObtenerTodos();
 
                         foreach (var inquilino in listaInquilinos)
                         {
                             if (inquilino.correo == correo && inquilino.contraseña == contraseña)
                             {
-                                
+
                                 MessageBox.Show("Usuario logueado");
                                 usuarioEncontrado = true;
                                 this.Hide();
@@ -73,19 +75,15 @@ namespace UI
                                 break;
                             }
                         }
-
-                    }
-                    else if (!File.Exists(rutaInqui) && !File.Exists(rutaAdmin))
-                    {
-                        MessageBox.Show("No hay registros de usuarios.");
-                        usuarioEncontrado = true;
+                        
                     }
                     if (!usuarioEncontrado)
                     {
-                        
+
                         MessageBox.Show("Usuario o contraseña incorrectos");
 
                     }
+
 
                 }
                 catch (Exception ex)
@@ -116,6 +114,10 @@ namespace UI
             this.Hide();
             FrmInicio inicio = new FrmInicio();
             inicio.Show();
+        }
+        private void MostrarMensaje(string mensaje)
+        {
+            MessageBox.Show(mensaje, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

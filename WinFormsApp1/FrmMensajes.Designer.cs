@@ -35,6 +35,7 @@
             lstContactos = new ListBox();
             rtbChat = new RichTextBox();
             lblInquilino = new Label();
+            btnAtras = new Button();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -105,12 +106,26 @@
             lblInquilino.TabIndex = 6;
             lblInquilino.Text = "INQUILINO";
             // 
+            // btnAtras
+            // 
+            btnAtras.FlatStyle = FlatStyle.Flat;
+            btnAtras.Font = new Font("Segoe UI Black", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            btnAtras.ImageAlign = ContentAlignment.TopRight;
+            btnAtras.Location = new Point(724, 12);
+            btnAtras.Name = "btnAtras";
+            btnAtras.Size = new Size(30, 30);
+            btnAtras.TabIndex = 30;
+            btnAtras.Text = "🢀";
+            btnAtras.UseVisualStyleBackColor = true;
+            btnAtras.Click += btnAtras_Click;
+            // 
             // FrmMensajes
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 128, 128);
             ClientSize = new Size(800, 450);
+            Controls.Add(btnAtras);
             Controls.Add(lblInquilino);
             Controls.Add(rtbChat);
             Controls.Add(panel1);
@@ -123,6 +138,7 @@
             Controls.SetChildIndex(panel1, 0);
             Controls.SetChildIndex(rtbChat, 0);
             Controls.SetChildIndex(lblInquilino, 0);
+            Controls.SetChildIndex(btnAtras, 0);
             panel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -136,5 +152,6 @@
         private ListBox lstContactos;
         private RichTextBox rtbChat;
         private Label lblInquilino;
+        private Button btnAtras;
     }
 }

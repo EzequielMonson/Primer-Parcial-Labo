@@ -1,17 +1,11 @@
 ﻿using Clases;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Text.Json;
 using NestApp;
-using System.Runtime.InteropServices;
 
 namespace UI
 {
@@ -21,57 +15,85 @@ namespace UI
         private Inquilino inquilinoActual;
         public List<Inquilino> listaInquilinos;
         public Deuda deudaActual;
+        public string cadenaConexion;
+        public OperacionesBDInquilino<Inquilino> baseDatosInquilinos;
+        public OperacionesBDAdministrador<Administrador> baseDatosAdministradores;
+        public OperacionesBDServicio<Servicio> OperacionesBDServicio;
         public FrmMenu()
         {
             InitializeComponent();
+            cadenaConexion = "SERVER=127.0.0.1;PORT=3306;DATABASE=nestapp;UID=root;PASSWORDS=;";
+            baseDatosInquilinos = new OperacionesBDInquilino<Inquilino>(cadenaConexion);
+            baseDatosAdministradores = new OperacionesBDAdministrador<Administrador>(cadenaConexion);
+            listaInquilinos = new List<Inquilino>();
         }
         public void FrmMenu_Load(object sender, EventArgs e)
         {
-            string jsonFilePath = "registrosInquilino.json";
 
-            if (File.Exists(jsonFilePath))
-            {
-                listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON(jsonFilePath);
-            }
-            else
-            {
-                MessageBox.Show("El archivo JSON no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                listaInquilinos = new List<Inquilino>();
-            }
+            listaInquilinos = baseDatosInquilinos.ObtenerTodos();
+
             if (UsuarioActual == TipoUsuario.Administrador)
             {
-                List<Vivienda> listaVivienda = administradorActual.viviendasACargo;
 
-                foreach (var vivienda in listaVivienda)
+                OperacionesBDVivienda<Vivienda> baseDatosVivienda = new OperacionesBDVivienda<Vivienda>(cadenaConexion);
+                List<Vivienda> listaViviendas = baseDatosVivienda.ObtenerListaPor(administradorActual.Identificacion, "SELECT * FROM viviendas WHERE identificacionArriendador = @identificacionArriendador");
+
+                foreach (var vivienda in listaViviendas)
                 {
                     foreach (var inquilino in listaInquilinos)
                     {
-
                         if (vivienda.dniInquilino == inquilino.dni)
                         {
-                            if (administradorActual.inquilinosACargo != null)
+                            inquilino.Vivienda = vivienda;
+                            if (administradorActual.inquilinosACargo != null && !administradorActual.inquilinosACargo.Contains(inquilino))
                             {
+
                                 administradorActual.inquilinosACargo.Add(inquilino);
                                 inquilino.CalcularDeuda(vivienda);
+
                             }
                             else
                             {
-                                administradorActual.inquilinosACargo = new List<Inquilino> { inquilino };
+                                administradorActual.inquilinosACargo = new List<Inquilino>();
+                                if (!administradorActual.inquilinosACargo.Contains(inquilino))
+                                {
+                                    administradorActual.inquilinosACargo.Add(inquilino);
+                                    inquilino.CalcularDeuda(vivienda);
+                                }
+
                             }
                             if (inquilino.Estado == Estado.Pendiente)
                             {
+                                if (administradorActual.inquilinosPendientes != null)
+                                {
+                                    administradorActual.inquilinosPendientes.Add(inquilino);
+                                }
+                                else
+                                {
+                                    administradorActual.inquilinosPendientes = new List<Inquilino> { inquilino };
 
-                                administradorActual.inquilinosPendientes.Add(inquilino);
+                                }
                             }
-                            if (inquilino.ColaDeudas.Count > 0)
+                            if (inquilino.ColaDeudas != null)
                             {
-                                administradorActual.inquilinosDeudores.Add(inquilino);
+                                if (inquilino.ColaDeudas.Count > 0)
+                                {
+                                    if (administradorActual.inquilinosDeudores != null)
+                                    {
+                                        administradorActual.inquilinosDeudores.Add(inquilino);
+                                    }
+                                    else
+                                    {
+                                        administradorActual.inquilinosDeudores = new List<Inquilino> { inquilino };
+                                    }
+                                }
                             }
+                            baseDatosInquilinos.Actualizar(inquilino);
                         }
 
                     }
                 }
-                Serializadora<Inquilino>.GuardarComoJSON(listaInquilinos, jsonFilePath);
+
                 this.cmbMostrar.DataSource = new List<string> { "Pendientes", "Deudores", "Todos" };
                 this.cmbInquilinoSeleccionado.DataSource = obtenerListasSegunOrden();
                 this.grpInquilinoSeleccionado.Visible = true;
@@ -90,7 +112,6 @@ namespace UI
                     CargarDeudas();
                 }
                 cmbInquilinoSeleccionado.SelectedIndexChanged += cmbInquilinoSeleccionado_SelectedIndexChanged;
-
 
             }
             if (UsuarioActual == TipoUsuario.Inquilino)
@@ -133,10 +154,8 @@ namespace UI
             Administrador,
             Inquilino
         }
-
         public TipoUsuario UsuarioActual { get; private set; }
 
-        // método para establecer el administrador actual
         public void SetAdministrador(Administrador administrador)
         {
 
@@ -144,7 +163,6 @@ namespace UI
             UsuarioActual = TipoUsuario.Administrador;
 
         }
-
         public void SetInquilino(Inquilino inquilino)
         {
             inquilinoActual = inquilino;
@@ -154,13 +172,9 @@ namespace UI
             {
                 btnAgregarTarjeta.Visible = true;
             }
-
-
-
         }
         private void CargarPagos()
         {
-
             dtgPagos.Rows.Clear();
             // Asumiendo que Inquilino tiene una propiedad List<Pago> llamada Pagos
             List<Pago> listaPagos = inquilinoActual.HistorialPagos;
@@ -179,13 +193,26 @@ namespace UI
         }
         private void CargarDeudas()
         {
+            OperacionesBDDeudas<Deuda> baseDatosDeudas = new OperacionesBDDeudas<Deuda>(cadenaConexion, inquilinoActual);
             // Asumiendo que Inquilino tiene una propiedad Queue<Deuda> llamada ColaDeudas
-            if (inquilinoActual.Tarjeta == null)
+            OperacionesBDTarjeta<Tarjeta> baseDatosTarjeta = new OperacionesBDTarjeta<Tarjeta>(cadenaConexion, inquilinoActual);
+            string consultaTarjeta = "SELECT * FROM tarjeta WHERE dniInquilino = @dniInquilino";
+            inquilinoActual.AgregarTarjeta(baseDatosTarjeta.ObtenerPor(inquilinoActual.Dni, consultaTarjeta));
+            if (inquilinoActual.Tarjeta == null && UsuarioActual == TipoUsuario.Inquilino)
             {
                 MessageBox.Show("Por favor, ingrese una tarjeta.");
             }
-            Queue<Deuda> colaDeudas = inquilinoActual.ColaDeudas;
-
+            else if (UsuarioActual == TipoUsuario.Inquilino && inquilinoActual.Tarjeta != null)
+            {
+                btnAgregarTarjeta.Visible = false;
+            }
+            Queue<Deuda> colaDeudas = new Queue<Deuda>();
+            List<Deuda> listaDeudas = baseDatosDeudas.ObtenerTodos();
+            foreach (var deuda in listaDeudas)
+            {
+                colaDeudas.Enqueue(deuda);
+            }
+            inquilinoActual.ColaDeudas = colaDeudas;
             dtgDeudas.Rows.Clear();
 
             foreach (var deuda in colaDeudas)
@@ -291,25 +318,38 @@ namespace UI
                 {
                     // Actualizar el saldo del inquili
                     Pago nuevoPago = new Pago(deudaActual.Monto, deudaActual.FechaVencimiento);
-                    inquilinoActual.HistorialPagos.Add(nuevoPago);
-                    inquilinoActual.Tarjeta.Saldo -= deudaActual.Monto;
-                    inquilinoActual.ColaDeudas.Dequeue();
-                    string jsonFilePath = "registrosInquilino.json";
-                    List<Inquilino> listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON(jsonFilePath);
-                    foreach (var inquilino in listaInquilinos)
+                    OperacionesBDDeudas<Deuda> baseDatosDeudas = new OperacionesBDDeudas<Deuda>(cadenaConexion, inquilinoActual);
+                    OperacionesBSPago<Pago> baseDatosPagos = new OperacionesBSPago<Pago>(cadenaConexion, inquilinoActual);
+                    OperacionesBDTarjeta<Tarjeta> baseDatosTarjeta = new OperacionesBDTarjeta<Tarjeta>(cadenaConexion, inquilinoActual);
+                    if (inquilinoActual.Tarjeta.Saldo >= deudaActual.Monto)
                     {
-                        if (inquilino.Dni == inquilinoActual.Dni)
+
+
+                        if (inquilinoActual.HistorialPagos != null)
                         {
-                            listaInquilinos.Remove(inquilino);
-                            listaInquilinos.Add(inquilinoActual);
-                            break;
+                            inquilinoActual.HistorialPagos.Add(nuevoPago);
+
                         }
-
+                        else
+                        {
+                            inquilinoActual.HistorialPagos = new List<Pago> { nuevoPago };
+                        }
+                        baseDatosPagos.Insertar(nuevoPago);
+                        inquilinoActual.Tarjeta.Saldo -= deudaActual.Monto;
+                        inquilinoActual.ColaDeudas.Dequeue();
+                        baseDatosDeudas.Eliminar(deudaActual);
+                        baseDatosTarjeta.Actualizar(inquilinoActual.Tarjeta);
+                        baseDatosInquilinos.Actualizar(inquilinoActual);
+                        CargarPagos();
+                        CargarDeudas();
                     }
-                    Serializadora<Inquilino>.GuardarComoJSON(listaInquilinos, jsonFilePath);
-
-                    CargarPagos();
-                    CargarDeudas();
+                    else
+                    {
+                        MessageBox.Show("Su saldo es insuficiente, para pagar la deuda seleccionada");
+                    }
+                    baseDatosDeudas.OnMostrarMensajeError += MostrarMensajeError;
+                    baseDatosPagos.OnMostrarMensajeError += MostrarMensajeError;
+                    baseDatosTarjeta.OnMostrarMensajeError += MostrarMensajeError;
                 }
                 else
                 {
@@ -326,6 +366,7 @@ namespace UI
             }
             else
             {
+                grpInquilinoSeleccionado.Visible = true;
                 Point ubicacion = new Point(121, 170);
                 grpSeleccionado.Location = ubicacion;
             }
@@ -368,33 +409,70 @@ namespace UI
                 grpDatosTarjeta.Visible = false;
                 grpIngreseSaldo.Visible = false;
                 grpServicios.Visible = true;
+                grpInquilinoSeleccionado.Visible = false;
+                Point ubicacion = new Point(121, 42);
+                grpServicios.Location = ubicacion;
+                if (UsuarioActual == TipoUsuario.Administrador)
+                {
+                    lblServicio.Visible = true;
+                    txtPrecio.Visible = true;
+                    lblPrecio.Visible = true;
+                    cmbServicios.Visible = true;
+                    chklServicios.Visible = false;
+
+                }
+                else
+                {
+                    chklServicios.Visible = true;
+                    lblServicio.Visible = false;
+                    txtPrecio.Visible = false;
+                    lblPrecio.Visible = false;
+                    cmbServicios.Visible = false;
+
+                }
             }
 
         }
         private List<Inquilino> obtenerListasSegunOrden()
         {
+
             string opcionSeleccionada = cmbMostrar.SelectedItem.ToString();
+            OperacionesBDVivienda<Vivienda> baseDeDatosVivienda = new OperacionesBDVivienda<Vivienda>(cadenaConexion);
+            string consultaVivienda = "SELECT * FROM viviendas WHERE IdentificacionArriendador = @IdentificacionArriendador";
+            string consultainquilino = "SELECT * FROM inquilinos WHERE dni = @dni";
+            List<Vivienda> viviendas = baseDeDatosVivienda.ObtenerListaPor(administradorActual.Identificacion, consultaVivienda);
+            List<Inquilino> inquilinos = new List<Inquilino>();
+            foreach (Vivienda vivienda in viviendas)
+            {
+                Inquilino inquilino = baseDatosInquilinos.ObtenerPor(vivienda.dniInquilino, consultainquilino);
+                inquilinos.Add(inquilino);
+            }
 
             switch (opcionSeleccionada)
             {
                 case "Pendientes":
                     this.btnValidarInquilino.Visible = true;
-
-                    return administradorActual.inquilinosPendientes;
+                    //List<Inquilino> listaPendientes = new List<Inquilino>();
+                    return administradorActual.inquilinosPendientes; //= listaPendientes;
+                                                                     //return listaPendientes;
                 case "Deudores":
                     this.btnValidarInquilino.Visible = false;
                     return administradorActual.inquilinosDeudores;
                 case "Todos":
                     this.btnValidarInquilino.Visible = false;
-                    return administradorActual.inquilinosACargo;
+                    administradorActual.inquilinosACargo = listaInquilinos;
+                    return listaInquilinos;
                 default:
                     this.btnValidarInquilino.Visible = false;
+                    administradorActual.inquilinosACargo = listaInquilinos;
                     return administradorActual.inquilinosACargo;
             }
 
         }
         private void cmbMostrar_SelectedIndexChanged(object sender, EventArgs e)
         {
+            cmbInquilinoSeleccionado.DataSource = null;
+            cmbInquilinoSeleccionado.Items.Clear();
             cmbInquilinoSeleccionado.DataSource = obtenerListasSegunOrden();
         }
 
@@ -411,18 +489,21 @@ namespace UI
             {
                 CambiarYMostrarGrp(grpIngreseSaldo);
                 lblCantSaldoTarjetaIngresada.Text = inquilinoActual.Tarjeta.Saldo.ToString();
+                OperacionesBDTarjeta<Tarjeta> baseDatosTarjeta = new OperacionesBDTarjeta<Tarjeta>(cadenaConexion, inquilinoActual);
                 try
                 {
                     int saldoIngresado;
                     if (int.TryParse(txtMonto.Text, out saldoIngresado))
                     {
-                        inquilinoActual.IngresarSaldo(saldoIngresado);
+                        inquilinoActual.Tarjeta.Saldo += (saldoIngresado);
+                        baseDatosTarjeta.Actualizar(inquilinoActual.Tarjeta);
                     }
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Error: " + ex);
+                    MostrarMensajeError("Error: " + ex);
                 }
+                lblCantSaldoTarjetaIngresada.Text = inquilinoActual.Tarjeta.Saldo.ToString();
             }
         }
 
@@ -432,6 +513,7 @@ namespace UI
             string numeroTarjeta = txtNumeroTarjetaIngresada.Text;
             string cvv = txtCvvIngresado.Text;
             int cvvEntero;
+            OperacionesBDTarjeta<Tarjeta> baseDatosTarjeta = new OperacionesBDTarjeta<Tarjeta>(cadenaConexion, inquilinoActual);
             if (int.TryParse(cvv, out cvvEntero))
             {
                 Tarjeta tarjetaIngresada = new Tarjeta(nombreCompleto, cvvEntero, numeroTarjeta);
@@ -443,26 +525,10 @@ namespace UI
                     lblCantSaldoTarjetaIngresada.Text = tarjetaIngresada.Saldo.ToString();
 
                     inquilinoActual.AgregarTarjeta(tarjetaIngresada);
+                    baseDatosTarjeta.Insertar(tarjetaIngresada);
 
-                    string rutaArchivoJsonInquilino = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosInquilino.json");
-
-                    if (File.Exists(rutaArchivoJsonInquilino))
-                    {
-                        List<Inquilino> listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON(rutaArchivoJsonInquilino);
-
-                        foreach (var inquilino in listaInquilinos)
-                        {
-                            if (inquilino.Dni == inquilinoActual.Dni)
-                            {
-                                listaInquilinos.Remove(inquilino);
-                                listaInquilinos.Add(inquilinoActual);
-                                break;
-                            }
-                        }
-
-                        Serializadora<Inquilino>.GuardarComoJSON(listaInquilinos, rutaArchivoJsonInquilino);
-                    }
                 }
+                baseDatosTarjeta.OnMostrarMensajeError += MostrarMensajeError;
             }
         }
 
@@ -476,13 +542,11 @@ namespace UI
             CambiarYMostrarGrp(grpDatosTarjeta);
         }
 
-        private void cmbInquilinoSeleccionado_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
-        }
 
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
+            OperacionesBDTarjeta<Tarjeta> baseDatosTarjeta = new OperacionesBDTarjeta<Tarjeta>(cadenaConexion, inquilinoActual);
+
             if (inquilinoActual.Tarjeta.NumeroTarjeta == txtNumeroTarjeta.Text && inquilinoActual.Tarjeta.Cvv.ToString() == txtCvv.Text)
             {
                 lblCantSaldo.Text = inquilinoActual.Tarjeta.Saldo.ToString();
@@ -490,127 +554,117 @@ namespace UI
                 if (int.TryParse(txtMonto.Text, out montoIngresado))
                 {
                     inquilinoActual.Tarjeta.Saldo += montoIngresado;
+
+                    baseDatosTarjeta.Actualizar(inquilinoActual.Tarjeta);
+
+                    lblCantSaldo.Text = inquilinoActual.Tarjeta.Saldo.ToString();
+                }
+                else
+                {
+                    MessageBox.Show("Datos incorrectos, por favor verifique los datos de la tarjeta.");
                 }
             }
-            else
-            {
-                MessageBox.Show("Datos incorrectos, por favor verifique los datos de la tarjeta.");
-            }
         }
-
         private void btnValidarInquilino_Click(object sender, EventArgs e)
         {
             Inquilino inquilinoSeleccionado = (Inquilino)cmbInquilinoSeleccionado.SelectedItem;
-            inquilinoActual = inquilinoSeleccionado;
-            administradorActual.PermitirNuevoInquilino(inquilinoSeleccionado);
-            string rutaArchivoJsonInquilino = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosInquilino.json");
-            if (File.Exists(rutaArchivoJsonInquilino))
+            if (inquilinoSeleccionado != null)
             {
-                List<Inquilino> listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON(rutaArchivoJsonInquilino);
-                foreach (var inquilino in listaInquilinos)
-                {
-                    if (inquilino.Dni == inquilinoActual.Dni)
-                    {
-                        listaInquilinos.Remove(inquilino);
-                        listaInquilinos.Add(inquilinoActual);
-                        break;
-                    }
-                }
 
+                inquilinoSeleccionado = administradorActual.PermitirNuevoInquilino(inquilinoSeleccionado);
+                baseDatosInquilinos.Actualizar(inquilinoSeleccionado);
             }
-            Serializadora<Inquilino>.GuardarComoJSON(listaInquilinos, rutaArchivoJsonInquilino);
         }
 
         private void btnServicios_Click(object sender, EventArgs e)
         {
             CambiarYMostrarGrp(grpServicios);
             chklServicios.DataSource = Enum.GetValues(typeof(NombreServicios));
+            cmbServicios.DataSource = Enum.GetValues(typeof(NombreServicios));
 
 
-        }
-        private int ObtenerPrecioServicio(NombreServicios nombreServicio)
-        {
-            switch (nombreServicio)
-            {
-                case NombreServicios.Agua:
-                    return 20; // Precio del servicio de agua
-
-                case NombreServicios.Internet:
-                    return 50; // Precio del servicio de internet
-
-                case NombreServicios.Cable:
-                    return 30; // Precio del servicio de cable
-
-                case NombreServicios.Luz:
-                    return 25; // Precio del servicio de luz
-
-                case NombreServicios.Gas:
-                    return 40; // Precio del servicio de gas
-
-                default:
-                    return 0;
-            }
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            List<Servicio> listaServiciosSeleccionados = new List<Servicio>();
-            inquilinoActual.Vivienda.servicios.Clear();
-            foreach (NombreServicios nombreServicio in chklServicios.CheckedItems)
+            if (UsuarioActual == TipoUsuario.Inquilino)
             {
-                int precio = ObtenerPrecioServicio(nombreServicio);
-                string nombre = Enum.GetName(typeof(NombreServicios), nombreServicio);
-                NombreServicios id = nombreServicio;
-                Servicio servicio = new Servicio(nombre, precio, id);
-                listaServiciosSeleccionados.Add(servicio);
-            }
-            foreach (var servicio in listaServiciosSeleccionados)
-            {
-                inquilinoActual.Vivienda.AgregarServicio(servicio);
-            }
-            string rutaArchivoJsonInquilino = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosInquilino.json");
-            List<Inquilino> listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON(rutaArchivoJsonInquilino);
-            foreach (var inquilino in listaInquilinos)
-            {
-                if (inquilino.dni == inquilinoActual.Dni)
+                if (inquilinoActual.Vivienda == null)
                 {
-                    listaInquilinos.Remove(inquilino);
-                    listaInquilinos.Add(inquilinoActual);
-                    break;
+                    OperacionesBDVivienda<Vivienda> baseDatosVivienda = new OperacionesBDVivienda<Vivienda>(cadenaConexion);
+                    List<Vivienda> listaViviendas = baseDatosVivienda.ObtenerTodos();
+                    foreach (var vivienda in listaViviendas)
+                    {
+                        if (vivienda.dniInquilino == inquilinoActual.Dni)
+                        {
+                            inquilinoActual.ElegirVivienda(vivienda);
+
+                        }
+                    }
                 }
+                OperacionesBDServicio<Servicio> baseDatosServicios = new OperacionesBDServicio<Servicio>(cadenaConexion, inquilinoActual.Vivienda.identificacionArriendador);
+
+                List<Servicio> listaServicios = inquilinoActual.Vivienda.servicios;
+
+                if (listaServicios == null)
+                {
+                    listaServicios = baseDatosServicios.ObtenerServiciosActivos(inquilinoActual.Vivienda.identificacionArriendador, inquilinoActual.Dni);
+                }
+
+                inquilinoActual.Vivienda.servicios = listaServicios;
+
+                // Eliminar los servicios no seleccionados
+                foreach (var servicio in listaServicios)
+                {
+                    if (!chklServicios.CheckedItems.Contains((NombreServicios)Enum.Parse(typeof(NombreServicios), servicio.Nombre)))
+                    {
+                        baseDatosServicios.Eliminar(servicio, inquilinoActual.Dni);
+                    }
+                }
+
+                // Insertar los servicios seleccionados
+                List<Servicio> listaNuevosServicios = new List<Servicio>();
+
+                foreach (NombreServicios servicioSeleccionado in chklServicios.CheckedItems)
+                {
+                    string nombreServicioSeleccionado = Enum.GetName(typeof(NombreServicios), servicioSeleccionado);
+                    string consulta = "SELECT * FROM servicios WHERE identificacionAdmin = @identificacionAdmin AND nombre = @nombre";
+                    Servicio servicio = baseDatosServicios.ObtenerPor(inquilinoActual.Vivienda.identificacionArriendador, consulta, nombreServicioSeleccionado);
+
+                    if (servicio != null)
+                    {
+                        listaNuevosServicios.Add(servicio);
+                    }
+                }
+
+                // Insertar la lista de nuevos servicios
+                baseDatosServicios.InsertarLista(listaNuevosServicios, inquilinoActual);
+
+                // Volver a cargar la lista de servicios activos después de las actualizaciones
+                listaServicios = baseDatosServicios.ObtenerServiciosActivos(inquilinoActual.Vivienda.identificacionArriendador, inquilinoActual.Dni);
+
+                // Asignar la lista actualizada de servicios a la propiedad servicios de la vivienda
+                inquilinoActual.Vivienda.servicios = listaServicios;
+
+
+
+
             }
-            Serializadora<Inquilino>.GuardarComoJSON(listaInquilinos, rutaArchivoJsonInquilino);
+            else
+            {
+                NombreServicios nombreServicio = (NombreServicios)cmbServicios.SelectedItem;
+
+                int precio = int.TryParse(txtPrecio.Text, out int parsedPrecio) ? parsedPrecio : 0;
+
+                string nombre = Enum.GetName(typeof(NombreServicios), nombreServicio);
+
+                Servicio servicio = new Servicio(nombre, precio, administradorActual.Identificacion);
+
+                OperacionesBDServicio<Servicio> baseDatosServicios = new OperacionesBDServicio<Servicio>(cadenaConexion, administradorActual.Identificacion);
+
+                baseDatosServicios.Insertar(servicio);
+            }
         }
-        //private void btnMensajes_Click(object sender, EventArgs e)
-        //{
-        //    List<Administrador> listaAdmin = Serializadora<Administrador>.CargarDesdeJSON("registrosAdministrador.json");
-        //    List<Inquilino> listaInqui = Serializadora<Inquilino>.CargarDesdeJSON("registrosInquilino.json");
-
-        //    List<FrmMensajes> formulariosMensajes = new List<FrmMensajes>();
-
-        //    foreach (var admin in listaAdmin)
-        //    {
-        //        FrmMensajes mensajes = new FrmMensajes();
-        //        mensajes.SetAdministrador(admin);
-        //        formulariosMensajes.Add(mensajes);
-        //    }
-
-        //    foreach (var inqui in listaInqui)
-        //    {
-        //        FrmMensajes mensajes = new FrmMensajes();
-        //        mensajes.SetInquilino(inqui);
-        //        formulariosMensajes.Add(mensajes);
-        //    }
-
-        //    // Mostrar todos los formularios al mismo tiempo
-        //    foreach (var formulario in formulariosMensajes)
-        //    {
-        //        formulario.Show();
-        //    }
-        //}
-
-
-
         private void btnMensajes_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -629,3 +683,4 @@ namespace UI
         }
     }
 }
+

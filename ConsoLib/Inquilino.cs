@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,42 +47,70 @@ namespace Clases
         {
             this.vivienda = viviendaElegida;
             vivienda.DniInquilino = Dni;
+            
             Administrador administrador = vivienda.ObtenerAdministradorPorIdentificacion();//arriendador.inquilinosPendientes.Add(this);
-            administrador.inquilinosPendientes.Add(this);
+            if (administrador.inquilinosPendientes != null)
+            {
+                administrador.inquilinosPendientes.Add(this);
+            }
+            else 
+            {
+                administrador.inquilinosPendientes = new List<Inquilino> { this };
+            }
         }
         public void CalcularDeuda(Vivienda vivienda)
         {
+            string cadenaConexion = "SERVER=127.0.0.1;PORT=3306;DATABASE=nestapp;UID=root;PASSWORDS=;";
+            OperacionesBDDeudas<Deuda> baseDatosDeuda = new OperacionesBDDeudas<Deuda>(cadenaConexion, this);
+            OperacionesBSPago<Pago> baseDatosPagos = new OperacionesBSPago<Pago>(cadenaConexion, this);
+            List<Deuda> listaDeudas = baseDatosDeuda.ObtenerTodos();
+            colaDeudas = new Queue<Deuda>(listaDeudas);
+            HistorialPagos = baseDatosPagos.ObtenerTodos();
             if (vivienda != null)
             {
                 int precioTotal = vivienda.CalcularPrecioTotal();
 
-
-                if (HistorialPagos.Count == 0)
+                if (HistorialPagos != null)
                 {
+                    if (HistorialPagos.Count == 0 && colaDeudas.Count()<=0)
+                    {
+
+                        DateTime fechaVencimiento = DateTime.Now.AddMonths(1);
+                        Deuda nuevaDeuda = new Deuda(precioTotal, "Alquiler", DateTime.Now, fechaVencimiento);
+                        AgregarDeuda(nuevaDeuda);
+                        baseDatosDeuda.Insertar(nuevaDeuda);
+
+                    }
+                    else
+                    {
+                        // Obtiene la fecha de vencimiento del último pago
+                        DateTime ultimaFechaVencimiento = HistorialPagos.Last().FechaVencimiento;
+
+                        // Calcula la diferencia en días desde la última fecha de vencimiento
+                        int diasDesdeVencimiento = (int)(DateTime.Now - ultimaFechaVencimiento).TotalDays;
+
+                        // Define el período después del cual se agregaría una nueva deuda (por ejemplo, 30 días)
+                        int periodoDeuda = 30;
+
+                        if (diasDesdeVencimiento >= periodoDeuda)
+                        {
+                            // Ha pasado el período definido, agrega una nueva deuda
+                            DateTime nuevaFechaVencimiento = DateTime.Now.AddMonths(1);
+                            Deuda nuevaDeuda = new Deuda(precioTotal, "Alquiler", DateTime.Now, nuevaFechaVencimiento);
+                            AgregarDeuda(nuevaDeuda);
+                            baseDatosDeuda.Insertar(nuevaDeuda);
+                        }
+                    }
+                }
+                else 
+                {
+                 
+                    HistorialPagos = new List<Pago>();
 
                     DateTime fechaVencimiento = DateTime.Now.AddMonths(1);
                     Deuda nuevaDeuda = new Deuda(precioTotal, "Alquiler", DateTime.Now, fechaVencimiento);
                     AgregarDeuda(nuevaDeuda);
-
-                }
-                else
-                {
-                    // Obtiene la fecha de vencimiento del último pago
-                    DateTime ultimaFechaVencimiento = HistorialPagos.Last().FechaVencimiento;
-
-                    // Calcula la diferencia en días desde la última fecha de vencimiento
-                    int diasDesdeVencimiento = (int)(DateTime.Now - ultimaFechaVencimiento).TotalDays;
-
-                    // Define el período después del cual se agregaría una nueva deuda (por ejemplo, 30 días)
-                    int periodoDeuda = 30;
-
-                    if (diasDesdeVencimiento >= periodoDeuda)
-                    {
-                        // Ha pasado el período definido, agrega una nueva deuda
-                        DateTime nuevaFechaVencimiento = DateTime.Now.AddMonths(1);
-                        Deuda nuevaDeuda = new Deuda(precioTotal, "Alquiler", DateTime.Now, nuevaFechaVencimiento);
-                        AgregarDeuda(nuevaDeuda);
-                    }
+                    baseDatosDeuda.Insertar(nuevaDeuda);
                 }
             }
         }
@@ -140,9 +169,18 @@ namespace Clases
 
         public void AgregarDeuda(Deuda nuevaDeuda)
         {
-            // Verificar si ya hay una deuda en la cola
-            if (colaDeudas.Count == 0 || colaDeudas.Peek().FechaVencimiento < DateTime.Now)
+            if (colaDeudas != null)
             {
+                // Verificar si ya hay una deuda en la cola
+                if (colaDeudas.Count == 0 || colaDeudas.Peek().FechaVencimiento < DateTime.Now)
+                {
+                    colaDeudas.Enqueue(nuevaDeuda);
+
+                }
+            }
+            else
+            {
+                colaDeudas = new Queue<Deuda>();
                 colaDeudas.Enqueue(nuevaDeuda);
             }
         }

@@ -9,8 +9,9 @@ namespace Clases
 {
     public interface IOperacionesBD<T>
     {
-        
-        void Insertar(T entidad, string consulta);
+
+
+        void Insertar(T entidad);
         void Actualizar(T entidad);
         void Eliminar(T entidad);
         T ObtenerPor(int identificacion, string consulta);

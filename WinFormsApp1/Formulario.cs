@@ -17,9 +17,9 @@ namespace UI
         public Formulario()
         {
             InitializeComponent();
-            this.MouseDown += MainForm_MouseDown;
-            this.MouseMove += MainForm_MouseMove;
-            this.MouseUp += MainForm_MouseUp;
+            //this.MouseDown += MainForm_MouseDown;
+            //this.MouseMove += MainForm_MouseMove;
+            //this.MouseUp += MainForm_MouseUp;
         }
 
         private void MainForm_MouseDown(object sender, MouseEventArgs e)

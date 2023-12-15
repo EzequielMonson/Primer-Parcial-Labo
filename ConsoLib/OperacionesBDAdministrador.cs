@@ -2,16 +2,20 @@
 using System.Reflection.PortableExecutable;
 using Clases;
 using MySql.Data.MySqlClient;
-public class OperacionesBDAdministrador<T> : OperacionesBD<Administrador>
+public class OperacionesBDAdministrador<T> : IOperacionesBD<Administrador>
 {
     private string CadenaConexion;
-    public OperacionesBDAdministrador(string cadenaConexion) : base(cadenaConexion)
+    public delegate void MostrarMensajeErrorDelegate(string mensaje);
+
+    public event MostrarMensajeErrorDelegate OnMostrarMensajeError;
+
+    public OperacionesBDAdministrador(string cadenaConexion)
     {
         CadenaConexion = cadenaConexion;
 
     }
 
-    public override List<Administrador> ObtenerTodos()
+    public List<Administrador> ObtenerTodos()
     {
         string consultaSelect = "SELECT * FROM administradores";
 
@@ -79,13 +83,15 @@ public class OperacionesBDAdministrador<T> : OperacionesBD<Administrador>
         }
     }
 
-    public override void Insertar(Administrador administradorIngresado, string consulta)
+    public void Insertar(Administrador administradorIngresado)
     {
         if (ExisteAdministradorConDni(administradorIngresado.dni))
         {
             EnviarMensajeErrorBD("Datos ya registrados");
             return;
         }
+        string consulta = "INSERT INTO administradores (nombre, apellido, correo, clave, ciudad, fechaNacimiento, telefono, dni, edad, agencia, contactoAgencia, identificacion)"+
+            " VALUES (@nombre, @apellido, @correo, @clave, @ciudad, @fechaNacimiento, @telefono, @dni, @edad, @agencia, @contactoAgencia, @identificacion)";
 
         using (MySqlConnection conexion = new MySqlConnection(CadenaConexion))
         {
@@ -134,7 +140,7 @@ public class OperacionesBDAdministrador<T> : OperacionesBD<Administrador>
             }
         }
     }
-    public override void Actualizar(Administrador administradorIngresado)
+    public void Actualizar(Administrador administradorIngresado)
     {
         string consultaUpdate = "UPDATE Inquilinos SET nombre = @nombre, apellido = @apellido, correo = @correo, " +
                                 "clave = @clave, ciudad = @ciudad, fechaNacimiento = @fechaNacimiento, " +
@@ -190,7 +196,7 @@ public class OperacionesBDAdministrador<T> : OperacionesBD<Administrador>
         }
     }
 
-    public override Administrador ObtenerPor(int identificacion, string consulta)
+    public Administrador ObtenerPor(int identificacion, string consulta)
     {
         //string consulta = "SELECT * FROM administradores WHERE id = @documento";
         Administrador administrador = null;
@@ -253,7 +259,7 @@ public class OperacionesBDAdministrador<T> : OperacionesBD<Administrador>
             return administrador;
         }
     }
-    public override void Eliminar(Administrador administrador)
+    public void Eliminar(Administrador administrador)
     {
         string consultaDelete = "DELETE FROM administradores WHERE dni = @dni";
 
@@ -336,6 +342,10 @@ public class OperacionesBDAdministrador<T> : OperacionesBD<Administrador>
                 //Console.WriteLine("Conexion cerrada");
             }
         }
+    }
+    public void EnviarMensajeErrorBD(string mensaje)
+    {
+        OnMostrarMensajeError?.Invoke(mensaje);
     }
 
 

@@ -15,22 +15,22 @@ namespace Pruebas
         public void InsertarAdministrador_EnBaseDeDatos()
         {
             OperacionesBDAdministrador<Administrador> baseDatosAdmin = new OperacionesBDAdministrador<Administrador>(CadenaConexion);
-            string consulta = "INSERT INTO administradores ...";
+            
             List<Administrador> listaAdministradores = baseDatosAdmin.ObtenerTodos();
             Assert.IsNotNull(listaAdministradores);
-            baseDatosAdmin.Insertar(unAdministrador, consulta);
+            baseDatosAdmin.Insertar(unAdministrador);
             
-            Assert.AreEqual(listaAdministradores.Count(), baseDatosAdmin.ObtenerTodos().Count);
+            Assert.AreEqual(listaAdministradores.Count()+1, baseDatosAdmin.ObtenerTodos().Count);
         }
         [TestMethod]
         public void InsertarInquilino_EnBaseDeDatos()
         {
             OperacionesBDInquilino<Inquilino> baseDatosInqui = new OperacionesBDInquilino<Inquilino>(CadenaConexion);
-            string consulta = "INSERT INTO inquilinos ...";
+            
 
             List<Inquilino> listaInquilinos = baseDatosInqui.ObtenerTodos();
             Assert.IsNotNull(listaInquilinos);
-            baseDatosInqui.Insertar(unInquilino, consulta);
+            baseDatosInqui.Insertar(unInquilino);
 
             Assert.AreEqual(listaInquilinos.Count(), baseDatosInqui.ObtenerTodos().Count);
         }

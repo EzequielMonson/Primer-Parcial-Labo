@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMenu));
             grpDeudas = new GroupBox();
             lblDeudas = new Label();
             dtgDeudas = new DataGridView();
@@ -39,7 +37,6 @@
             FechaVencimiento = new DataGridViewTextBoxColumn();
             btnPagarDeudaSeleccionada = new Button();
             btnPagarTotalDeudas = new Button();
-            notifyIcon1 = new NotifyIcon(components);
             grpPagos = new GroupBox();
             lblPagos = new Label();
             dtgPagos = new DataGridView();
@@ -81,14 +78,18 @@
             lblSaldoActualTarjetaIngresada = new Label();
             txtCvvIngresado = new TextBox();
             lblNumeroTarjetaIngresada = new Label();
-            label6 = new Label();
+            lblCvvDt = new Label();
             txtNumeroTarjetaIngresada = new TextBox();
             btnConfirmarTarjetaIngresada = new Button();
             lblDatosTarjeta = new Label();
             grpServicios = new GroupBox();
-            chklServicios = new CheckedListBox();
+            txtPrecio = new TextBox();
             btnGuardar = new Button();
             lblServicios = new Label();
+            lblServicio = new Label();
+            chklServicios = new CheckedListBox();
+            lblPrecio = new Label();
+            cmbServicios = new ComboBox();
             grpDeudas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtgDeudas).BeginInit();
             grpPagos.SuspendLayout();
@@ -198,12 +199,6 @@
             btnPagarTotalDeudas.Text = "PAGAR TOTAL ";
             btnPagarTotalDeudas.UseVisualStyleBackColor = true;
             btnPagarTotalDeudas.Visible = false;
-            // 
-            // notifyIcon1
-            // 
-            notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
-            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
-            notifyIcon1.Text = "notifyIcon1";
             // 
             // grpPagos
             // 
@@ -368,9 +363,9 @@
             pnlOpciones.Controls.Add(btnMostrarPagos);
             pnlOpciones.Controls.Add(btnMostrarDeudas);
             pnlOpciones.ForeColor = SystemColors.ButtonFace;
-            pnlOpciones.Location = new Point(1, 1);
+            pnlOpciones.Location = new Point(0, 0);
             pnlOpciones.Name = "pnlOpciones";
-            pnlOpciones.Size = new Size(213, 659);
+            pnlOpciones.Size = new Size(214, 659);
             pnlOpciones.TabIndex = 6;
             pnlOpciones.Visible = false;
             // 
@@ -504,7 +499,7 @@
             grpIngreseSaldo.Controls.Add(txtNumeroTarjeta);
             grpIngreseSaldo.Controls.Add(btnConfirmar);
             grpIngreseSaldo.Controls.Add(lblIngreseSaldo);
-            grpIngreseSaldo.Location = new Point(724, 563);
+            grpIngreseSaldo.Location = new Point(348, 595);
             grpIngreseSaldo.Name = "grpIngreseSaldo";
             grpIngreseSaldo.Size = new Size(611, 180);
             grpIngreseSaldo.TabIndex = 9;
@@ -627,11 +622,11 @@
             grpDatosTarjeta.Controls.Add(lblSaldoActualTarjetaIngresada);
             grpDatosTarjeta.Controls.Add(txtCvvIngresado);
             grpDatosTarjeta.Controls.Add(lblNumeroTarjetaIngresada);
-            grpDatosTarjeta.Controls.Add(label6);
+            grpDatosTarjeta.Controls.Add(lblCvvDt);
             grpDatosTarjeta.Controls.Add(txtNumeroTarjetaIngresada);
             grpDatosTarjeta.Controls.Add(btnConfirmarTarjetaIngresada);
             grpDatosTarjeta.Controls.Add(lblDatosTarjeta);
-            grpDatosTarjeta.Location = new Point(121, 749);
+            grpDatosTarjeta.Location = new Point(579, 556);
             grpDatosTarjeta.Name = "grpDatosTarjeta";
             grpDatosTarjeta.Size = new Size(611, 180);
             grpDatosTarjeta.TabIndex = 19;
@@ -702,17 +697,17 @@
             lblNumeroTarjetaIngresada.Text = "N° TARJETA:";
             lblNumeroTarjetaIngresada.TextAlign = ContentAlignment.TopCenter;
             // 
-            // label6
+            // lblCvvDt
             // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label6.ForeColor = Color.Snow;
-            label6.Location = new Point(418, 66);
-            label6.Name = "label6";
-            label6.Size = new Size(33, 15);
-            label6.TabIndex = 17;
-            label6.Text = "CVV:";
-            label6.TextAlign = ContentAlignment.TopCenter;
+            lblCvvDt.AutoSize = true;
+            lblCvvDt.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            lblCvvDt.ForeColor = Color.Snow;
+            lblCvvDt.Location = new Point(418, 66);
+            lblCvvDt.Name = "lblCvvDt";
+            lblCvvDt.Size = new Size(33, 15);
+            lblCvvDt.TabIndex = 17;
+            lblCvvDt.Text = "CVV:";
+            lblCvvDt.TextAlign = ContentAlignment.TopCenter;
             // 
             // txtNumeroTarjetaIngresada
             // 
@@ -748,9 +743,13 @@
             // 
             // grpServicios
             // 
-            grpServicios.Controls.Add(chklServicios);
+            grpServicios.Controls.Add(txtPrecio);
             grpServicios.Controls.Add(btnGuardar);
             grpServicios.Controls.Add(lblServicios);
+            grpServicios.Controls.Add(lblServicio);
+            grpServicios.Controls.Add(chklServicios);
+            grpServicios.Controls.Add(lblPrecio);
+            grpServicios.Controls.Add(cmbServicios);
             grpServicios.Location = new Point(121, 199);
             grpServicios.Name = "grpServicios";
             grpServicios.Size = new Size(611, 151);
@@ -758,16 +757,15 @@
             grpServicios.TabStop = false;
             grpServicios.Visible = false;
             // 
-            // chklServicios
+            // txtPrecio
             // 
-            chklServicios.BackColor = Color.FromArgb(255, 128, 128);
-            chklServicios.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            chklServicios.ForeColor = Color.WhiteSmoke;
-            chklServicios.FormattingEnabled = true;
-            chklServicios.Location = new Point(168, 58);
-            chklServicios.Name = "chklServicios";
-            chklServicios.Size = new Size(243, 52);
-            chklServicios.TabIndex = 12;
+            txtPrecio.BackColor = Color.FromArgb(255, 128, 128);
+            txtPrecio.ForeColor = Color.White;
+            txtPrecio.Location = new Point(417, 73);
+            txtPrecio.Name = "txtPrecio";
+            txtPrecio.Size = new Size(154, 23);
+            txtPrecio.TabIndex = 16;
+            txtPrecio.Visible = false;
             // 
             // btnGuardar
             // 
@@ -794,18 +792,68 @@
             lblServicios.Text = "SERVICIOS";
             lblServicios.TextAlign = ContentAlignment.TopCenter;
             // 
+            // lblServicio
+            // 
+            lblServicio.AutoSize = true;
+            lblServicio.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            lblServicio.ForeColor = Color.Snow;
+            lblServicio.Location = new Point(42, 73);
+            lblServicio.Name = "lblServicio";
+            lblServicio.Size = new Size(68, 19);
+            lblServicio.TabIndex = 15;
+            lblServicio.Text = "Servicio:";
+            lblServicio.TextAlign = ContentAlignment.TopCenter;
+            lblServicio.Visible = false;
+            // 
+            // chklServicios
+            // 
+            chklServicios.BackColor = Color.FromArgb(255, 128, 128);
+            chklServicios.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            chklServicios.ForeColor = Color.WhiteSmoke;
+            chklServicios.FormattingEnabled = true;
+            chklServicios.Location = new Point(168, 58);
+            chklServicios.Name = "chklServicios";
+            chklServicios.Size = new Size(243, 52);
+            chklServicios.TabIndex = 12;
+            chklServicios.Visible = false;
+            // 
+            // lblPrecio
+            // 
+            lblPrecio.AutoSize = true;
+            lblPrecio.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            lblPrecio.ForeColor = Color.Snow;
+            lblPrecio.Location = new Point(343, 74);
+            lblPrecio.Name = "lblPrecio";
+            lblPrecio.Size = new Size(56, 19);
+            lblPrecio.TabIndex = 17;
+            lblPrecio.Text = "Precio:";
+            lblPrecio.TextAlign = ContentAlignment.TopCenter;
+            lblPrecio.Visible = false;
+            // 
+            // cmbServicios
+            // 
+            cmbServicios.BackColor = Color.FromArgb(255, 128, 128);
+            cmbServicios.FlatStyle = FlatStyle.Flat;
+            cmbServicios.ForeColor = SystemColors.Control;
+            cmbServicios.FormattingEnabled = true;
+            cmbServicios.Location = new Point(116, 73);
+            cmbServicios.Name = "cmbServicios";
+            cmbServicios.Size = new Size(155, 23);
+            cmbServicios.TabIndex = 14;
+            cmbServicios.Visible = false;
+            // 
             // FrmMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(800, 663);
+            ClientSize = new Size(797, 647);
             Controls.Add(grpDatosTarjeta);
+            Controls.Add(grpIngreseSaldo);
             Controls.Add(pnlOpciones);
             Controls.Add(grpPagos);
             Controls.Add(grpDeudas);
             Controls.Add(btnOpciones);
-            Controls.Add(grpIngreseSaldo);
             Controls.Add(grpInquilinoSeleccionado);
             Controls.Add(grpServicios);
             Name = "FrmMenu";
@@ -813,11 +861,11 @@
             Load += FrmMenu_Load;
             Controls.SetChildIndex(grpServicios, 0);
             Controls.SetChildIndex(grpInquilinoSeleccionado, 0);
-            Controls.SetChildIndex(grpIngreseSaldo, 0);
             Controls.SetChildIndex(btnOpciones, 0);
             Controls.SetChildIndex(grpDeudas, 0);
             Controls.SetChildIndex(grpPagos, 0);
             Controls.SetChildIndex(pnlOpciones, 0);
+            Controls.SetChildIndex(grpIngreseSaldo, 0);
             Controls.SetChildIndex(grpDatosTarjeta, 0);
             grpDeudas.ResumeLayout(false);
             grpDeudas.PerformLayout();
@@ -842,7 +890,6 @@
         private GroupBox grpDeudas;
         private DataGridView dtgDeudas;
         private Label lblDeudas;
-        private NotifyIcon notifyIcon1;
         private GroupBox grpPagos;
         private Label lblPagos;
         private DataGridView dtgPagos;
@@ -882,12 +929,9 @@
         private Button btnAgregarTarjeta;
         private GroupBox grpDatosTarjeta;
         private Label lblMostrar;
-        private Label label2;
-        private Label label3;
-        private TextBox textBox1;
-        private Label label4;
+        private Label lblPrecio;
+        private TextBox txtPrecio;
         private Label lblNumeroTarjetaIngresada;
-        private TextBox textBox2;
         private TextBox txtNumeroTarjetaIngresada;
         private Button btnConfirmarTarjetaIngresada;
         private Label lblDatosTarjeta;
@@ -896,12 +940,14 @@
         private Label lblCantSaldoTarjetaIngresada;
         private Label lblSaldoActualTarjetaIngresada;
         private TextBox txtCvvIngresado;
-        private Label label6;
+        private Label lblCvvDt;
         internal ComboBox cmbMostrar;
         private Button btnValidarInquilino;
         private GroupBox grpServicios;
         private Button btnGuardar;
         private Label lblServicios;
         private CheckedListBox chklServicios;
+        internal ComboBox cmbServicios;
+        private Label lblServicio;
     }
 }

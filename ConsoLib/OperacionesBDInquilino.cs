@@ -2,16 +2,19 @@
 using System.Reflection.PortableExecutable;
 using Clases;
 using MySql.Data.MySqlClient;
-public class OperacionesBDInquilino<T> : OperacionesBD<Inquilino>
+public class OperacionesBDInquilino<T> : IOperacionesBD<Inquilino>
 {
     private string CadenaConexion;
-    public OperacionesBDInquilino(string cadenaConexion) : base(cadenaConexion)
+    public delegate void MostrarMensajeErrorDelegate(string mensaje);
+    public event MostrarMensajeErrorDelegate OnMostrarMensajeError;
+
+    public OperacionesBDInquilino(string cadenaConexion)
     {
         CadenaConexion = cadenaConexion;
 
     }
 
-    public override List<Inquilino> ObtenerTodos()
+    public List<Inquilino> ObtenerTodos()
     {
         string consultaSelect = "SELECT * FROM Inquilinos";
 
@@ -77,13 +80,16 @@ public class OperacionesBDInquilino<T> : OperacionesBD<Inquilino>
         }
     }
 
-    public override void Insertar(Inquilino inquilinoIngresado, string consulta)
+    public void Insertar(Inquilino inquilinoIngresado)
     {
+
         if (ExisteInquilinoConDni(inquilinoIngresado.dni))
         {
             EnviarMensajeErrorBD("Datos ya registrados");
             return;
         }
+        string consulta = "INSERT INTO inquilinos (nombre, apellido, correo, clave, ciudad, fechaNacimiento, telefono, dni, edad, estado ,direccion)" +
+            " VALUES (@nombre, @apellido, @correo, @clave, @ciudad, @fechaNacimiento, @telefono, @dni, @edad, @estado, @direccion)";
         using (MySqlConnection conexion = new MySqlConnection(CadenaConexion))
         {
             try
@@ -130,12 +136,12 @@ public class OperacionesBDInquilino<T> : OperacionesBD<Inquilino>
             }
         }
     }
-    public override void Actualizar(Inquilino inquilino)
+    public void Actualizar(Inquilino inquilino)
     {
         string consultaUpdate = "UPDATE Inquilinos SET nombre = @nombre, apellido = @apellido, correo = @correo, " +
                                 "clave = @clave, ciudad = @ciudad, fechaNacimiento = @fechaNacimiento, " +
                                 "telefono = @telefono, direccion = @direccion, dni = @dni, edad = @edad, estado = @estado " +
-                                "WHERE id = @id";
+                                "WHERE dni = @dni";
 
         using (MySqlConnection conexion = new MySqlConnection(CadenaConexion))
         {
@@ -185,7 +191,7 @@ public class OperacionesBDInquilino<T> : OperacionesBD<Inquilino>
         }
     }
 
-    public override Inquilino ObtenerPor(int documento, string consulta)
+    public Inquilino ObtenerPor(int documento, string consulta)
     {
         //string consulta = "SELECT * FROM Inquilinos WHERE id = @documento";
         Inquilino inquilino = null;
@@ -199,8 +205,10 @@ public class OperacionesBDInquilino<T> : OperacionesBD<Inquilino>
 
                 using (MySqlCommand comando = new MySqlCommand(consulta, conexion))
                 {
+                    comando.Parameters.AddWithValue("@dni", documento);
                     using (MySqlDataReader reader = comando.ExecuteReader())
                     {
+
                         while (reader.Read())
                         {
                             inquilino = new Inquilino
@@ -245,7 +253,8 @@ public class OperacionesBDInquilino<T> : OperacionesBD<Inquilino>
             return inquilino;
         }
     }
-    public override void Eliminar(Inquilino inquilino)
+
+    public void Eliminar(Inquilino inquilino)
     {
         string consultaDelete = "DELETE FROM Inquilinos WHERE dni = @dni";
 
@@ -328,6 +337,10 @@ public class OperacionesBDInquilino<T> : OperacionesBD<Inquilino>
                 //Console.WriteLine("Conexion cerrada");
             }
         }
+    }
+    public void EnviarMensajeErrorBD(string mensaje)
+    {
+        OnMostrarMensajeError?.Invoke(mensaje);
     }
 
 

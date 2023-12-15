@@ -13,7 +13,7 @@ namespace NestApp
             ApplicationConfiguration.Initialize();
             Application.Run(new FrmInicio());
 
-            string directorioActual = Directory.GetCurrentDirectory();
+            //string directorioActual = Directory.GetCurrentDirectory();
             
         }
     }

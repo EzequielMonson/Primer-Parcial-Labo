@@ -36,63 +36,70 @@ namespace UI
         public List<Administrador> listaAdministradores;
         public string confirmacionCorreo;
         public string confirmacionContraseña;
+        public string cadenaConexion;
+        public OperacionesBDInquilino<Inquilino> baseDatosInquilinos;
+        public OperacionesBDAdministrador<Administrador> baseDatosAdministradores;
+        public OperacionesBDServicio<Servicio> baseDatosServicios;
+        public OperacionesBDServicio<Servicio> baseDatosServiciosActivos;
         public List<Servicio> ListaServiciosSeleccionados { get; set; }
 
         public Registro()
         {
             InitializeComponent();
             ListaServiciosSeleccionados = new List<Servicio>();
+            cadenaConexion = "SERVER=127.0.0.1;PORT=3306;DATABASE=nestapp;UID=root;PASSWORDS=;";
+            baseDatosInquilinos = new OperacionesBDInquilino<Inquilino>(cadenaConexion);
+            baseDatosAdministradores = new OperacionesBDAdministrador<Administrador>(cadenaConexion);
 
         }
         private void Registro_Load(object sender, EventArgs e)
         {
-            string rutaArchivoAdminJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");
-            if (File.Exists(rutaArchivoAdminJson))
-            {
-                listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON(rutaArchivoAdminJson);
-                // Llenar el ComboBox con los nombres de los administradores
-                cboArriendador.DataSource = listaAdministradores;
-                cboArriendador.DisplayMember = "ToString"; // nombre completo del administrador
-                cboArriendador.ValueMember = null;
-            }
+
+            listaAdministradores = baseDatosAdministradores.ObtenerTodos();
+            cboArriendador.DataSource = listaAdministradores;
+            cboArriendador.DisplayMember = "ToString"; // nombre completo del administrador
+            cboArriendador.ValueMember = null;
             chklServicios.DataSource = Enum.GetValues(typeof(NombreServicios));
         }
-        private void ObtenerServiciosSeleccionados()
+        private Inquilino ObtenerServiciosSeleccionados(Inquilino inquilinoSeleccionado, int identificacionAdministrador)
         {
             ListaServiciosSeleccionados.Clear();
-
+            baseDatosServicios = new OperacionesBDServicio<Servicio>(cadenaConexion, identificacionAdministrador);
+            baseDatosServiciosActivos = new OperacionesBDServicio<Servicio>(cadenaConexion, identificacionAdministrador);
+            string consulta = "SELECT * FROM servicios WHERE identificacionAdmin = @identificacionAdmin AND nombre = @nombre";
             foreach (NombreServicios nombreServicio in chklServicios.CheckedItems)
             {
-                int precio = ObtenerPrecioServicio(nombreServicio);
                 string nombre = Enum.GetName(typeof(NombreServicios), nombreServicio);
-                NombreServicios id = nombreServicio;
-                Servicio servicio = new Servicio(nombre, precio, id);
+                Servicio servicio = baseDatosServicios.ObtenerPor(identificacionAdministrador, consulta, nombre);
                 ListaServiciosSeleccionados.Add(servicio);
             }
+            baseDatosServiciosActivos.InsertarLista(ListaServiciosSeleccionados, inquilinoSeleccionado);
+
+            return inquilinoSeleccionado;
         }
-        private int ObtenerPrecioServicio(NombreServicios nombreServicio)
-        {
-            switch (nombreServicio)
-            {
-                case NombreServicios.Agua:
-                    return 20; // Precio del servicio de agua
+        //private int ObtenerPrecioServicio(NombreServicios nombreServicio)
+        //{
+        //    switch (nombreServicio)
+        //    {
+        //        case NombreServicios.Agua:
+        //            return 20; // Precio del servicio de agua
 
-                case NombreServicios.Internet:
-                    return 50; // Precio del servicio de internet
+        //        case NombreServicios.Internet:
+        //            return 50; // Precio del servicio de internet
 
-                case NombreServicios.Cable:
-                    return 30; // Precio del servicio de cable
+        //        case NombreServicios.Cable:
+        //            return 30; // Precio del servicio de cable
 
-                case NombreServicios.Luz:
-                    return 25; // Precio del servicio de luz
+        //        case NombreServicios.Luz:
+        //            return 25; // Precio del servicio de luz
 
-                case NombreServicios.Gas:
-                    return 40; // Precio del servicio de gas
+        //        case NombreServicios.Gas:
+        //            return 40; // Precio del servicio de gas
 
-                default:
-                    return 0; 
-            }
-        }
+        //        default:
+        //            return 0; 
+        //    }
+        //}
 
     
         private void RadInquilino_CheckedChanged(object sender, EventArgs e)
@@ -154,37 +161,51 @@ namespace UI
                     {
                         Administrador administradorSeleccionado = (Administrador)cboArriendador.SelectedItem;
 
-                        this.inquilino = new Inquilino(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, direccion, dni, edad);
+                        inquilino = new Inquilino(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, direccion, dni, edad);
 
-                        // Crear la vivienda
+                        // Creando la vivienda
                         string direccionVivienda = txtDireccionVivienda.Text;
-                        int numeroHabitaciones = ObtenerValorNumerico(lblHabitaciones.Text);
+                        int numeroHabitaciones = ObtenerValorNumerico(nudHabitaciones.Text);
                         int pisoVivienda = ObtenerValorNumerico(nudPiso.Text);
                         string departamento = cboDepartamento.Text;
                         int cantInquilinos = ObtenerValorNumerico(nudInquilinos.Text);
-                        Vivienda nuevaVivienda = new Vivienda(direccionVivienda, numeroHabitaciones, pisoVivienda, administradorSeleccionado.Identificacion, departamento, cantInquilinos);
-                        ObtenerServiciosSeleccionados();
-                        foreach (var servicio in ListaServiciosSeleccionados)
-                        {
-                            nuevaVivienda.AgregarServicio(servicio);
-                        }
-                        this.inquilino.ElegirVivienda(nuevaVivienda);
-
+                        Vivienda nuevaVivienda = new Vivienda(direccionVivienda, numeroHabitaciones, pisoVivienda, administradorSeleccionado.Identificacion, departamento, cantInquilinos, inquilino.Dni);
+                        
+                        inquilino = ObtenerServiciosSeleccionados(inquilino, administradorSeleccionado.Identificacion);
+                        //foreach (var servicio in ListaServiciosSeleccionados)
+                        //{
+                        //    nuevaVivienda.AgregarServicio(servicio);
+                        //}
+                        inquilino.ElegirVivienda(nuevaVivienda);
+                        
+                        OperacionesBDVivienda<Vivienda> baseDatosVivienda = new OperacionesBDVivienda<Vivienda>(cadenaConexion);
+                        
                         int adminIndex = listaAdministradores.FindIndex(admin => admin.Identificacion == administradorSeleccionado.Identificacion);
-                        administradorSeleccionado.viviendasACargo.Add(nuevaVivienda);
-                        listaAdministradores[adminIndex] = administradorSeleccionado;
-
-                        string rutaArchivoJsonAdministrador = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");
-                        string rutaArchivoJsonInquilino = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosInquilino.json");
-                        Serializadora<Administrador>.GuardarComoJSON(listaAdministradores, rutaArchivoJsonAdministrador);
-                        List<Inquilino> listaInquilinos = new List<Inquilino>();
-                        if (File.Exists(rutaArchivoJsonInquilino))
+                        string consulta = "SELECT * FROM viviendas WHERE identificacionArriendador = @identificacionArriendador";
+                        administradorSeleccionado.viviendasACargo = baseDatosVivienda.ObtenerListaPor(administradorSeleccionado.Identificacion, consulta);
+                        if (administradorSeleccionado.viviendasACargo != null)
                         {
-                            listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON(rutaArchivoJsonInquilino);
-                            listaInquilinos.Add(inquilino);
+                            administradorSeleccionado.viviendasACargo.Add(nuevaVivienda);
                         }
+                        else 
+                        {
+                            administradorSeleccionado.viviendasACargo = new List<Vivienda>{nuevaVivienda};
+                        }
+                        listaAdministradores[adminIndex] = administradorSeleccionado;
+                        //string rutaArchivoJsonAdministrador = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");
+                        //string rutaArchivoJsonInquilino = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosInquilino.json");
+                        baseDatosInquilinos.Insertar(inquilino);
+                        baseDatosVivienda.Insertar(nuevaVivienda);
+                        baseDatosInquilinos.OnMostrarMensajeError += MostrarMensajeError;
+                        //Serializadora<Administrador>.GuardarComoJSON(listaAdministradores, rutaArchivoJsonAdministrador);
+                        //List<Inquilino> listaInquilinos = new List<Inquilino>();
+                        //if (File.Exists(rutaArchivoJsonInquilino))
+                        //{
+                        //    listaInquilinos = Serializadora<Inquilino>.CargarDesdeJSON(rutaArchivoJsonInquilino);
+                        //    listaInquilinos.Add(inquilino);
+                        //}
 
-                        Serializadora<Inquilino>.GuardarComoJSON(listaInquilinos, rutaArchivoJsonInquilino);
+                        //Serializadora<Inquilino>.GuardarComoJSON(listaInquilinos, rutaArchivoJsonInquilino);
 
                         MessageBox.Show($"{this.inquilino.ToString()}");
                         this.Hide();
@@ -197,22 +218,23 @@ namespace UI
             else if (rol == "administrador")
             {
                 ciudad = this.cboCiudadAdministrador.Text;
-                this.administrador = new Administrador(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, dni, edad, agencia, contactoAgencia, identificacion);
+                administrador = new Administrador(nombre, apellido, correo, contraseña, ciudad, fechaNacimiento, telefono, dni, edad, agencia, contactoAgencia, identificacion);
                 ValidadorAdministrador miValidadorAdministrador = new ValidadorAdministrador(this.administrador);
                 miValidadorAdministrador.OnMostrarMensajeError += MostrarMensajeError;
                 if (miValidadorAdministrador.ConfirmarContraseña(confirmacionContraseña) && miValidadorAdministrador.ConfirmarCorreo(confirmacionCorreo))
                 {
                     if (miValidadorAdministrador.Validar())
                     {
-                        List<Administrador> adminList = new List<Administrador> { administrador };
-                        string rutaArchivoJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");
-                        List<Administrador> listaAdministradores = new List<Administrador>();
-                        if (File.Exists(rutaArchivoJson))
-                        {
-                            listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON(rutaArchivoJson);
-                            listaAdministradores.Add(administrador);
-                        }
-                        Serializadora<Administrador>.GuardarComoJSON(listaAdministradores, rutaArchivoJson);
+                        baseDatosAdministradores.Insertar(administrador);
+                        baseDatosAdministradores.OnMostrarMensajeError += MostrarMensajeError;
+                        //string rutaArchivoJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RegistrosAdministrador.json");
+                        //List<Administrador> listaAdministradores = new List<Administrador>();
+                        //if (File.Exists(rutaArchivoJson))
+                        //{
+                        //    listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON(rutaArchivoJson);
+                        //    listaAdministradores.Add(administrador);
+                        //}
+                        //Serializadora<Administrador>.GuardarComoJSON(listaAdministradores, rutaArchivoJson);
 
                         MessageBox.Show($"{this.administrador.ToString()}");
                         this.Hide();

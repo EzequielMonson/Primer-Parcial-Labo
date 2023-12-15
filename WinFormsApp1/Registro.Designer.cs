@@ -754,7 +754,6 @@
         private Label lblEdad;
         private Label lblFechaNacimiento;
         private DateTimePicker dtpFechaNacimiento;
-        private GroupBox groupBox4;
         private TextBox txtConfirmacionClave;
         private Label lblConfirmarContraseña;
         private TextBox txtCorfirmacionCorreo;

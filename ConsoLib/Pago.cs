@@ -19,5 +19,11 @@ namespace Clases
             CantidadAbonada = cantidadAbonada;
             FechaVencimiento = fechaVencimiento;
         }
+        public Pago(int cantidadAbonada, DateTime fechaVencimiento, DateTime fechaAbono)
+        {
+            FechaAbono = fechaAbono; // La fecha de abono se establece como el día actual
+            CantidadAbonada = cantidadAbonada;
+            FechaVencimiento = fechaVencimiento;
+        }
     }
 }

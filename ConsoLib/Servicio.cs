@@ -13,23 +13,26 @@ namespace Clases
         Cable,
         Luz,
         Gas,
+        Alquiler,
     }
 
     public class Servicio
     {
         public string Nombre { get; set; }
         public int Precio { get; set; }
+        public int IdentificacionArriendador { get; set; }
 
         public NombreServicios Id { get; set; }
 
         public Servicio() 
         {
         }
-        public Servicio(string nombre, int precio, NombreServicios id)
+        public Servicio(string nombre, int precio, int identificacionArriendador)//, NombreServicios id)
         {
             Nombre = nombre;
             Precio = precio;
-            Id = id;
+            IdentificacionArriendador = identificacionArriendador;
+            //Id = id;
         }
     }
 }

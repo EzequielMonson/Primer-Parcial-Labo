@@ -25,7 +25,7 @@ namespace Clases
         {
 
         }
-        public Vivienda(string direccion, int numeroHabitaciones, int piso, int identificacionArriendador, string departamento, int cantInquilinos)
+        public Vivienda(string direccion, int numeroHabitaciones, int piso, int identificacionArriendador, string departamento, int cantInquilinos, int dniInquilino)
         {
             this.direccion = direccion;
             this.numeroHabitaciones = numeroHabitaciones;
@@ -34,6 +34,7 @@ namespace Clases
             this.departamento = departamento;
             this.cantInquilinos = cantInquilinos;
             this.servicios = new List<Servicio> ();
+            DniInquilino = dniInquilino;
             
         }
         
@@ -47,28 +48,26 @@ namespace Clases
         }
     }
 
-        public int CalcularPrecioBase()
-        {
-           
-            return 1000; 
-        }
         public int CalcularPrecioTotal()
         {
-            int precioTotal = CalcularPrecioBase();
-            if (servicios != null)
+            int precio = 0;
+            OperacionesBDServicio<Servicio> baseDatosServicios = new OperacionesBDServicio<Servicio>("SERVER=127.0.0.1;PORT=3306;DATABASE=nestapp;UID=root;PASSWORDS=;", identificacionArriendador);
+            List<Servicio> serviciosActivos = baseDatosServicios.ObtenerServiciosActivos(identificacionArriendador, dniInquilino);
+            foreach (var servicio in serviciosActivos)
             {
-                foreach (Servicio unServicio in servicios)
-                {
-                    precioTotal += unServicio.Precio;
-                }
+                precio += servicio.Precio;
             }
-            return precioTotal;
+            return precio;
+
         }
+       
         public Administrador ObtenerAdministradorPorIdentificacion()
         {
             try
             {
-                List<Administrador> listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON("RegistrosAdministrador.json");
+                string conexion = "SERVER=127.0.0.1;PORT=3306;DATABASE=nestapp;UID=root;PASSWORDS=;";
+                OperacionesBDAdministrador<Administrador> baseDatosAdministrador = new OperacionesBDAdministrador<Administrador>(conexion);
+                List<Administrador> listaAdministradores = baseDatosAdministrador.ObtenerTodos();
 
                 if (listaAdministradores != null)
                 {
@@ -122,14 +121,8 @@ namespace Clases
         }
 
 
-        public int MostrarPrecio(int precioBase)
+        public int MostrarPrecio(int precioTotal)
         {
-            int precioTotal = precioBase;
-
-            foreach (Servicio unServicio in servicios)
-            {
-                precioTotal += unServicio.Precio;
-            }
 
             return precioTotal;
         }
@@ -139,11 +132,11 @@ namespace Clases
             CalcularDeuda(); 
         }
 
-        public void CancelarServicio(NombreServicios servicioAEliminar)
+        public void CancelarServicio(Servicio servicioAEliminar)
         {
             for (int i = this.servicios.Count - 1; i >= 0; i--)
             {
-                if (this.servicios[i].Id == servicioAEliminar)
+                if (this.servicios[i] == servicioAEliminar)
                 {
                     this.servicios.RemoveAt(i);
                 }

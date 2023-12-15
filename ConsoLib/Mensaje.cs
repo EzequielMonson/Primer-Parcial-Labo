@@ -9,15 +9,19 @@ namespace Clases
 {
     public class Mensaje
     {
-        public DateTime FechaEnvio { get; set; }
-        public string Contenido { get; set; }
-        public string Emisor { get; set; }
+        private DateTime fechaEnvio;
+        private string contenido;
+        private string emisor;
+        private string receptor;
+        public DateTime FechaEnvio { get=> fechaEnvio; set=> fechaEnvio = value; }
+        public string Contenido { get => contenido; set => contenido = value; }
+        public string Emisor { get => emisor; set => emisor = value; }
 
-        public string Receptor { get; set; }
+        public string Receptor { get => receptor; set => receptor = value; }
 
-        public Mensaje(string contenido, string emisor, string receptor)
+        public Mensaje(string contenido, string emisor, string receptor, DateTime fechaEnvio)
         {
-            FechaEnvio = DateTime.Now;
+            FechaEnvio = fechaEnvio;
             Contenido = contenido;
             Emisor = emisor;
             Receptor = receptor;

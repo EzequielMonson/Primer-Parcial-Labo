@@ -94,11 +94,11 @@ namespace Clases
                 Inquilino inquilino = vivienda.ObtenerInquilinoPorDni(vivienda.DniInquilino);
 
                 // Verificar si hay un inquilino y si la vivienda tiene deudas
-                if (inquilino != null && vivienda.MostrarPrecio(vivienda.CalcularPrecioBase()) > 0)
+                if (inquilino != null && vivienda.MostrarPrecio(vivienda.CalcularPrecioTotal()) > 0)
                 {
                     // Crear una nueva instancia de Deuda
                     Deuda nuevaDeuda = new Deuda(
-                        vivienda.MostrarPrecio(vivienda.CalcularPrecioBase()),
+                        vivienda.MostrarPrecio(vivienda.CalcularPrecioTotal()),
                         "Alquiler",
                         fechaActual,
                         fechaActual.AddMonths(1) // Vencimiento en un mes
@@ -123,9 +123,11 @@ namespace Clases
                 Console.WriteLine($"Nombre: {deudor.nombre} {deudor.apellido}, DNI: {deudor.Dni}");
             }
         }
-        public void PermitirNuevoInquilino(Inquilino inquilino)
+        public Inquilino PermitirNuevoInquilino(Inquilino inquilino)
         {
+            inquilinosPendientes.Remove(inquilino);
             inquilino.Estado = Estado.Activo;
+            return inquilino;
 
         }
         public void RechazarNuevoInquilino(Inquilino inquilino)

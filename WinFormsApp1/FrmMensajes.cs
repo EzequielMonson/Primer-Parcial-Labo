@@ -15,86 +15,122 @@ namespace UI
         private Inquilino inquilinoActual;
         private TipoUsuario UsuarioActual;
         private string emisor;
-        private string pathArchivoMensajesEmisor;
+        private OperacionesBDMensajes<Mensaje> baseDatosMensajesEmisor;
+        private OperacionesBDMensajes<Mensaje> baseDatosMensajesReceptor;
+        private OperacionesBDAdministrador<Administrador> baseDatosAdministradores;
+        private OperacionesBDInquilino<Inquilino> baseDatosInquilinos;
         private List<Usuario> listaContactos = new List<Usuario>();
         private Usuario contactoSeleccionado;
+        private string cadenaConexion;
 
         // Delegado para actualizar el RichTextBox
         private delegate void ActualizarRichTextBoxDelegado(string mensaje, HorizontalAlignment alineacion);
 
-        // Acceder a la instancia de MensajeManager
+
         private MensajeManager mensajeManager = MensajeManager.Instancia;
 
         public FrmMensajes()
         {
             InitializeComponent();
+            InitializeComponent();
+            cadenaConexion = "SERVER=127.0.0.1;PORT=3306;DATABASE=nestapp;UID=root;PASSWORDS=;";
+            baseDatosAdministradores = new OperacionesBDAdministrador<Administrador>(cadenaConexion);
+            baseDatosInquilinos = new OperacionesBDInquilino<Inquilino>(cadenaConexion);
+            if (UsuarioActual == TipoUsuario.Inquilino)
+            {
+                baseDatosMensajesEmisor = new OperacionesBDMensajes<Mensaje>(cadenaConexion, inquilinoActual);
+            }
+            else
+            {
+                baseDatosMensajesEmisor = new OperacionesBDMensajes<Mensaje>(cadenaConexion, administradorActual);
+            }
+            
         }
 
         private void FrmMensajes_Load(object sender, EventArgs e)
         {
-            string pathAdministradores = "registrosAdministrador.json";
-            string pathInquilinos = "registrosInquilino.json";
+            // Obtener listas de administradores y vecinos desde otras fuentes
+            
+            List<Inquilino> listaVecinos = ObtenerVecinosDesdeOtraFuente(baseDatosInquilinos.ObtenerTodos());
 
-            if (File.Exists(pathInquilinos))
+            // Combinar listas de administradores y vecinos en listaContactos
+            
+            listaContactos.AddRange(listaVecinos);
+            if (UsuarioActual == TipoUsuario.Inquilino)
+            { 
+                Administrador administrador = ObtenerAdminDesdeOtraFuente(baseDatosAdministradores.ObtenerTodos());
+                listaContactos.Add(administrador);
+            }
+            
+            lstContactos.DataSource = listaContactos;
+            this.contactoSeleccionado = (Usuario)lstContactos.SelectedItem;
+            lstContactos.SelectedIndexChanged += lstContactos_SelectedIndexChanged;
+        }
+        private Administrador ObtenerAdminDesdeOtraFuente(List<Administrador> listaAdministradores)
+        {
+            Administrador administradorACargo = null;
+            foreach (var administrador in listaAdministradores)
             {
-                List<Inquilino> listaVecinos = Serializadora<Inquilino>.CargarDesdeJSON(pathInquilinos);
-
-                if (File.Exists(pathAdministradores))
+                if (inquilinoActual.Vivienda.identificacionArriendador == administrador.Identificacion)
                 {
-                    List<Administrador> listaAdministradores = Serializadora<Administrador>.CargarDesdeJSON(pathAdministradores);
-
-                    foreach (var administrador in listaAdministradores)
+                    administradorACargo = administrador;
+                    return administradorACargo;
+                }
+            }
+            return administradorACargo;
+        }
+        private List<Inquilino> ObtenerVecinosDesdeOtraFuente(List<Inquilino>listaInquilinos)
+        {
+            List<Inquilino> listaVecinos = new List<Inquilino>();
+            foreach (var inquilino in listaInquilinos)
+            {
+                if (inquilino.Vivienda == null)
+                {
+                    OperacionesBDVivienda<Vivienda> baseDatosViviendas = new OperacionesBDVivienda<Vivienda>(cadenaConexion);
+                    List<Vivienda> listaViviendas = baseDatosViviendas.ObtenerTodos();
+                    foreach (var vivienda in listaViviendas)
                     {
-                        foreach (var inquilino in listaVecinos)
+                        if (vivienda.DniInquilino == inquilino.Dni)
                         {
-                            if (administrador.Identificacion == inquilino.Vivienda.identificacionArriendador)
-                            {
-                                if (inquilinoActual != null)
-                                {
-                                    if (inquilinoActual.Dni != inquilino.Dni)
-                                    {
-                                        listaContactos.Add(inquilino);
-                                    }
-
-                                    if (!listaContactos.Contains(administrador) && UsuarioActual == TipoUsuario.Inquilino)
-                                    {
-                                        listaContactos.Add(administrador);
-                                    }
-                                }
-                                else
-                                {
-                                    listaContactos.Add(inquilino);
-
-                                    if (!listaContactos.Contains(administrador) && UsuarioActual == TipoUsuario.Inquilino)
-                                    {
-                                        listaContactos.Add(administrador);
-                                    }
-                                }
-                            }
+                            inquilino.Vivienda = vivienda;
                         }
                     }
                 }
-
-                lstContactos.DataSource = listaContactos;
-                this.contactoSeleccionado = (Usuario)lstContactos.SelectedItem;
-                lstContactos.SelectedIndexChanged += lstContactos_SelectedIndexChanged;
+                if (inquilinoActual.Vivienda == null)
+                {
+                    OperacionesBDVivienda<Vivienda> baseDatosViviendas = new OperacionesBDVivienda<Vivienda>(cadenaConexion);
+                    List<Vivienda> listaViviendas = baseDatosViviendas.ObtenerTodos();
+                    foreach (var vivienda in listaViviendas)
+                    {
+                        if (vivienda.DniInquilino == inquilinoActual.Dni)
+                        {
+                            inquilinoActual.Vivienda = vivienda;
+                        }
+                    }
+                }
+                if (inquilino.Vivienda.identificacionArriendador == inquilinoActual.Vivienda.identificacionArriendador && inquilinoActual.Dni != inquilino.Dni)
+                {
+                    listaVecinos.Add(inquilino);
+                }
             }
+            return listaVecinos;
+            
         }
-
         private async void lstContactos_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.rtbChat.Visible = true;
             this.btnEnviar.Visible = true;
             this.txtMensaje.Visible = true;
             this.contactoSeleccionado = (Usuario)lstContactos.SelectedItem;
-
+            baseDatosMensajesEmisor = new OperacionesBDMensajes<Mensaje>(cadenaConexion, contactoSeleccionado);
+            this.lblInquilino.Text = contactoSeleccionado.ToString();
             await CargarMensajesAsync();
 
             List<Mensaje> mensajesEnviados = mensajeManager.ObtenerMensajesEmisor()
                 .Where(m => m.Emisor == emisor && m.Receptor == contactoSeleccionado.ToString())
                 .ToList();
 
-            List<Mensaje> mensajesRecibidos = mensajeManager.ObtenerMensajesReceptor()
+            List<Mensaje> mensajesRecibidos = mensajeManager.ObtenerMensajesEmisor()
                 .Where(m => m.Emisor == contactoSeleccionado.ToString() && m.Receptor == emisor)
                 .ToList();
 
@@ -103,9 +139,9 @@ namespace UI
 
         private async Task CargarMensajesAsync()
         {
-            if (File.Exists(pathArchivoMensajesEmisor))
+            try
             {
-                List<Mensaje> mensajesCargados = await Task.Run(() => Serializadora<Mensaje>.CargarDesdeJSON(pathArchivoMensajesEmisor));
+                List<Mensaje> mensajesCargados = await Task.Run(() => baseDatosMensajesEmisor.ObtenerTodos(emisor));
 
                 // Filtrar solo los mensajes nuevos desde la última carga
                 List<Mensaje> mensajesNuevos = mensajesCargados
@@ -130,15 +166,19 @@ namespace UI
                     MostrarMensajesEnChat(mensajesRecibidos, mensajesEnviados);
                 }
             }
+            catch (Exception ex)
+            {   
+                //MostrarError($"Error al cargar mensajes: {ex}"); 
+            }
+            
         }
 
         private async Task ActualizarMensajesReceptorAsync()
         {
-            if (File.Exists($"mensajes{emisor}.json"))
+            try
             {
-                List<Mensaje> mensajesCargados = await Task.Run(() => Serializadora<Mensaje>.CargarDesdeJSON($"mensajes{emisor}.json"));
-
-                // Filtrar solo los mensajes nuevos desde la última carga
+                List<Mensaje> mensajesCargados = await Task.Run(() => baseDatosMensajesReceptor.ObtenerTodos(emisor));
+                
                 List<Mensaje> mensajesNuevos = mensajesCargados
                     .Where(m => !mensajeManager.ObtenerMensajesReceptor().Any(em => em.Equals(m)))
                     .ToList();
@@ -148,6 +188,12 @@ namespace UI
                     mensajeManager.ObtenerMensajesReceptor().AddRange(mensajesNuevos);
                 }
             }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cargar mensajes: {ex}");
+                
+            }
+            
         }
 
         private void MostrarMensajesEnChat(List<Mensaje> mensajesRecibidos, List<Mensaje> mensajesEnviados)
@@ -180,7 +226,10 @@ namespace UI
 
 
 
-
+        private void MostrarError(string mensaje)
+        {
+            MessageBox.Show($"{mensaje}");
+        }
         private void AgregarMensajeRichTextBox(string mensaje, HorizontalAlignment alineacion)
         {
             rtbChat.SelectionAlignment = alineacion;
@@ -201,19 +250,16 @@ namespace UI
         {
             if (contactoSeleccionado != null)
             {
-                Mensaje nuevoMensaje = new Mensaje(contenido, emisor, this.contactoSeleccionado.ToString());
-                string pathMensajesReceptor = "mensajes" + contactoSeleccionado.ToString() + ".json";
+                Mensaje nuevoMensaje = new Mensaje(contenido, emisor, this.contactoSeleccionado.ToString(), DateTime.Now);
+                
 
                 await Task.Run(() =>
                 {
                     // Verificar si el mensaje ya existe en la lista
                     if (!mensajeManager.ObtenerMensajesReceptor().Any(m => m.Equals(nuevoMensaje)))
                     {
-                        mensajeManager.GuardarMensajeReceptor(nuevoMensaje);
-                        Serializadora<Mensaje>.GuardarComoJSON(mensajeManager.ObtenerMensajesReceptor(), pathMensajesReceptor);
-
-                        mensajeManager.GuardarMensajeEmisor(nuevoMensaje);
-                        Serializadora<Mensaje>.GuardarComoJSON(mensajeManager.ObtenerMensajesEmisor(), pathArchivoMensajesEmisor);
+                        baseDatosMensajesEmisor.Insertar(nuevoMensaje);
+                        
                     }
                 });
 
@@ -223,7 +269,7 @@ namespace UI
                     .Where(m => m.Emisor == emisor && m.Receptor == contactoSeleccionado.ToString())
                     .ToList();
 
-                List<Mensaje> mensajesRecibidos = mensajeManager.ObtenerMensajesReceptor()
+                List<Mensaje> mensajesRecibidos = mensajeManager.ObtenerMensajesEmisor()
                     .Where(m => m.Emisor == contactoSeleccionado.ToString() && m.Receptor == emisor)
                     .ToList();
 
@@ -236,7 +282,7 @@ namespace UI
             this.administradorActual = administrador;
             UsuarioActual = TipoUsuario.Administrador;
             emisor = administradorActual.ToString();
-            pathArchivoMensajesEmisor = "mensajes" + administradorActual.ToString() + ".json";
+            
         }
 
         public void SetInquilino(Inquilino inquilino)
@@ -244,18 +290,39 @@ namespace UI
             this.inquilinoActual = inquilino;
             UsuarioActual = TipoUsuario.Inquilino;
             emisor = inquilinoActual.ToString();
-            pathArchivoMensajesEmisor = "mensajes" + inquilinoActual.ToString() + ".json";
+            if (inquilinoActual.Vivienda != null)
+            {
+                OperacionesBDVivienda<Vivienda> baseDatosViviendas = new OperacionesBDVivienda<Vivienda>(cadenaConexion);
+                List<Vivienda> listaViviendas = baseDatosViviendas.ObtenerTodos();
+                foreach (var vivienda in listaViviendas)
+                {
+                    if (vivienda.DniInquilino == inquilinoActual.Dni)
+                    {
+                        inquilinoActual.Vivienda = vivienda;
+                    }
+                }
+            }
+
         }
 
-        private void FrmMensajes_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Serializadora<Mensaje>.GuardarComoJSON(mensajeManager.ObtenerMensajesEmisor(), pathArchivoMensajesEmisor);
 
-            if (contactoSeleccionado != null)
+        private void btnAtras_Click(object sender, EventArgs e)
+        {
+
+            if (UsuarioActual == TipoUsuario.Inquilino)
             {
-                string pathMensajesReceptor = "mensajes" + contactoSeleccionado.ToString() + ".json";
-                mensajeManager.ObtenerMensajesReceptor().AddRange(mensajeManager.ObtenerMensajesEmisor().Where(m => m.Receptor == contactoSeleccionado.ToString()));
-                Serializadora<Mensaje>.GuardarComoJSON(mensajeManager.ObtenerMensajesReceptor(), pathMensajesReceptor);
+
+                this.Hide();
+                FrmMenu menuInqui = new FrmMenu();
+                menuInqui.SetInquilino(inquilinoActual);
+                menuInqui.Show();
+            }
+            else 
+            {
+                this.Hide();
+                FrmMenu menuAdmin = new FrmMenu();
+                menuAdmin.SetAdministrador(administradorActual);
+                menuAdmin.Show();
             }
         }
     }
